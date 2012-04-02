@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="left|center"
+    android:paddingBottom="5dp"
+    android:paddingLeft="5dp"
+    android:paddingTop="5dp" >
+
+    <ImageView
+       android:id="@+id/thumb"
+       android:layout_width="100dip"
+       android:layout_height="100dip"
+       android:layout_marginRight="6dip"
+       android:src="@drawable/ic_photo" />
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+	    <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="0dip"
+	        android:layout_gravity="right"
+	        android:layout_weight="1"
+	        android:orientation="horizontal" >
+	      
+	        <LinearLayout
+		        android:layout_width="0dip"
+		        android:layout_height="fill_parent"
+		        android:layout_weight="1"
+		        android:orientation="vertical" >
+		        
+		        <TextView
+		            android:id="@+id/name"
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:textSize="16dip"
+		            android:textStyle="bold" />
+		
+				<TextView android:id="@+id/description" 
+				    android:layout_width="wrap_content" 
+				    android:layout_height="wrap_content"
+				    android:layout_marginLeft="10dp" 
+				    android:textColor="#33b5e5"/>
+	
+			</LinearLayout>
+		<TextView
+		    android:id="@+id/distance"
+		    android:layout_width="wrap_content"
+		    android:layout_height="fill_parent"
+		    android:gravity="center_vertical|right"
+		    android:textAppearance="?android:attr/textAppearanceLarge" />
+	</LinearLayout>
+			
+    	<TextView
+	        android:id="@+id/tags"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:clickable="true"
+	        android:padding="5dp"
+	        android:textAppearance="?android:attr/textAppearanceSmall"
+	        android:textColor="#99CC00" />
+
+	</LinearLayout>
+</LinearLayout>

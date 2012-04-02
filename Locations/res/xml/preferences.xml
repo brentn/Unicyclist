@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" android:key="settings">
+    <PreferenceCategory android:key="@string/locations" android:title="@string/locations"><CheckBoxPreference android:key="miles" android:persistent="true" android:defaultValue="false" android:title="@string/distances_in_miles"/>
+    <ListPreference android:defaultValue="80" android:title="@string/distance_filter" android:entries="@array/distance_filter_array" android:entryValues="@array/distance_filter_values" android:persistent="true" android:key="distance_filter" android:summary="@string/distance_filter_summary"/>
+</PreferenceCategory>
+    
+
+</PreferenceScreen>
