@@ -1,5 +1,10 @@
 package com.unicycle;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -9,6 +14,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 	
@@ -39,8 +45,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String KEY_LOCATION_TAG_LOCATIONID = "locationId";
 	private static final String KEY_LOCATION_TAG_TAGID = "tagId";
 	
-	private List<Integer> favourites = new ArrayList<Integer>();
-	private List<Integer> deleted = new ArrayList<Integer>();
+	private static List<Integer> favourites = new ArrayList<Integer>();
+	private static List<Integer> deleted = new ArrayList<Integer>();
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -64,8 +70,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.execSQL(CREATE_FAVOURITES_TABLE);
 		db.execSQL(CREATE_DELETED_TABLE);
 		db.execSQL(CREATE_LOCATION_TAGS_TABLE);
+	}
+	
+	public void initialize() {
+		SQLiteDatabase db = this.getReadableDatabase();
 		this.loadFavouriteList(db);
-		this.loadDeletedList(db);
+		this.loadDeletedList(db);		
 	}
 
     @Override
@@ -79,6 +89,54 @@ public class DatabaseHandler extends SQLiteOpenHelper {
  
         // Create tables again
         onCreate(db);
+    }
+    
+    public void backup() {
+    	final String DB_FILEPATH = "/data/data/{package_name}/databases/database.db";
+    	final String DB_BACKUP = "{package_name}.db";
+    	
+    	close();
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+            File data = Environment.getDataDirectory();
+
+            if (sd.canWrite()) {
+                File currentDB = new File(data, DB_FILEPATH);
+                File backupDB = new File(sd, DB_BACKUP);
+
+                if (currentDB.exists()) {
+                    FileChannel src = new FileInputStream(currentDB).getChannel();
+                    FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+                }
+            }
+        } catch (Exception e) {
+        }
+    }
+    
+    public boolean restore() {
+    	final String DB_FILEPATH = "/data/data/{package_name}/databases/database.db";
+    	final String DB_BACKUP = "{package_name}.db";
+
+    	    // Close the SQLiteOpenHelper so it will commit the created empty
+    	    // database to internal storage.
+    	    close();
+    	    try {
+	    	    File newDb = new File(DB_BACKUP);
+	    	    File oldDb = new File(DB_FILEPATH);
+	    	    if (newDb.exists()) {
+	    	        FileUtils.copyFile(new FileInputStream(newDb), new FileOutputStream(oldDb));
+	    	        // Access the copied database so SQLiteHelper will cache it and mark
+	    	        // it as created.
+	    	        getWritableDatabase().close();
+	    	        return true;
+	    	    }
+	    	    return false;
+    	    } catch (Exception e) {
+    	    	return false;
+    	    }
     }
     
     

@@ -1,8 +1,13 @@
 package com.unicycle;
 
 public class Image {
+	
+	public static final int LOCATION_IMAGE = 1;
+	public static final int TRAIL_IMAGE = 2;
+	public static final int CHALLENGE_IMAGE = 3;
 
 	private int _id;
+	private int _type;
 	private String _url;;
 	private String _localPath;
 	private Double _latitude;
@@ -54,6 +59,14 @@ public class Image {
 	
 	public void setId(int id) {
 		_id = id;
+	}
+	
+	public int getType() {
+		return _type;
+	}
+	
+	public void setType(int type) {
+		_type = type;
 	}
 	
 	public double getLatitude() {

@@ -8,7 +8,7 @@
     <string name="trails">Trails...</string>
     <string name="challenges">Challenges...</string>
     <string name="comments">Comments</string>
-    <string name="mapview">Map View</string>
+    <string name="mapview">map view</string>
     <string name="new_location">New Location</string>
     <string name="New">New</string>
     <string name="add_image">Add Image</string>
@@ -16,8 +16,11 @@
     <string name="add_to_my_locations">Add to \"My Locations\"</string>
     <string name="settings">Settings</string>
     <string name="distances_in_miles">Measure distances in Miles?</string>
-    <string name="locations">Locations</string>
+    <string name="locations">locations</string>
     <string name="distance_filter">Distance Filter</string>
     <string name="distance_filter_summary">Show only locations this distance from your current location.</string>
+    <string name="name">Name</string>
+    <string name="add">Add</string>
+    <string name="favourites">favourites</string>
 
 </resources>

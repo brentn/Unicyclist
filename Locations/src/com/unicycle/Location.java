@@ -16,6 +16,7 @@ public class Location {
 	private int _rating;
 	private boolean _favourite;
 	private boolean _deleted;
+	private List<Image> _images;
 	private List<Tag> _tags;
 	
 	//constructors
@@ -23,6 +24,7 @@ public class Location {
 		this._favourite = false;
 		this._deleted = false;
 		this._tags = new ArrayList<Tag>();
+		this._images = new ArrayList<Image>();
 	}
 	
 	public Location(int id, String name, double latitude, double longitude) {
@@ -33,6 +35,7 @@ public class Location {
 		this._favourite = false;
 		this._deleted = false;
 		this._tags = new ArrayList<Tag>();
+		this._images = new ArrayList<Image>();
 	}
 	
 	public Location(String name, double latitude, double longitude, String description, String directions, int rating) {
@@ -45,6 +48,7 @@ public class Location {
 		this._favourite = false;
 		this._deleted = false;
 		this._tags = new ArrayList<Tag>();
+		this._images = new ArrayList<Image>();
 	}
 	
 	public Location(int id, String name, double latitude, double longitude, String description, String directions, int rating) {
@@ -58,6 +62,7 @@ public class Location {
 		this._favourite = false;
 		this._deleted = false;
 		this._tags = new ArrayList<Tag>();
+		this._images = new ArrayList<Image>();
 	}
 	
 	public void setId(int id) {

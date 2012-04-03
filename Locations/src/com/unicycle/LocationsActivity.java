@@ -19,7 +19,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Gallery;
 import android.widget.ListView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.google.android.maps.GeoPoint;
@@ -31,7 +30,11 @@ import com.google.android.maps.OverlayItem;
 
 public class LocationsActivity extends MapActivity {
 	
-    ListView.OnItemClickListener clickListener;
+	private ListView locationsView;
+	private ListView favouritesView;
+	private LocationsListAdapter locationsListAdapter;
+	private LocationsListAdapter favouritesListAdapter;
+    private ListView.OnItemClickListener clickListener;
     
 	private ViewFlipper page; 
 	private Animation fadeIn;
@@ -46,8 +49,9 @@ public class LocationsActivity extends MapActivity {
         setContentView(R.layout.locations_list);
         
         DatabaseHandler db = new DatabaseHandler(this);
+        db.initialize();
         
-this.addSampleData();
+//this.addSampleData();
         
         locationList = db.getAllLocations();
         db.close();
@@ -59,28 +63,29 @@ this.addSampleData();
       	  }
       	}
 
-        ListView listview = (ListView) findViewById(R.id.allLocationsList);
-        listview.setAdapter(new LocationsListAdapter(this.getBaseContext(), R.layout.locations_list_item, locationList));
-        registerForContextMenu(listview);
-        ListView mylistview = (ListView) findViewById(R.id.myLocationsList);
-        mylistview.setAdapter(new LocationsListAdapter(this.getBaseContext(), R.layout.locations_list_item, myList));
-        Gallery gallery = (Gallery) findViewById(R.id.gallery);
-        gallery.setAdapter(new ImageAdapter(this));
+        locationsView = (ListView) findViewById(R.id.allLocationsList);
+        locationsListAdapter = new LocationsListAdapter(this.getBaseContext(), R.layout.locations_list_item, locationList);
+        locationsView.setAdapter(locationsListAdapter);
+        registerForContextMenu(locationsView);
+        favouritesView = (ListView) findViewById(R.id.myLocationsList);
+        favouritesListAdapter = new LocationsListAdapter(this.getBaseContext(), R.layout.locations_list_item, myList);
+        favouritesView.setAdapter(favouritesListAdapter);
+        registerForContextMenu(favouritesView);
+        Gallery menu = (Gallery) findViewById(R.id.gallery);
+        menu.setAdapter(new GalleryMenuAdapter(this, new String[] {getString(R.string.locations),getString(R.string.favourites),getString(R.string.mapview)}));
         
         page = (ViewFlipper)findViewById(R.id.flipper);
         fadeIn = AnimationUtils.loadAnimation(this,android.R.anim.fade_in);
         fadeOut = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
         
         // Change View
-        gallery.setOnItemSelectedListener(new OnItemSelectedListener() {
-
+        menu.setOnItemSelectedListener(new OnItemSelectedListener() {
 	        @Override
 	        public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
 	        	page.setInAnimation(fadeIn);
 	        	page.setOutAnimation(fadeOut);
 	        	page.setDisplayedChild(position);
 	        }
-	
 	        @Override
 	        public void onNothingSelected(AdapterView<?> arg0) {
 	            // Do nothing
@@ -98,6 +103,7 @@ this.addSampleData();
         };
         
         ((ListView) findViewById(R.id.allLocationsList)).setOnItemClickListener(clickListener);
+        ((ListView) findViewById(R.id.myLocationsList)).setOnItemClickListener(clickListener);
         
         MapView mapView = (MapView) findViewById(R.id.mapview);
         mapView.setBuiltInZoomControls(true);
@@ -142,7 +148,11 @@ this.addSampleData();
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.newLocation:     Toast.makeText(this, "Create New Location", Toast.LENGTH_LONG).show();
+            case R.id.newLocation:                    
+	        	Intent intent = new Intent(LocationsActivity.this,NewLocationActivity.class);
+	        	LocationsActivity.this.startActivity(intent);
+	        	locationsListAdapter.notifyDataSetChanged();
+	        	favouritesListAdapter.notifyDataSetChanged();
                 break;   
             case R.id.settings:		startActivity(new Intent(this, Preferences.class));
             	break;

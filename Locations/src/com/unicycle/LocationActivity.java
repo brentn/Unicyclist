@@ -8,12 +8,21 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageButton;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Gallery;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 public class LocationActivity extends Activity {
 	
+	private ViewFlipper page; 
+	private Animation fadeIn;
+	private Animation fadeOut;
 	private static final int SELECT_PICTURE = 1;
 	private String selectedImagePath;
 
@@ -30,14 +39,32 @@ public class LocationActivity extends Activity {
         location = db.getLocation(id);
 //        Toast.makeText(LocationActivity.this,location.getName(), Toast.LENGTH_SHORT).show();
         
-        TextView name = (TextView) findViewById(R.id.name);
-        TextView description = (TextView) findViewById(R.id.description);
-        TextView directions = (TextView) findViewById(R.id.directions);
-        TextView tags = (TextView) findViewById(R.id.tags);
-        ImageButton addImageButton = (ImageButton) findViewById(R.id.addImageButton);
-        
-        addImageButton.setOnClickListener(new OnClickListener() {
+        page = (ViewFlipper) findViewById(R.id.flipper);
+        fadeIn = AnimationUtils.loadAnimation(this,android.R.anim.fade_in);
+        fadeOut = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
 
+        TextView name = (TextView) findViewById(R.id.name);
+        final TextView description = (TextView) findViewById(R.id.description);
+        final TextView directions = (TextView) findViewById(R.id.directions);
+        TextView tags = (TextView) findViewById(R.id.tags);
+        ImageView addImageButton = (ImageView) findViewById(R.id.addImageButton);
+        Gallery descriptionMenu = (Gallery) findViewById(R.id.descriptionMenu);
+        descriptionMenu.setAdapter(new DescriptionMenuAdapter(this, new String[] {"Description","Directions"}));
+        
+        descriptionMenu.setOnItemSelectedListener(new OnItemSelectedListener() {
+	        @Override
+	        public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+	        	page.setInAnimation(fadeIn);
+	        	page.setOutAnimation(fadeOut);
+	        	page.setDisplayedChild(position);
+	        }
+	        @Override
+	        public void onNothingSelected(AdapterView<?> arg0) {
+	            // Do nothing
+	        }
+        });
+      
+        addImageButton.setOnClickListener(new OnClickListener() {
             public void onClick(View arg0) {
                 Intent intent = new Intent();
                 intent.setType("image/*");
