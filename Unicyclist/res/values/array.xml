@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="distance_filter_array">
+      	<item>Nearby</item>
+    	<item>Medium</item>
+    	<item>Distant</item>
+    	<item>All</item>
+	</string-array>
+	 
+	<string-array name="distance_filter_values">
+	        <item>30</item>
+	        <item>80</item>
+	        <item>200</item>
+	        <item>1000000</item>
+	</string-array>
+    
+</resources>

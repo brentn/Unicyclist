@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+    
+    <RelativeLayout
+        android:id="@+id/mapview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+        
+        <!-- Home:  0Wp1747MVgskQz6SzgO1mpYZQNHRrP40R4v8aTA 
+             Work:  0Wp1747MVgsklImDthpkPZQmQXF-igwvxB_kePg  -->
+   	    
+	    <com.google.android.maps.MapView
+	   	    xmlns:android="http://schemas.android.com/apk/res/android"
+	   	    android:id="@+id/locationPicker"
+	   	    android:layout_width="fill_parent"
+	   	    android:layout_height="fill_parent"
+	   	    android:apiKey="0Wp1747MVgsklImDthpkPZQmQXF-igwvxB_kePg"
+	   	    android:clickable="true"
+	   	    android:visibility="visible" />
+
+	   	<ImageView
+	   	    android:id="@+id/pinButton"
+	   	    android:layout_width="wrap_content"
+	   	    android:layout_height="wrap_content"
+	   	    android:layout_alignParentLeft="true"
+	   	    android:layout_alignParentTop="true"
+	   	    android:layout_marginLeft="20dip"
+	   	    android:layout_marginTop="20dip"
+	   	    android:contentDescription="pinButton"
+	   	    android:src="@drawable/ic_pin_button" />
+	
+	   	<ImageView
+	   	    android:id="@+id/satButton"
+	   	    android:layout_width="wrap_content"
+	   	    android:layout_height="wrap_content"
+	   	    android:layout_alignParentTop="true"
+	   	    android:layout_alignParentRight="true"
+	   	    android:layout_marginRight="20dip"
+	   	    android:layout_marginTop="20dip"
+	   	    android:contentDescription="satelliteButton"
+	   	    android:src="@drawable/sat_button" />
+  	    
+	   		   	<ImageView
+	   	    android:id="@+id/gpsButton"
+	   	    android:contentDescription="gpsButton"
+	   	    android:layout_width="wrap_content"
+	   	    android:layout_height="wrap_content"
+	   	    android:layout_alignParentTop="true"
+	   	    android:layout_toLeftOf="@+id/satButton"
+	   	    android:layout_marginRight="5dip"
+	   	    android:layout_marginTop="20dip"
+	   	    android:src="@drawable/gps_button" />
+	
+	</RelativeLayout>
+
+	<EditText
+	    android:id="@+id/editText1"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:hint="@string/location_name" >
+
+	</EditText>
+
+	<EditText
+	    android:id="@+id/editText2"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:gravity="top"
+	    android:hint="@string/description"
+	    android:inputType="textMultiLine"
+	    android:lines="6"
+	    android:singleLine="false" />
+
+   	<EditText
+   	    android:id="@+id/editText3"
+   	    android:layout_width="fill_parent"
+   	    android:layout_height="wrap_content"
+   	    android:gravity="top"
+   	    android:hint="@string/directions"
+   	    android:inputType="textMultiLine"
+   	    android:lines="6"
+   	    android:singleLine="false" />
+
+   	<RelativeLayout
+   	    android:id="@+id/relativeLayout1"
+   	    android:layout_width="fill_parent"
+   	    android:layout_height="wrap_content" >
+
+   		<Button
+   		    android:id="@+id/addButton"
+   		    android:layout_width="100dp"
+   		    android:layout_height="50dp"
+   		    android:layout_alignParentRight="true"
+   		    android:layout_alignParentBottom="true"
+   		    android:background="@drawable/black_button"
+   		    android:textColor="#FFFFFF"
+   		    android:text="@string/add" />
+
+   		<Button
+   		    android:id="@+id/cancelButton"
+   		    android:layout_width="100dp"
+   		    android:layout_height="50dp"
+   		    android:layout_alignParentLeft="true"
+   		    android:layout_alignParentBottom="true"
+   		    android:background="@drawable/black_button"
+   		    android:text="@android:string/cancel"
+   		    android:textColor="#FFFFFF" />
+
+   	</RelativeLayout>
+
+
+</ViewFlipper>
