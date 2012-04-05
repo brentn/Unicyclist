@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Gallery;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.widget.ViewFlipper;
 
@@ -34,61 +35,85 @@ import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
 public class LocationsActivity extends MapActivity {
-	
-	private ViewFlipper page;
+
+    ListView.OnItemClickListener clickListener;
+    
+	private ViewFlipper page; 
 	private Animation fadeIn;
 	private Animation fadeOut;
-	
+
+	private List<Location> locationList;
+	private List<Location> favouritesList;
 	private LocationsListAdapter locationsListAdapter;
 	private LocationsListAdapter favouritesListAdapter;
+	private MapView mapView;
 	private MapController mapController;
-	
+	private LocationManager locationManager;
+	private LocationListener locationListener;
+	private ToggleButton satButton;
+	private ToggleButton gpsButton;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.locations_list);
         
-        // Read Locations from Databse
+        //Read data from DB
         DatabaseHandler db = new DatabaseHandler(this);
         db.initialize();
 //this.addSampleData();
-        List<Location> locationList = db.getAllLocations();
+        locationList = db.getAllLocations();
         db.close();
-        List<Location> myList = new ArrayList<Location>();
+        favouritesList = new ArrayList<Location>();
         for(Iterator<Location> i = locationList.iterator(); i.hasNext(); ) {
       	  Location location = i.next();
       	  if (location.isFavourite()) {
-      		  myList.add(location);
+      		  favouritesList.add(location);
       	  }
       	}
-        
+
         //Find View Components
         Gallery menu = (Gallery) findViewById(R.id.gallery);
         page = (ViewFlipper)findViewById(R.id.flipper);
         ListView locationsView = (ListView) findViewById(R.id.allLocationsList);
         ListView favouritesView = (ListView) findViewById(R.id.myLocationsList);
-        MapView mapView = (MapView) findViewById(R.id.mapview);
-        ToggleButton gpsButton = (ToggleButton) findViewById(R.id.gpsButton);
-        ToggleButton satButton = (ToggleButton) findViewById(R.id.satButton);
-
-
+        mapView = (MapView) findViewById(R.id.mapview);
+        gpsButton = (ToggleButton) findViewById(R.id.gpsButton);
+        satButton = (ToggleButton) findViewById(R.id.satButton);
+        
         //Find other resources
         fadeIn = AnimationUtils.loadAnimation(this,android.R.anim.fade_in);
         fadeOut = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
 
-        //Set up adapters
+        //Set up Adapters
         locationsListAdapter = new LocationsListAdapter(this.getBaseContext(), R.layout.locations_list_item, locationList);
         locationsView.setAdapter(locationsListAdapter);
-        favouritesListAdapter = new LocationsListAdapter(this.getBaseContext(), R.layout.locations_list_item, myList);
+        favouritesListAdapter = new LocationsListAdapter(this.getBaseContext(), R.layout.locations_list_item, favouritesList);
         favouritesView.setAdapter(favouritesListAdapter);
         menu.setAdapter(new GalleryMenuAdapter(this, new String[] {getString(R.string.locations),getString(R.string.favourites),getString(R.string.mapview)}));
         
-        //Set up menus
+        //Set Up Menus
         registerForContextMenu(locationsView);
         registerForContextMenu(favouritesView);
         
-        
-        //Set up listeners
+        // Set Up Listeners
+        satButton.setOnClickListener(new OnClickListener() {
+        	@Override
+        	public void onClick(View view) {
+        		mapView.setSatellite(satButton.isChecked());
+        	}
+        });
+        gpsButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				if (gpsButton.isChecked()) {
+					locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+				} else {
+					locationManager.removeUpdates(locationListener);
+				}
+			}
+        	
+        });
         menu.setOnItemSelectedListener(new OnItemSelectedListener() {
 	        @Override
 	        public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
@@ -101,50 +126,25 @@ public class LocationsActivity extends MapActivity {
 	            // Do nothing
 	        }
         });
-        ListView.OnItemClickListener clickListener = new ListView.OnItemClickListener() {
+        clickListener = new ListView.OnItemClickListener() {
         	@Override
         	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         		Intent locationIntent = new Intent(LocationsActivity.this, LocationActivity.class);
         		locationIntent.putExtra("id",id);
         		LocationsActivity.this.startActivity(locationIntent);
         	}
-
         };
-        locationsView.setOnItemClickListener(clickListener);
-        favouritesView.setOnItemClickListener(clickListener);
+        ((ListView) findViewById(R.id.allLocationsList)).setOnItemClickListener(clickListener);
+        ((ListView) findViewById(R.id.myLocationsList)).setOnItemClickListener(clickListener);
+
+        
+        //Set up Map
         mapController = mapView.getController();
         mapController.setZoom(11);
-        satButton.setOnClickListener(new OnClickListener() {
-        	@Override
-        	public void onClick(View arg0) {
-        		//mapView.setSatellite(satButton.isChecked());
-        	}
-        });
-        LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-		LocationListener locationListener = new MyLocationListener();
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+		locationListener = new MyLocationListener();
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-        gpsButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-//				if (gpsButton.isChecked()) {
-//					locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-//				} else {
-//					locationManager.removeUpdates(locationListener);
-//				}
-			}
-        	
-        });
-
-        
-        //Initialize the map
-        //mapView.setBuiltInZoomControls(true);
-        gpsButton.setChecked(true);
-        mapView.setSatellite(false);
-		GeoPoint myGeoPoint = new GeoPoint(
-				 (int)(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLatitude()*1000000),
-				 (int)(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLongitude()*1000000));
-		mapController.animateTo(myGeoPoint);
-        
+		
         //add stuff to the map
         List<Overlay> mapOverlays = mapView.getOverlays();
         Drawable drawable = this.getResources().getDrawable(R.drawable.ic_map_pin);
@@ -181,41 +181,13 @@ public class LocationsActivity extends MapActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.newLocation:                    
-	        	Intent intent = new Intent(LocationsActivity.this,NewLocationActivity.class);
-	        	LocationsActivity.this.startActivity(intent);
-	        	locationsListAdapter.notifyDataSetChanged();
-	        	favouritesListAdapter.notifyDataSetChanged();
+            case R.id.newLocation:     Toast.makeText(this, "Create New Location", Toast.LENGTH_LONG).show();
                 break;   
             case R.id.settings:		startActivity(new Intent(this, Preferences.class));
             	break;
         }
         return true;
     }
-    
-    private class MyLocationListener implements LocationListener{
-
-    	  public void onLocationChanged(android.location.Location argLocation) {
-    	   // TODO Auto-generated method stub
-    	   GeoPoint myGeoPoint = new GeoPoint(
-    	    (int)(argLocation.getLatitude()*1000000),
-    	    (int)(argLocation.getLongitude()*1000000));
-    	   mapController.animateTo(myGeoPoint);
-    	  }
-
-    	  public void onProviderDisabled(String provider) {
-    	   // TODO Auto-generated method stub
-    	  }
-
-    	  public void onProviderEnabled(String provider) {
-    	   // TODO Auto-generated method stub
-    	  }
-
-    	  public void onStatusChanged(String provider,
-    	    int status, Bundle extras) {
-    	   // TODO Auto-generated method stub
-    	  }
-	 }
     
 //    @Override  
 //    public boolean onContextItemSelected(MenuItem item) {  
@@ -232,7 +204,30 @@ public class LocationsActivity extends MapActivity {
 ////        else {return false;}  
 //    return true;  
 //    }  
-    
+
+    private class MyLocationListener implements LocationListener{
+
+  	  public void onLocationChanged(android.location.Location argLocation) {
+  	   // TODO Auto-generated method stub
+  	   GeoPoint myGeoPoint = new GeoPoint(
+  	    (int)(argLocation.getLatitude()*1000000),
+  	    (int)(argLocation.getLongitude()*1000000));
+  	   mapController.animateTo(myGeoPoint);
+  	  }
+
+  	  public void onProviderDisabled(String provider) {
+  	   // TODO Auto-generated method stub
+  	  }
+
+  	  public void onProviderEnabled(String provider) {
+  	   // TODO Auto-generated method stub
+  	  }
+
+  	  public void onStatusChanged(String provider,
+  	    int status, Bundle extras) {
+  	   // TODO Auto-generated method stub
+  	  }
+	 }
          
     private void addSampleData() {
     	DatabaseHandler db = new DatabaseHandler(this);

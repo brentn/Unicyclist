@@ -38,7 +38,7 @@
 			    android:layout_width="fill_parent"
 			    android:layout_height="fill_parent"
 			    android:clickable="true"
-			    android:apiKey="0Wp1747MVgsklImDthpkPZQmQXF-igwvxB_kePg" />
+			    android:apiKey="0Wp1747MVgskQz6SzgO1mpYZQNHRrP40R4v8aTA" />
 		   	
 		   	<ToggleButton
 		   	    android:id="@+id/satButton"
