@@ -144,6 +144,7 @@ public class LocationsActivity extends MapActivity {
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		locationListener = new MyLocationListener();
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+		gpsButton.setChecked(true);
 		
         //add stuff to the map
         List<Overlay> mapOverlays = mapView.getOverlays();
@@ -173,15 +174,21 @@ public class LocationsActivity extends MapActivity {
     @Override  
     public void onCreateContextMenu(ContextMenu menu, View v,ContextMenuInfo menuInfo) {  
 		 super.onCreateContextMenu(menu, v, menuInfo);  
-		     menu.setHeaderTitle("Locations");  
-		     menu.add(0, v.getId(), 0, getString(R.string.add_to_my_locations));  
-		     menu.add(0, v.getId(), 0, getString(R.string.delete_location));  
+		     AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+		     Location selected = ((Location)((ListView) v).getAdapter().getItem(info.position));
+		     menu.setHeaderTitle(selected.getName());
+		     if (selected.isFavourite()) {
+		    	 menu.add(0, v.getId(), 0, getString(R.string.remove_from_favourites));
+		     } else {
+		    	 menu.add(0, v.getId(), 0, getString(R.string.add_to_favourites));
+		     }
+		     menu.add(0, v.getId(), 0, getString(R.string.delete_location));
     }  
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.newLocation:     Toast.makeText(this, "Create New Location", Toast.LENGTH_LONG).show();
+            case R.id.newLocation:	startActivity(new Intent(this, NewLocationActivity.class));     
                 break;   
             case R.id.settings:		startActivity(new Intent(this, Preferences.class));
             	break;
@@ -189,21 +196,12 @@ public class LocationsActivity extends MapActivity {
         return true;
     }
     
-//    @Override  
-//    public boolean onContextItemSelected(MenuItem item) {  
-//            if(item.getTitle()==getString(R.string.add_to_my_locations)) {
-//            	int id = item.getItemId();
-//            	 DatabaseHandler db = new DatabaseHandler(this);
-//            	 db.addFavourite(id);
-//            	 db.close();
-//            	 locationList.get(id).setFavourite();
-//            	 myLocationList.add(locationList.get(id));
-//            	 
-//        	}  
-////        else if(item.getTitle()==getString(R.string.delete_location)){function2(item.getItemId());}  
-////        else {return false;}  
-//    return true;  
-//    }  
+    @Override  
+    public boolean onContextItemSelected(MenuItem item) {  
+    	AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+    	//int id = ((Location)((ListView) info.targetView).getAdapter().getItem(info.position)).getId();
+    	return true;  
+    }  
 
     private class MyLocationListener implements LocationListener{
 

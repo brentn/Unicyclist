@@ -88,9 +88,9 @@ public final class R {
     }
     public static final class string {
         public static final int New=0x7f06000a;
-        public static final int add=0x7f060014;
+        public static final int add=0x7f060015;
         public static final int add_image=0x7f06000b;
-        public static final int add_to_my_locations=0x7f06000d;
+        public static final int add_to_favourites=0x7f06000d;
         public static final int all_locations=0x7f060001;
         public static final int app_name=0x7f060000;
         public static final int challenges=0x7f060006;
@@ -98,17 +98,18 @@ public final class R {
         public static final int delete_location=0x7f06000c;
         public static final int description=0x7f060003;
         public static final int directions=0x7f060004;
-        public static final int distance_filter=0x7f060011;
-        public static final int distance_filter_summary=0x7f060012;
-        public static final int distances_in_miles=0x7f06000f;
-        public static final int favourites=0x7f060015;
-        public static final int location_name=0x7f060016;
-        public static final int locations=0x7f060010;
+        public static final int distance_filter=0x7f060012;
+        public static final int distance_filter_summary=0x7f060013;
+        public static final int distances_in_miles=0x7f060010;
+        public static final int favourites=0x7f060016;
+        public static final int location_name=0x7f060017;
+        public static final int locations=0x7f060011;
         public static final int mapview=0x7f060008;
         public static final int my_locations=0x7f060002;
-        public static final int name=0x7f060013;
+        public static final int name=0x7f060014;
         public static final int new_location=0x7f060009;
-        public static final int settings=0x7f06000e;
+        public static final int remove_from_favourites=0x7f06000e;
+        public static final int settings=0x7f06000f;
         public static final int trails=0x7f060005;
     }
     public static final class xml {
