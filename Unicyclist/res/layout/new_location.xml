@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/newlocationflipper"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
     
@@ -16,21 +17,16 @@
 	   	    android:id="@+id/locationPicker"
 	   	    android:layout_width="fill_parent"
 	   	    android:layout_height="fill_parent"
-	   	    android:apiKey="0Wp1747MVgsklImDthpkPZQmQXF-igwvxB_kePg"
+	   	    android:apiKey="@string/maps_api_key"
 	   	    android:clickable="true"
 	   	    android:visibility="visible" />
 
-	   	<ImageButton
-	   	    	android:id="@+id/pinButton"
-		   	    android:layout_width="wrap_content"
-		   	    android:layout_height="wrap_content"
-		   	    android:textOn=""
-		   	    android:textOff=""
-		   	    android:layout_alignParentTop="true"
-		   	    android:layout_alignParentLeft="true"
-		   	    android:layout_marginLeft="20dip"
-		   	    android:layout_marginTop="20dip"
-	   	    	android:background="@drawable/ic_pin_button" />
+		 <ImageView android:id="@+id/drag"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:src="@drawable/marker"
+		    android:visibility="gone"
+		  />   
 	
 	   	<ToggleButton
 		   	    android:id="@+id/satButton"
@@ -57,61 +53,77 @@
 		   	    android:layout_marginTop="20dip"
 		   	    android:background="@drawable/gps_button" />	
 	</RelativeLayout>
-
-	<EditText
-	    android:id="@+id/editText1"
+	<LinearLayout
 	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:hint="@string/location_name" >
-
-	</EditText>
-
-	<EditText
-	    android:id="@+id/editText2"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:gravity="top"
-	    android:hint="@string/description"
-	    android:inputType="textMultiLine"
-	    android:lines="6"
-	    android:singleLine="false" />
-
-   	<EditText
-   	    android:id="@+id/editText3"
-   	    android:layout_width="fill_parent"
-   	    android:layout_height="wrap_content"
-   	    android:gravity="top"
-   	    android:hint="@string/directions"
-   	    android:inputType="textMultiLine"
-   	    android:lines="6"
-   	    android:singleLine="false" />
-
-   	<RelativeLayout
-   	    android:id="@+id/relativeLayout1"
-   	    android:layout_width="fill_parent"
-   	    android:layout_height="wrap_content" >
-
-   		<Button
-   		    android:id="@+id/addButton"
-   		    android:layout_width="100dp"
-   		    android:layout_height="50dp"
-   		    android:layout_alignParentRight="true"
-   		    android:layout_alignParentBottom="true"
-   		    android:background="@drawable/black_button"
-   		    android:textColor="#FFFFFF"
-   		    android:text="@string/add" />
-
-   		<Button
-   		    android:id="@+id/cancelButton"
-   		    android:layout_width="100dp"
-   		    android:layout_height="50dp"
-   		    android:layout_alignParentLeft="true"
-   		    android:layout_alignParentBottom="true"
-   		    android:background="@drawable/black_button"
-   		    android:text="@android:string/cancel"
-   		    android:textColor="#FFFFFF" />
-
-   	</RelativeLayout>
-
-
+	    android:layout_height="fill_parent"
+	    android:orientation="vertical" >
+		<EditText
+		    android:id="@+id/name"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:hint="@string/location_name" >
+	
+		</EditText>
+	
+		<EditText
+		    android:id="@+id/description"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:gravity="top"
+		    android:hint="@string/description"
+		    android:inputType="textMultiLine"
+		    android:lines="6"
+		    android:singleLine="false" />
+	
+	   	<EditText
+	   	    android:id="@+id/directions"
+	   	    android:layout_width="fill_parent"
+	   	    android:layout_height="wrap_content"
+	   	    android:gravity="top"
+	   	    android:hint="@string/directions"
+	   	    android:inputType="textMultiLine"
+	   	    android:lines="6"
+	   	    android:singleLine="false" />
+	   	<TextView
+	   	    android:layout_width="wrap_content"
+	   	    android:layout_height="wrap_content"
+	   	    android:text="@string/rating" />
+	   	<RatingBar 
+	   	    android:id="@+id/rating"
+	   	    android:layout_width="wrap_content"
+	   	    android:layout_height="wrap_content"
+	   	    android:gravity="center"
+	   	    android:numStars="5"
+	   	    android:max="10"
+	   	    android:stepSize="0.5"
+	   	    android:rating="2.5" />
+	
+	   	<RelativeLayout
+	   	    android:id="@+id/relativeLayout1"
+	   	    android:layout_width="fill_parent"
+	   	    android:layout_height="wrap_content" >
+	
+	   		<Button
+	   		    android:id="@+id/addButton"
+	   		    android:layout_width="100dp"
+	   		    android:layout_height="50dp"
+	   		    android:layout_alignParentRight="true"
+	   		    android:layout_alignParentBottom="true"
+	   		    android:background="@drawable/black_button"
+	   		    android:textColor="#FFFFFF"
+	   		    android:text="@string/add" />
+	
+	   		<Button
+	   		    android:id="@+id/cancelButton"
+	   		    android:layout_width="100dp"
+	   		    android:layout_height="50dp"
+	   		    android:layout_alignParentLeft="true"
+	   		    android:layout_alignParentBottom="true"
+	   		    android:background="@drawable/black_button"
+	   		    android:text="@android:string/cancel"
+	   		    android:textColor="#FFFFFF" />
+	
+	   	</RelativeLayout>
+	</LinearLayout>
+	   	
 </ViewFlipper>

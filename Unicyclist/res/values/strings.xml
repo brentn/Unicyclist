@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<!-- Work 
+    <string name="maps_api_key">0Wp1747MVgsklImDthpkPZQmQXF-igwvxB_kePg</string>
+-->    
+<!-- Home -->
+	<string name="maps_api_key">0Wp1747MVgskQz6SzgO1mpYZQNHRrP40R4v8aTA</string>
     <string name="app_name">Unicyclist</string>
     <string name="all_locations">All Locations</string>
     <string name="my_locations">My Locations</string>
     <string name="description">Description</string>
     <string name="directions">Directions</string>
-    <string name="trails">Trails...</string>
-    <string name="challenges">Challenges...</string>
+    <string name="trails">Trails</string>
+    <string name="challenges">Challenges</string>
     <string name="comments">Comments</string>
     <string name="mapview">map view</string>
     <string name="new_location">New Location</string>
@@ -24,5 +29,10 @@
     <string name="add">Add</string>
     <string name="favourites">favourites</string>
     <string name="location_name">Location name</string>
+    <string name="location_picker">Location Picker</string>
+    <string name="is_this_location_correct">Is this location correct?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="rating">Rating</string>
 
 </resources>

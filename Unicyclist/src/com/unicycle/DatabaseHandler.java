@@ -235,7 +235,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     
     //Public Methods
         
-    public void addLocation(Location location) {
+    public int addLocation(Location location) {
     	SQLiteDatabase db = this.getWritableDatabase(); 	 
         ContentValues values = new ContentValues();
         values.put(KEY_LOCATION_NAME, location.getName()); 
@@ -250,6 +250,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         	this.addFavourite(id);
         }
         this.addTags(id, location.getTags());
+        return id;
     }
     
     public Tag findTagByName(String name) {

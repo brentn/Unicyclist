@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -23,11 +25,11 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Gallery;
 import android.widget.ListView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.widget.ViewFlipper;
 
 import com.google.android.maps.GeoPoint;
+import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
@@ -35,6 +37,8 @@ import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
 public class LocationsActivity extends MapActivity {
+	
+	final int GET_NEW_LOCATION = 1;
 
     ListView.OnItemClickListener clickListener;
     
@@ -188,12 +192,40 @@ public class LocationsActivity extends MapActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.newLocation:	startActivity(new Intent(this, NewLocationActivity.class));     
-                break;   
+            case R.id.newLocation:	
+            	startActivityForResult(new Intent(LocationsActivity.this, NewLocationActivity.class), GET_NEW_LOCATION);
+            	break;   
             case R.id.settings:		startActivity(new Intent(this, Preferences.class));
             	break;
         }
         return true;
+    }
+    
+    @Override
+    protected void onActivityResult(
+        int aRequestCode, int aResultCode, Intent aData) {
+        switch (aRequestCode) {
+            case GET_NEW_LOCATION:
+            	if ((aData != null) && (aResultCode == Activity.RESULT_OK)) {
+            		String name = aData.getStringExtra("name");
+            		double latitude = aData.getDoubleExtra("latitude", 0);
+            		double longitude = aData.getDoubleExtra("longitude", 0);
+            		String description = aData.getStringExtra("description");
+            		String directions = aData.getStringExtra("directions");
+            		int rating = aData.getIntExtra("rating",5);
+            		Location location = new Location(name,latitude,longitude,description,directions,rating);
+            		location.setFavourite();
+            		DatabaseHandler db = new DatabaseHandler(this);
+            		location.setId(db.addLocation(location));
+            		db.close();
+            		locationList.add(location);
+            		locationsListAdapter.notifyDataSetChanged();
+            		favouritesList.add(location);
+            		favouritesListAdapter.notifyDataSetChanged();
+            	}
+                break;
+        }
+        super.onActivityResult(aRequestCode, aResultCode, aData);
     }
     
     @Override  
@@ -226,6 +258,44 @@ public class LocationsActivity extends MapActivity {
   	   // TODO Auto-generated method stub
   	  }
 	 }
+    
+    public class LocationsOverlay extends ItemizedOverlay {
+
+    	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
+    	Context mContext;
+    	
+    	public LocationsOverlay(Drawable defaultMarker, Context context) {
+    	  super(boundCenterBottom(defaultMarker));
+    	  mContext = context;
+    	}
+    	
+    	public void addOverlay(OverlayItem overlay) {
+    	    mOverlays.add(overlay);
+    	    populate();
+    	}
+    	
+    	@Override
+    	protected OverlayItem createItem(int i) {
+    	  return mOverlays.get(i);
+    	}
+    	
+    	@Override
+    	public int size() {
+    	  return mOverlays.size();
+    	}
+    	
+    	@Override
+    	protected boolean onTap(int index) {
+    	  OverlayItem item = mOverlays.get(index);
+    	  AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+    	  dialog.setTitle(item.getTitle());
+    	  dialog.setMessage(item.getSnippet());
+    	  dialog.show();
+    	  return true;
+    	}
+
+    }
+
          
     private void addSampleData() {
     	DatabaseHandler db = new DatabaseHandler(this);
