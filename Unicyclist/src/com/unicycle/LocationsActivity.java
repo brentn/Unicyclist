@@ -25,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Gallery;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.widget.ViewFlipper;
 
@@ -50,6 +51,7 @@ public class LocationsActivity extends MapActivity {
 	private List<Location> favouritesList;
 	private LocationsListAdapter locationsListAdapter;
 	private LocationsListAdapter favouritesListAdapter;
+	private LocationsOverlay locationsOverlay;
 	private MapView mapView;
 	private MapController mapController;
 	private LocationManager locationManager;
@@ -147,13 +149,13 @@ public class LocationsActivity extends MapActivity {
         mapController.setZoom(11);
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		locationListener = new MyLocationListener();
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-		gpsButton.setChecked(true);
+//		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+//		gpsButton.setChecked(true);
 		
         //add stuff to the map
         List<Overlay> mapOverlays = mapView.getOverlays();
         Drawable drawable = this.getResources().getDrawable(R.drawable.ic_map_pin);
-        LocationsOverlay locationsOverlay = new LocationsOverlay(drawable, this);
+        locationsOverlay = new LocationsOverlay(drawable, this);
         for(Iterator<Location> i = locationList.iterator(); i.hasNext(); ) {
         	  Location location = i.next();
         	  GeoPoint point = new GeoPoint((int) (location.getLatitude()*1e6),(int) (location.getLongitude()*1e6));
@@ -207,6 +209,7 @@ public class LocationsActivity extends MapActivity {
         switch (aRequestCode) {
             case GET_NEW_LOCATION:
             	if ((aData != null) && (aResultCode == Activity.RESULT_OK)) {
+            		//Retrieve Data
             		String name = aData.getStringExtra("name");
             		double latitude = aData.getDoubleExtra("latitude", 0);
             		double longitude = aData.getDoubleExtra("longitude", 0);
@@ -214,14 +217,23 @@ public class LocationsActivity extends MapActivity {
             		String directions = aData.getStringExtra("directions");
             		int rating = aData.getIntExtra("rating",5);
             		Location location = new Location(name,latitude,longitude,description,directions,rating);
-            		location.setFavourite();
+            		//Add to database
             		DatabaseHandler db = new DatabaseHandler(this);
             		location.setId(db.addLocation(location));
             		db.close();
+            		//Add to location list in memory
             		locationList.add(location);
             		locationsListAdapter.notifyDataSetChanged();
-            		favouritesList.add(location);
-            		favouritesListAdapter.notifyDataSetChanged();
+            		//Add to map
+            		GeoPoint point = new GeoPoint((int) (location.getLatitude()*1e6),(int) (location.getLongitude()*1e6));
+              	  	OverlayItem overlayitem = new OverlayItem(point, location.getName(), location.getDescription());
+                    locationsOverlay.addOverlay(overlayitem);
+                    //Add to favourites ONLY if favourites list is currently displayed
+            		if (page.getDisplayedChild() == 1) {
+                		location.setFavourite();
+	            		favouritesList.add(location);
+	            		favouritesListAdapter.notifyDataSetChanged();
+            		}
             	}
                 break;
         }
@@ -230,9 +242,72 @@ public class LocationsActivity extends MapActivity {
     
     @Override  
     public boolean onContextItemSelected(MenuItem item) {  
+    	Location location;
+    	
     	AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-    	//int id = ((Location)((ListView) info.targetView).getAdapter().getItem(info.position)).getId();
-    	return true;  
+    	int locationId = (int) info.id;
+    	String selection = item.getTitle().toString();
+    	if (selection == getString(R.string.add_to_favourites)) {
+    		//modify database
+    		DatabaseHandler db = new DatabaseHandler(this);
+    		location = db.getLocation(locationId);
+    		location.setFavourite();
+    		db.updateLocation(location);
+    		db.close();
+    		//modify location list
+    		location = locationsListAdapter.findById(locationId);
+    		if (location != null) {
+    			location.setFavourite();
+    			locationsListAdapter.notifyDataSetChanged();
+    		}
+    		//modify favourites list
+    		favouritesList.add(location);
+    		favouritesListAdapter.notifyDataSetChanged();
+    		return true;
+    	}
+    	else if (selection == getString(R.string.remove_from_favourites)) {
+    		//modify database
+    		DatabaseHandler db = new DatabaseHandler(this);
+    		location = db.getLocation(locationId);
+    		location.clearFavourite();
+    		db.updateLocation(location);
+    		db.close();
+    		//modify location list
+    		location = locationsListAdapter.findById(locationId);
+    		if (location != null) {
+    			location.clearFavourite();
+    			locationsListAdapter.notifyDataSetChanged();
+    		}
+    		//modify favourites list
+    		location = favouritesListAdapter.findById(locationId);
+    		if (location != null) {
+    			favouritesList.remove(location);
+    			favouritesListAdapter.notifyDataSetChanged();
+    		}
+    		return true;
+    	}
+    	else if (selection == getString(R.string.delete_location)) {
+    		//modify database
+    		DatabaseHandler db = new DatabaseHandler(this);
+    		db.deleteLocation(locationId);
+    		db.close();
+    		//modify location list
+    		location = locationsListAdapter.findById(locationId);
+    		if (location != null) {
+    			locationList.remove(location);
+    			locationsListAdapter.notifyDataSetChanged();
+    		}
+    		//modify favourites list
+    		location = favouritesListAdapter.findById(locationId);
+    		if (location != null) {
+    			favouritesList.remove(location);
+    			favouritesListAdapter.notifyDataSetChanged();
+    		}
+//FIX    		//remove from map
+    		
+    		return true;
+    	}
+    	return false;  
     }  
 
     private class MyLocationListener implements LocationListener{

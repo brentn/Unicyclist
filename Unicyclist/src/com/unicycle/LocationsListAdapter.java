@@ -1,6 +1,7 @@
 package com.unicycle;
 
 import java.text.DecimalFormat;
+import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
@@ -78,6 +79,18 @@ public class LocationsListAdapter extends android.widget.ArrayAdapter<Location> 
 	@Override
 	public long getItemId(int position) {
 		return (long) locations.get(position).getId();
+	}
+	
+	public Location findById(int id) {
+		Location result = null;
+		for(Iterator<Location> i = locations.iterator(); i.hasNext(); ) {
+			Location location = i.next();
+			if ( location.getId() == id ) {
+				result = location;
+				break;
+			}
+		}
+		return result;
 	}
 	
 }

@@ -177,7 +177,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     
     private void clearFavourite(int id) {
     	if (favourites.contains(id)) {
-    		favourites.remove(id);
+    		favourites.remove(favourites.indexOf(id));
 	    	SQLiteDatabase db = this.getWritableDatabase();
 	    	String query = "DELETE FROM " + TABLE_FAVOURITES + " WHERE " + KEY_FAVOURITES_LOCATIONID + "="+id;
 	    	db.execSQL(query);
@@ -347,21 +347,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	    return locationList;
     }
     
-//    public List<Location> getMyLocations() {
-//    	List<Location> myLocationList = new ArrayList<Location>();
-//    	String query = "SELECT * FROM " + TABLE_FAVOURITES;
-//    	SQLiteDatabase db = this.getReadableDatabase();
-//    	Cursor cursor = db.rawQuery(query,null);
-//    	if (cursor.moveToFirst()) {
-//    		do {
-//	            Location location = new Location();
-//    			location = this.getLocation(Integer.parseInt(cursor.getString(0)));
-//	            myLocationList.add(location);
-//    		} while (cursor.moveToNext());
-//    	}
-//    	return myLocationList;
-//    }
-    
     public int updateLocation(Location location) {
     	int id = location.getId();
     	SQLiteDatabase db = this.getWritableDatabase(); 
@@ -375,12 +360,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         int result = db.update(TABLE_LOCATIONS, values, KEY_LOCATION_ID + " = ?", new String[] { String.valueOf(id) });
         db.close();
         
-        if (isFavourite(id)) {
+        if (location.isFavourite()) {
         	this.addFavourite(id);
         } else {
         	this.clearFavourite(id);
         }
-        if (isDeleted(id)) {
+        if (location.isDeleted()) {
         	this.deleteLocation(id);
         }
         return result;
@@ -401,7 +386,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     	if (! isDeleted(id)) {
         	SQLiteDatabase db = this.getWritableDatabase();
         	ContentValues values = new ContentValues();
-        	values.put(KEY_DELETED_ID, id);
+        	values.put(KEY_DELETED_LOCATIONID, id);
         	db.insert(TABLE_DELETED, null, values);
         	db.close();    		
     	}
