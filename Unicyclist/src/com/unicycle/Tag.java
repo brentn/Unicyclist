@@ -4,6 +4,7 @@ package com.unicycle;
 public class Tag {
 	private int _id;
 	private String _name;
+	private int _timesUsed;
 	
 	public Tag() {
 	}

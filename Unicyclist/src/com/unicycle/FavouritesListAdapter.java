@@ -4,6 +4,8 @@ import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.List;
 
+import com.unicycle.MyLocation.LocationResult;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -16,20 +18,18 @@ import android.widget.TextView;
 public class FavouritesListAdapter extends android.widget.ArrayAdapter<Location> {
 	
 	private List<Location> locations;
-	private UNUSED_WhereAmI myLocation;
 	private android.location.Location _myLocation = new android.location.Location("");
 	private android.location.Location _destLocation = new android.location.Location("");
 	private boolean miles;
+	private MyLocation myLocation = new MyLocation();
+	private FavouritesListAdapter lla = this;
 	
 	public FavouritesListAdapter(Context context, int textViewResourceId, List<Location> locations) {
         super(context, textViewResourceId, locations);
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-
+		myLocation.getLocation(this.getContext(), locationResult);
 		miles = settings.getBoolean("miles", false);
         this.locations = locations;
-        myLocation = new UNUSED_WhereAmI(context);
-        _myLocation.setLatitude(myLocation.getLatitude());
-        _myLocation.setLongitude(myLocation.getLongitude());
     }
 	
 	@Override
@@ -92,6 +92,15 @@ public class FavouritesListAdapter extends android.widget.ArrayAdapter<Location>
 		}
 		return result;
 	}
+	
+	public LocationResult locationResult = new LocationResult(){
+	    @Override
+	    public void gotLocation(final android.location.Location location){
+	    	_myLocation = location;
+	    	lla.notifyDataSetChanged();
+	    }
+	};
+
 }
 
 

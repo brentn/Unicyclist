@@ -94,7 +94,7 @@ public class Location {
 		this._longitude = longitude;
 	}
 	
-	public void setCoordinates(int latitudeE6, int longitudeE6) {
+	public void setCoordinatesE6(int latitudeE6, int longitudeE6) {
 		this._latitude = (latitudeE6 / 1e6);
 		this._longitude = (longitudeE6 / 1e6);
 	}

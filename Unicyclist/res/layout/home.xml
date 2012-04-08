@@ -2,13 +2,72 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:gravity="center"
+    android:gravity="bottom"
     android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/locationsButton"
+    <SlidingDrawer
+        android:id="@+id/locationsSlider"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:text="@string/locations" />
+        android:layout_height="84dip"
+        android:topOffset="-235dp"
+        android:orientation="horizontal"
+        android:content="@+id/content"
+        android:handle="@+id/locationButton" >
 
+	    <ImageView
+	        android:id="@+id/locationButton"
+	        android:layout_width="fill_parent"
+	        android:layout_height="84dip"
+	        android:src="@drawable/locations_btn" />
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+        </LinearLayout>
+    </SlidingDrawer>
+
+    <SlidingDrawer
+        android:id="@+id/ridesSlider"
+        android:layout_width="fill_parent"
+        android:layout_height="84dip"
+        android:topOffset="-235dp"
+        android:orientation="horizontal"
+        android:content="@+id/content"
+        android:handle="@+id/ridesButton" >
+
+	    <ImageView
+	        android:id="@+id/ridesButton"
+	        android:layout_width="fill_parent"
+	        android:layout_height="84dip"
+	        android:src="@drawable/rides_btn" />
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+        </LinearLayout>
+    </SlidingDrawer>
+    
+    <SlidingDrawer
+        android:id="@+id/skillsSlider"
+        android:layout_width="fill_parent"
+        android:layout_height="84dip"
+        android:topOffset="-235dp"
+        android:orientation="horizontal"
+        android:content="@+id/content2"
+        android:handle="@+id/skillsButton" >
+
+        <ImageView
+	        android:id="@+id/skillsButton"
+	        android:layout_width="wrap_content"
+	        android:layout_height="84dip"
+	        android:src="@drawable/skills_btn" />
+
+        <LinearLayout
+            android:id="@+id/content2"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+        </LinearLayout>
+    </SlidingDrawer>
 </LinearLayout>

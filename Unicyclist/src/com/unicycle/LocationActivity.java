@@ -12,6 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,7 +38,6 @@ public class LocationActivity extends Activity {
         Location location = new Location();
         
         location = db.getLocation(id);
-//        Toast.makeText(LocationActivity.this,location.getName(), Toast.LENGTH_SHORT).show();
         
         page = (ViewFlipper) findViewById(R.id.flipper);
         fadeIn = AnimationUtils.loadAnimation(this,android.R.anim.fade_in);
@@ -49,6 +49,7 @@ public class LocationActivity extends Activity {
         TextView tags = (TextView) findViewById(R.id.tags);
         ImageView addImageButton = (ImageView) findViewById(R.id.addImageButton);
         Gallery descriptionMenu = (Gallery) findViewById(R.id.descriptionMenu);
+        Button trailsButton = (Button) findViewById(R.id.trailsButton);
         descriptionMenu.setAdapter(new DescriptionMenuAdapter(this, new String[] {"Description","Directions"}));
         
         descriptionMenu.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -72,6 +73,11 @@ public class LocationActivity extends Activity {
                 startActivityForResult(Intent.createChooser(intent,"Select Picture"), SELECT_PICTURE);
             }
         });    
+        trailsButton.setOnClickListener(new OnClickListener() {
+        	public void onClick(View view) {
+        		startActivity(new Intent(LocationActivity.this, TrailsActivity.class));
+        	}
+        });
         
         if ( name != null) {
         	name.setText(location.getName());
