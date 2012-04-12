@@ -72,9 +72,10 @@ public final class R {
         public static final int mapview=0x7f090021;
         public static final int myLocationsList=0x7f090020;
         public static final int name=0x7f090009;
-        public static final int newLocation=0x7f090032;
+        public static final int newLocation=0x7f090034;
         public static final int newlocationflipper=0x7f090026;
-        public static final int preferences=0x7f090033;
+        public static final int okButton=0x7f090031;
+        public static final int preferences=0x7f090035;
         public static final int relativeLayout1=0x7f090029;
         public static final int relativeLayout4=0x7f090010;
         public static final int relativeLayout5=0x7f090014;
@@ -85,12 +86,13 @@ public final class R {
         public static final int skillsButton=0x7f090008;
         public static final int skillsSlider=0x7f090006;
         public static final int strut1=0x7f090011;
+        public static final int tagName=0x7f090032;
         public static final int tagarea=0x7f090018;
         public static final int tags=0x7f09001c;
         public static final int textView7=0x7f090016;
         public static final int thumb=0x7f090024;
         public static final int trailsButton=0x7f090012;
-        public static final int trailsList=0x7f090031;
+        public static final int trailsList=0x7f090033;
         public static final int x=0x7f09002e;
         public static final int y=0x7f09002f;
     }
@@ -150,6 +152,7 @@ public final class R {
         public static final int rating=0x7f07001d;
         public static final int remove_from_favourites=0x7f07000f;
         public static final int settings=0x7f070010;
+        public static final int tag_name=0x7f070023;
         public static final int tag_picker=0x7f070022;
         public static final int tags_by_name=0x7f07001e;
         public static final int tags_by_usage=0x7f07001f;

@@ -39,5 +39,6 @@
     <string name="click_to_add_tags"> - Click here to add TAGS - </string>
     <string name="preferences">Preferences</string>
     <string name="tag_picker">Tag Picker</string>
+    <string name="tag_name">tag name</string>
 
 </resources>
