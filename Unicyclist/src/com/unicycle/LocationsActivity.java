@@ -25,7 +25,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Gallery;
 import android.widget.ListView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.widget.ViewFlipper;
 
@@ -58,15 +57,15 @@ public class LocationsActivity extends MapActivity {
 	private LocationListener locationListener;
 	private ToggleButton satButton;
 	private ToggleButton gpsButton;
-
+//	private SoundManager mSoundManager;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.locations_list);
         
         //Read data from DB
-        DatabaseHandler db = new DatabaseHandler(this);
-        db.initialize();
+        Locations db = new Locations(this);
 //this.addSampleData();
         locationList = db.getAllLocations();
         db.close();
@@ -77,6 +76,10 @@ public class LocationsActivity extends MapActivity {
       		  favouritesList.add(location);
       	  }
       	}
+        
+//        mSoundManager = new SoundManager();
+//        mSoundManager.initSounds(getBaseContext());
+//        mSoundManager.addSound(1, R.raw.click);
 
         //Find View Components
         Gallery menu = (Gallery) findViewById(R.id.gallery);
@@ -120,11 +123,12 @@ public class LocationsActivity extends MapActivity {
 			}
         	
         });
+        
         menu.setOnItemSelectedListener(new OnItemSelectedListener() {
 	        @Override
-	        public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
-	        	page.setInAnimation(fadeIn);
+	        public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {	        	page.setInAnimation(fadeIn);
 	        	page.setOutAnimation(fadeOut);
+//	        	mSoundManager.playSound(1);
 	        	page.setDisplayedChild(position);
 	        }
 	        @Override
@@ -132,11 +136,13 @@ public class LocationsActivity extends MapActivity {
 	            // Do nothing
 	        }
         });
+        
         clickListener = new ListView.OnItemClickListener() {
         	@Override
         	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         		Intent locationIntent = new Intent(LocationsActivity.this, LocationActivity.class);
-        		locationIntent.putExtra("id",id);
+        		((UnicyclistApplication) getApplication()).setCurrentLocation(new Locations(getBaseContext()).getLocation((int) id));
+//        		locationIntent.putExtra("id",id);
         		LocationsActivity.this.startActivity(locationIntent);
         	}
         };
@@ -150,7 +156,7 @@ public class LocationsActivity extends MapActivity {
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		locationListener = new MyLocationListener();
 //		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-//		gpsButton.setChecked(true);
+		gpsButton.setChecked(mapView.isSatellite());
 		
         //add stuff to the map
         List<Overlay> mapOverlays = mapView.getOverlays();
@@ -173,7 +179,7 @@ public class LocationsActivity extends MapActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
+        inflater.inflate(R.menu.locations, menu);
         return true;
     }
     
@@ -197,8 +203,6 @@ public class LocationsActivity extends MapActivity {
             case R.id.newLocation:	
             	startActivityForResult(new Intent(LocationsActivity.this, NewLocationActivity.class), GET_NEW_LOCATION);
             	break;   
-            case R.id.settings:		startActivity(new Intent(this, Preferences.class));
-            	break;
         }
         return true;
     }
@@ -218,7 +222,7 @@ public class LocationsActivity extends MapActivity {
             		int rating = aData.getIntExtra("rating",5);
             		Location location = new Location(name,latitude,longitude,description,directions,rating);
             		//Add to database
-            		DatabaseHandler db = new DatabaseHandler(this);
+            		Locations db = new Locations(this);
             		location.setId(db.addLocation(location));
             		db.close();
             		//Add to location list in memory
@@ -249,7 +253,7 @@ public class LocationsActivity extends MapActivity {
     	String selection = item.getTitle().toString();
     	if (selection == getString(R.string.add_to_favourites)) {
     		//modify database
-    		DatabaseHandler db = new DatabaseHandler(this);
+    		Locations db = new Locations(this);
     		location = db.getLocation(locationId);
     		location.setFavourite();
     		db.updateLocation(location);
@@ -267,7 +271,7 @@ public class LocationsActivity extends MapActivity {
     	}
     	else if (selection == getString(R.string.remove_from_favourites)) {
     		//modify database
-    		DatabaseHandler db = new DatabaseHandler(this);
+    		Locations db = new Locations(this);
     		location = db.getLocation(locationId);
     		location.clearFavourite();
     		db.updateLocation(location);
@@ -288,7 +292,7 @@ public class LocationsActivity extends MapActivity {
     	}
     	else if (selection == getString(R.string.delete_location)) {
     		//modify database
-    		DatabaseHandler db = new DatabaseHandler(this);
+    		Locations db = new Locations(this);
     		db.deleteLocation(locationId);
     		db.close();
     		//modify location list
@@ -373,7 +377,7 @@ public class LocationsActivity extends MapActivity {
 
          
     private void addSampleData() {
-    	DatabaseHandler db = new DatabaseHandler(this);
+    	Locations db = new Locations(this);
     	Location location = new Location();
     	Location location2 = new Location();
     	
@@ -383,17 +387,21 @@ public class LocationsActivity extends MapActivity {
     	location.setDescription("Right in town. A good workout.  Lots of hills.");
     	location.setDirections("Park at the Ag Rec center across the street.  Then follow the paved pathway under the road to get to the entrance.");
     	location.setRating(3);
-    	location.addTag("MUni");
-    	db.addLocation(location);  
+    	location.setId(db.addLocation(location));
+    	location.addTag(this,"MUni");
     	
     	location2.setName("Ledgeview");
     	location2.setCoordinates( 49.070808, -122.222654);
     	location2.setDescription("Right in town. Ride up in 45 mins, down in about 30.  Can be muddy.");
     	location2.setDirections("Drive just past Ledgeview Golf course, and park on the shoulder of the road.  There's a big muddy area on the right, and a yellow gate where the trails begin.");
     	location2.setRating(7);
-    	location2.addTag("Shared Trail");
-    	location2.addTag("MUni");
     	location2.setFavourite();
-    	db.addLocation(location2);
+    	location2.setId(db.addLocation(location2));
+    	location2.addTag(this,"Shared Trail");
+    	location2.addTag(this,"MUni");
+    	location2.addTag(this,"MyNameIsBrent");
+    	location2.addTag(this,"There is more to this Mountain Unicycling than meets the eye");
+    	location2.addTag(this,"Red and blue");
+    	location2.addTag(this,"Go away");
     }
 }

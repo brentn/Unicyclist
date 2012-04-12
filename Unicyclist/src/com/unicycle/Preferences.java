@@ -1,13 +1,23 @@
 package com.unicycle;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
+
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.widget.Toast;
 
 public class Preferences extends PreferenceActivity {
-	 
+	
+    private final String currentDBPath = "/data/com.unicycle/databases/";
+    private final String backupDBPath = "/com.unicycle/backup/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
  
@@ -46,22 +56,78 @@ public class Preferences extends PreferenceActivity {
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				DatabaseHandler db = new DatabaseHandler(preference.getContext());
-				db.backup();
+				Locations locations = new Locations(getApplicationContext());
+				Tags tags = new Tags(getApplicationContext());
+				copyDatabaseToSD(locations.databaseName());
+				copyDatabaseToSD(tags.databaseName());
+				Toast.makeText(getApplicationContext(), "Backup Complete", Toast.LENGTH_SHORT).show();
 				return true;
 			}
 		});
-
+        
         restore.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				DatabaseHandler db = new DatabaseHandler(preference.getContext());
-				return db.restore();
+				boolean result;
+				Locations locations = new Locations(getApplicationContext());
+				Tags tags = new Tags(getApplicationContext());
+				result = (restoreDatabaseFromSD(locations.databaseName()) && 
+						restoreDatabaseFromSD(tags.databaseName()));
+    	        // Access the copied database so SQLiteHelper will cache it and mark
+    	        // it as created.
+ 				locations.getWritableDatabase().close();
+ 				tags.getWritableDatabase().close();
+ 				if (result) {
+ 					Toast.makeText(getApplicationContext(), "Restore Complete", Toast.LENGTH_SHORT).show();
+ 				} else {
+ 					Toast.makeText(getApplicationContext(), "Backup Failed!", Toast.LENGTH_LONG).show();
+ 				}
+				return result;
 			}
 		});
-
- 
     }
+
+    private void copyDatabaseToSD(String dbname) {
+    	try {
+            File sd = Environment.getExternalStorageDirectory();
+            File data = Environment.getDataDirectory();
+
+            if (sd.canWrite()) {
+                File backupPath = new File(sd, backupDBPath);
+                backupPath.mkdirs();
+                File currentDB = new File(data, currentDBPath + dbname);
+                File backupDB = new File(sd, backupDBPath + dbname);
+
+                if (currentDB.exists()) {
+                    FileChannel src = new FileInputStream(currentDB).getChannel();
+                    FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+                }
+            }
+        } catch (Exception e) {
+        }
+    }
+    
+    private boolean restoreDatabaseFromSD(String dbname) {
+	    try {
+            File sd = Environment.getExternalStorageDirectory();
+            File data = Environment.getDataDirectory();
+    	    File backupDB = new File(sd, backupDBPath + dbname);
+    	    File currentDB = new File(data, currentDBPath + dbname);
+    	    if (backupDB.exists()) {
+    	        FileUtils.copyFile(new FileInputStream(backupDB), new FileOutputStream(currentDB));
+    	        return true;
+    	    }
+    	    return false;
+	    } catch (Exception e) {
+	    	return false;
+	    }
+    }
+    
+    
+
     
 } 

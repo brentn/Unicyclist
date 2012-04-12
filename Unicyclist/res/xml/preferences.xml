@@ -3,7 +3,7 @@
     <PreferenceCategory android:key="@string/locations" android:title="@string/locations"><CheckBoxPreference android:key="miles" android:persistent="true" android:defaultValue="false" android:title="@string/distances_in_miles"/>
     <ListPreference android:defaultValue="80" android:title="@string/distance_filter" android:entries="@array/distance_filter_array" android:entryValues="@array/distance_filter_values" android:persistent="true" android:key="distance_filter" android:summary="@string/distance_filter_summary"/>
 </PreferenceCategory>
-    <PreferenceCategory android:title="Database" android:key="database"><Preference android:key="backup" android:selectable="true" android:title="Backup Locations" /><Preference android:key="restore" android:selectable="true" android:title="Restore Locations"/></PreferenceCategory>
+    <PreferenceCategory android:title="Database" android:key="database"><Preference android:key="backup" android:selectable="true" android:title="Backup Databases to SD card" /><Preference android:key="restore" android:selectable="true" android:title="Restore Databases from SD card"/></PreferenceCategory>
     
 
 </PreferenceScreen>

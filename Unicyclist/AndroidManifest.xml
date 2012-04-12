@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.unicycle"
+<manifest package="com.unicycle"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-sdk android:minSdkVersion="7" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -11,7 +10,9 @@
 
     <application
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar">
+        android:label="@string/app_name"
+        android:name="UnicyclistApplication" 
+        android:theme="@android:style/Theme.NoTitleBar">
         <uses-library android:name="com.google.android.maps" />
         <activity android:name=".UnicyclistActivity" android:label="@string/app_name">
             <intent-filter>
@@ -28,6 +29,7 @@
         <activity android:name="LocationActivity"></activity>
         <activity android:name="NewLocationActivity"></activity><activity android:name="Preferences"></activity>
         <activity android:name="TrailsActivity"></activity>
+        <activity android:name="TagsActivity" android:theme="@android:style/Theme.Dialog" android:label="@string/tag_picker"></activity>
         
         
     </application>

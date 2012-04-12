@@ -27,17 +27,17 @@ public class LocationActivity extends Activity {
 	private static final int SELECT_PICTURE = 1;
 	private String selectedImagePath;
 
-	 @Override
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.location);
-        Intent intent = getIntent();
-        int id = (int) intent.getLongExtra("id",0);
+//        Intent intent = getIntent();
+//        int id = (int) intent.getLongExtra("id",0);
         
-        DatabaseHandler db = new DatabaseHandler(this);
-        Location location = new Location();
+//        Locations db = new Locations(this);
+//        Location location = new Location();
         
-        location = db.getLocation(id);
+        Location location = ((UnicyclistApplication) getApplication()).getCurrentLocation();
         
         page = (ViewFlipper) findViewById(R.id.flipper);
         fadeIn = AnimationUtils.loadAnimation(this,android.R.anim.fade_in);
@@ -47,6 +47,7 @@ public class LocationActivity extends Activity {
         final TextView description = (TextView) findViewById(R.id.description);
         final TextView directions = (TextView) findViewById(R.id.directions);
         TextView tags = (TextView) findViewById(R.id.tags);
+        TextView addTags = (TextView) findViewById(R.id.addTags);
         ImageView addImageButton = (ImageView) findViewById(R.id.addImageButton);
         Gallery descriptionMenu = (Gallery) findViewById(R.id.descriptionMenu);
         Button trailsButton = (Button) findViewById(R.id.trailsButton);
@@ -78,6 +79,12 @@ public class LocationActivity extends Activity {
         		startActivity(new Intent(LocationActivity.this, TrailsActivity.class));
         	}
         });
+        addTags.setOnClickListener(new OnClickListener() {
+        	public void onClick(View view) {
+        		
+        		startActivity(new Intent(LocationActivity.this, TagsActivity.class));
+        	}
+        });
         
         if ( name != null) {
         	name.setText(location.getName());
@@ -89,7 +96,7 @@ public class LocationActivity extends Activity {
         	directions.setText(location.getDirections());
         }
         if ( tags != null) {
-        	tags.setText(location.getTagString());
+       		tags.setText(location.getTagString());
         }
        
 	 }

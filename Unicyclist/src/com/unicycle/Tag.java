@@ -2,15 +2,18 @@ package com.unicycle;
 
 
 public class Tag {
+	
 	private int _id;
 	private String _name;
-	private int _timesUsed;
+	private int _usage;
 	
 	public Tag() {
+		this.setUsage(0);
 	}
 	
 	public Tag(String name) {
-		this._name = name;
+		this.setName(name);
+		this.setUsage(0);
 	}
 	
 	public void setId(int id) {
@@ -30,4 +33,13 @@ public class Tag {
 	public String getName() {
 		return this._name;
 	}
+	
+	public int getUsage() {
+		return this._usage;
+	}
+	
+	public void setUsage(int usage) {
+		this._usage = usage;
+	}
+	
 }	

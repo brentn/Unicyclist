@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import android.content.Context;
+
 public class Location {
 	
 	//private variables
@@ -21,6 +23,7 @@ public class Location {
 	
 	//constructors
 	public Location() {
+		this._id=-1;
 		this._favourite = false;
 		this._deleted = false;
 		this._tags = new ArrayList<Tag>();
@@ -39,6 +42,7 @@ public class Location {
 	}
 	
 	public Location(String name, double latitude, double longitude, String description, String directions, int rating) {
+		this._id=-1;
 		this._name = name;
 		this._latitude = latitude;
 		this._longitude = longitude;
@@ -164,8 +168,20 @@ public class Location {
 		this._tags = tags;
 	}
 	
-	public void addTag(String tagName) {
-		this._tags.add(new Tag(tagName));
+	public void addTag(Context context,String name) {
+		Tags tags = new Tags(context);
+		Tag tag = new Tag(name);
+		tag.setId(tags.addTag(tag));
+		tags.addLocationTag(this, tag);
+		_tags.add(tag);
 	}
 	
+	public void removeTag(Context context, String name) {
+		Tags tags = new Tags(context);
+		Tag tag = tags.findTagByName(name);
+		if (tag != null) {
+			tags.removeLocationTag(this, tag);
+			_tags.remove(tag);
+		}
+	}
 }

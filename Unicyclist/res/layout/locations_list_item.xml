@@ -58,7 +58,7 @@
 	        android:id="@+id/tags"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:clickable="true"
+	        android:singleLine="true"
 	        android:padding="5dp"
 	        android:textAppearance="?android:attr/textAppearanceSmall"
 	        android:textColor="#99CC00" />

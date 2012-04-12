@@ -4,12 +4,19 @@
     android:layout_height="fill_parent"
     android:gravity="bottom"
     android:orientation="vertical" >
+    
+    <RelativeLayout
+        android:id="@+id/feature"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+        
+    </RelativeLayout>
 
     <SlidingDrawer
         android:id="@+id/locationsSlider"
         android:layout_width="fill_parent"
         android:layout_height="84dip"
-        android:topOffset="-235dp"
+        android:topOffset="-235dip"
         android:orientation="horizontal"
         android:content="@+id/content"
         android:handle="@+id/locationButton" >
@@ -23,7 +30,10 @@
         <LinearLayout
             android:id="@+id/content"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
+            android:layout_height="fill_parent" 
+            android:orientation="horizontal" >
+
+
         </LinearLayout>
     </SlidingDrawer>
 
@@ -31,7 +41,7 @@
         android:id="@+id/ridesSlider"
         android:layout_width="fill_parent"
         android:layout_height="84dip"
-        android:topOffset="-235dp"
+        android:topOffset="-235dip"
         android:orientation="horizontal"
         android:content="@+id/content"
         android:handle="@+id/ridesButton" >
@@ -53,7 +63,7 @@
         android:id="@+id/skillsSlider"
         android:layout_width="fill_parent"
         android:layout_height="84dip"
-        android:topOffset="-235dp"
+        android:topOffset="-235dip"
         android:orientation="horizontal"
         android:content="@+id/content2"
         android:handle="@+id/skillsButton" >

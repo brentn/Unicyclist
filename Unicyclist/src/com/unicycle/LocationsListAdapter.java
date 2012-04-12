@@ -70,7 +70,7 @@ public class LocationsListAdapter extends android.widget.ArrayAdapter<Location> 
             	}
             }
             if (tags != null) {
-            	tags.setText(location.getTagString());
+        		tags.setText(location.getTagString());
             }
         }
         return v;

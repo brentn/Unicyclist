@@ -5,7 +5,7 @@
 -->    
 <!-- Home -->
 	<string name="maps_api_key">0Wp1747MVgskQz6SzgO1mpYZQNHRrP40R4v8aTA</string>
-    <string name="app_name">Unicyclist</string>
+    <string name="app_name">Mountain Unicyclist</string>
     <string name="all_locations">All Locations</string>
     <string name="my_locations">My Locations</string>
     <string name="description">Description</string>
@@ -34,5 +34,10 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="rating">Rating</string>
+    <string name="tags_by_name">Tags by name</string>
+    <string name="tags_by_usage">Tags by usage</string>
+    <string name="click_to_add_tags"> - Click here to add TAGS - </string>
+    <string name="preferences">Preferences</string>
+    <string name="tag_picker">Tag Picker</string>
 
 </resources>

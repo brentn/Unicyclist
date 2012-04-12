@@ -173,7 +173,7 @@
 	
 	        <LinearLayout
 	            android:id="@+id/linearLayout1"
-	            android:layout_width="wrap_content"
+	            android:layout_width="fill_parent"
 	            android:layout_height="wrap_content"
 	            android:orientation="horizontal" >
 	
@@ -186,13 +186,16 @@
 	                android:textAppearance="?android:attr/textAppearanceSmall"
 	                android:textColor="#99CC00" />
 	            
-	<!-- 		    <ImageButton -->
-	<!-- 		        android:id="@+id/addTagButton" -->
-	<!-- 		        android:layout_width="wrap_content" -->
-	<!-- 		        android:layout_height="wrap_content" -->
-	<!-- 		        android:layout_gravity="center|right" -->
-	<!-- 		        android:contentDescription="@string/add_image" -->
-	<!-- 		        android:src="@drawable/plus" /> -->
+	            <TextView
+	                android:id="@+id/addTags"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:clickable="true"
+	                android:padding="5dp"
+	                android:text="@string/click_to_add_tags"
+	                android:textAppearance="?android:attr/textAppearanceSmall"
+	                android:textColor="#FFBB33" />
+	            
 	
 	        </LinearLayout>
 	            
