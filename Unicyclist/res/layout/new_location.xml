@@ -61,6 +61,8 @@
 		    android:id="@+id/name"
 		    android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"
+		    android:inputType="textCapWords"
+		    android:nextFocusDown="@+id/description"
 		    android:hint="@string/location_name" >
 	
 		</EditText>
@@ -71,7 +73,7 @@
 		    android:layout_height="wrap_content"
 		    android:gravity="top"
 		    android:hint="@string/description"
-		    android:inputType="textMultiLine"
+		    android:inputType="textMultiLine|textCapSentences"
 		    android:lines="6"
 		    android:singleLine="false" />
 	
@@ -81,22 +83,9 @@
 	   	    android:layout_height="wrap_content"
 	   	    android:gravity="top"
 	   	    android:hint="@string/directions"
-	   	    android:inputType="textMultiLine"
-	   	    android:lines="6"
+	   	    android:inputType="textMultiLine|textCapSentences"
+       	    android:lines="6"
 	   	    android:singleLine="false" />
-	   	<TextView
-	   	    android:layout_width="wrap_content"
-	   	    android:layout_height="wrap_content"
-	   	    android:text="@string/rating" />
-	   	<RatingBar 
-	   	    android:id="@+id/rating"
-	   	    android:layout_width="wrap_content"
-	   	    android:layout_height="wrap_content"
-	   	    android:gravity="center"
-	   	    android:numStars="5"
-	   	    android:max="10"
-	   	    android:stepSize="0.5"
-	   	    android:rating="2.5" />
 	
 	   	<RelativeLayout
 	   	    android:id="@+id/relativeLayout1"

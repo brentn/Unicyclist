@@ -1,6 +1,8 @@
 package com.unicycle;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,12 +11,13 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.ProgressBar;
 import android.widget.SlidingDrawer;
 import android.widget.SlidingDrawer.OnDrawerOpenListener;
 
 public class UnicyclistActivity extends Activity {
-	
+
+	private Context mContext = this;
+	ProgressDialog pd = null;
 	SlidingDrawer locationsButton;
 	SlidingDrawer ridesButton;
 	SlidingDrawer skillsButton;
@@ -41,8 +44,10 @@ public class UnicyclistActivity extends Activity {
 			}
         });
         locationsButton.setOnDrawerOpenListener(new OnDrawerOpenListener() {
+        	
 			@Override
 			public void onDrawerOpened() {
+		        pd = ProgressDialog.show(mContext, "Opening..", "Please wait...", true, false);
 				Intent intent = new Intent(UnicyclistActivity.this, LocationsActivity.class);
 				UnicyclistActivity.this.startActivity(intent);
 			}
@@ -82,6 +87,9 @@ public class UnicyclistActivity extends Activity {
 	
 	protected void onResume() {
 		super.onResume();
+		if (pd!=null) {
+			pd.dismiss();
+		}
 		if (locationsButton.isOpened()) {
 			locationsButton.animateClose();
 		}

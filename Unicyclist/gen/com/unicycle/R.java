@@ -21,13 +21,13 @@ public final class R {
         public static final int black_button_normal=0x7f020003;
         public static final int black_button_sparkle=0x7f020004;
         public static final int brushed_metal_texture=0x7f020005;
-        public static final int gps_button=0x7f020006;
-        public static final int gps_button_selected=0x7f020007;
-        public static final int gps_button_unselected=0x7f020008;
-        public static final int ic_launcher=0x7f020009;
-        public static final int ic_map_pin=0x7f02000a;
-        public static final int ic_photo=0x7f02000b;
-        public static final int ic_pin_button=0x7f02000c;
+        public static final int button_background=0x7f020006;
+        public static final int gps_button=0x7f020007;
+        public static final int gps_button_selected=0x7f020008;
+        public static final int gps_button_unselected=0x7f020009;
+        public static final int ic_blue_pin=0x7f02000a;
+        public static final int ic_launcher=0x7f02000b;
+        public static final int ic_photo=0x7f02000c;
         public static final int locations_btn=0x7f02000d;
         public static final int marker=0x7f02000e;
         public static final int mountain_uni=0x7f02000f;
@@ -41,12 +41,12 @@ public final class R {
         public static final int skills_btn=0x7f020017;
     }
     public static final class id {
-        public static final int addButton=0x7f09002b;
+        public static final int addButton=0x7f09002a;
         public static final int addImageButton=0x7f09000b;
         public static final int addTags=0x7f09001d;
         public static final int allLocationsList=0x7f09001f;
-        public static final int byUsage=0x7f090031;
-        public static final int cancelButton=0x7f09002c;
+        public static final int byUsage=0x7f090030;
+        public static final int cancelButton=0x7f09002b;
         public static final int challengesButton=0x7f090013;
         public static final int comments=0x7f09001a;
         public static final int commentsBackground=0x7f090015;
@@ -61,27 +61,26 @@ public final class R {
         public static final int flipper=0x7f09000d;
         public static final int gallery=0x7f09001e;
         public static final int gallery1=0x7f09000a;
-        public static final int gpsButton=0x7f090023;
-        public static final int latitude=0x7f09002d;
+        public static final int gpsButton=0x7f090022;
+        public static final int latitude=0x7f09002c;
         public static final int linearLayout1=0x7f09001b;
         public static final int linearLayout2=0x7f090019;
         public static final int locationButton=0x7f090003;
         public static final int locationPicker=0x7f090027;
         public static final int locationsSlider=0x7f090001;
-        public static final int longitude=0x7f09002e;
+        public static final int longitude=0x7f09002d;
         public static final int mapview=0x7f090021;
         public static final int myLocationsList=0x7f090020;
         public static final int name=0x7f090009;
-        public static final int newLocation=0x7f090033;
+        public static final int newLocation=0x7f090032;
         public static final int newlocationflipper=0x7f090026;
-        public static final int preferences=0x7f090034;
-        public static final int rating=0x7f090029;
-        public static final int relativeLayout1=0x7f09002a;
+        public static final int preferences=0x7f090033;
+        public static final int relativeLayout1=0x7f090029;
         public static final int relativeLayout4=0x7f090010;
         public static final int relativeLayout5=0x7f090014;
         public static final int ridesButton=0x7f090005;
         public static final int ridesSlider=0x7f090004;
-        public static final int satButton=0x7f090022;
+        public static final int satButton=0x7f090023;
         public static final int scrollView1=0x7f090017;
         public static final int skillsButton=0x7f090008;
         public static final int skillsSlider=0x7f090006;
@@ -91,9 +90,9 @@ public final class R {
         public static final int textView7=0x7f090016;
         public static final int thumb=0x7f090024;
         public static final int trailsButton=0x7f090012;
-        public static final int trailsList=0x7f090032;
-        public static final int x=0x7f09002f;
-        public static final int y=0x7f090030;
+        public static final int trailsList=0x7f090031;
+        public static final int x=0x7f09002e;
+        public static final int y=0x7f09002f;
     }
     public static final class layout {
         public static final int home=0x7f030000;

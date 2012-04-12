@@ -152,7 +152,8 @@ public class LocationsActivity extends MapActivity {
         
         //Set up Map
         mapController = mapView.getController();
-        mapController.setZoom(11);
+        mapView.setBuiltInZoomControls(true);
+        mapController.setZoom(13);
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		locationListener = new MyLocationListener();
 //		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
@@ -160,7 +161,7 @@ public class LocationsActivity extends MapActivity {
 		
         //add stuff to the map
         List<Overlay> mapOverlays = mapView.getOverlays();
-        Drawable drawable = this.getResources().getDrawable(R.drawable.ic_map_pin);
+        Drawable drawable = this.getResources().getDrawable(R.drawable.ic_blue_pin);
         locationsOverlay = new LocationsOverlay(drawable, this);
         for(Iterator<Location> i = locationList.iterator(); i.hasNext(); ) {
         	  Location location = i.next();

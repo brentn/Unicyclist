@@ -47,7 +47,6 @@ public class NewLocationActivity extends MapActivity {
 	private EditText name;
 	private EditText description;
 	private EditText directions;
-	private RatingBar rating;
 	private Button addButton;
 	private Button cancelButton;
 	private double latitude;
@@ -68,7 +67,6 @@ public class NewLocationActivity extends MapActivity {
         name = (EditText) findViewById(R.id.name);
         description = (EditText) findViewById(R.id.description);
         directions = (EditText) findViewById(R.id.directions);
-        rating = (RatingBar) findViewById(R.id.rating);
         Drawable marker = getResources().getDrawable(R.drawable.marker);
         marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
         
@@ -99,7 +97,7 @@ public class NewLocationActivity extends MapActivity {
         		_result.putExtra("longitude",longitude);
         		_result.putExtra("description",description.getText().toString());
         		_result.putExtra("directions",directions.getText().toString());
-        		_result.putExtra("rating",(int) (rating.getRating() * 2));
+        		_result.putExtra("rating",5);
         		setResult(Activity.RESULT_OK,_result);
         		NewLocationActivity.this.finish();
         	}
