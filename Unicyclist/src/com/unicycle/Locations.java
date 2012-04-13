@@ -71,6 +71,7 @@ public class Locations extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         this.loadFavouriteList(db);
         this.loadDeletedList(db);
+        db.close();
     }
 	
 	@Override

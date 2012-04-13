@@ -21,14 +21,20 @@ public class Tags extends SQLiteOpenHelper {
 	//table names
 	private static final String TABLE_TAGS = "tags";
 	private static final String TABLE_LOCATION_TAGS = "locationTags";
+	private static final String TABLE_TRAIL_TAGS = "trailTags";
 
 	//column names
 	private static final String KEY_TAG_ID = "id";
 	private static final String KEY_TAG_NAME = "name";
 	private static final String KEY_TAG_USAGE = "usage";
+	
 	private static final String KEY_LOCATION_TAG_ID = "id";
 	private static final String KEY_LOCATION_TAG_TAGID = "tagId";
 	private static final String KEY_LOCATION_TAG_LOCATIONID = "locationId";
+	
+	private static final String KEY_TRAIL_TAG_ID = "id";
+	private static final String KEY_TRAIL_TAG_TAGID = "tagId";
+	private static final String KEY_TRAIL_TAG_TRAILID = "trailId";
 
 	public Tags(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -40,14 +46,18 @@ public class Tags extends SQLiteOpenHelper {
 				+ KEY_TAG_ID + " INTEGER PRIMARY KEY," + KEY_TAG_NAME + " TEXT," + KEY_TAG_USAGE + " INTEGER)";
 		String CREATE_LOCATION_TAGS_TABLE = "CREATE TABLE " + TABLE_LOCATION_TAGS + "("
 				+ KEY_LOCATION_TAG_ID + " INTEGER PRIMARY KEY, "+ KEY_LOCATION_TAG_LOCATIONID + " INTEGER, " + KEY_LOCATION_TAG_TAGID + " INTEGER)";
+		String CREATE_TRAIL_TAGS_TABLE = "CREATE TABLE " + TABLE_TRAIL_TAGS + "("
+				+ KEY_TRAIL_TAG_ID + " INTEGER PRIMARY KEY, "+ KEY_TRAIL_TAG_TRAILID + " INTEGER, " + KEY_TRAIL_TAG_TAGID + " INTEGER)";
 		db.execSQL(CREATE_TAGS_TABLE);
 		db.execSQL(CREATE_LOCATION_TAGS_TABLE);
+		db.execSQL(CREATE_TRAIL_TAGS_TABLE);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TAGS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOCATION_TAGS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRAIL_TAGS);
         onCreate(db);
 	}
 	
@@ -100,6 +110,35 @@ public class Tags extends SQLiteOpenHelper {
     	}
     }    
 	
+	public int addTrailTag(Trail trail, Tag tag) {
+		//ensure locationId has been set
+		if (trail.getId() == -1) {
+			return -1;
+		}
+		//If it is not a duplicate
+		int id = findTrailTag(trail,tag);
+		if (id == -1) {
+			SQLiteDatabase db = this.getWritableDatabase();
+			ContentValues values = new ContentValues();
+			values.put(KEY_TRAIL_TAG_TRAILID,trail.getId());
+			values.put(KEY_TRAIL_TAG_TAGID, tag.getId());
+			id = (int) db.insert(TABLE_TRAIL_TAGS, null, values);
+			db.close();
+			//record another use of this tag
+			tag.setUsage(tag.getUsage()+1);
+			this.updateTag(tag);
+		}
+		return id;
+	}
+	
+    public void addTrailTags(Trail trail, List<Tag> tags) {
+    	Iterator<Tag> i = tags.iterator();
+    	while (i.hasNext()) {
+    		this.addTrailTag(trail, (Tag) i.next());
+    		i.remove();
+    	}
+    }    
+	
 	public Tag findTagByName(String name) {
 		Tag tag = null;
 		String query = "SELECT * FROM " + TABLE_TAGS + " WHERE " + KEY_TAG_NAME + " =  '" + name + "'";
@@ -117,6 +156,20 @@ public class Tags extends SQLiteOpenHelper {
 		String query = "SELECT * FROM " + TABLE_LOCATION_TAGS 
 				+ " WHERE " + KEY_LOCATION_TAG_LOCATIONID + " = " + Integer.toString(location.getId())
 				+ " AND " + KEY_LOCATION_TAG_TAGID + " = " + Integer.toString(tag.getId());
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(query, null);
+		if (cursor.moveToFirst()) {
+			result = Integer.parseInt(cursor.getString(0));
+		}
+		db.close();
+		return result;
+	}
+	
+	public int findTrailTag(Trail trail, Tag tag) {
+		int result = -1;
+		String query = "SELECT * FROM " + TABLE_TRAIL_TAGS 
+				+ " WHERE " + KEY_TRAIL_TAG_TRAILID + " = " + Integer.toString(trail.getId())
+				+ " AND " + KEY_TRAIL_TAG_TAGID + " = " + Integer.toString(tag.getId());
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(query, null);
 		if (cursor.moveToFirst()) {
@@ -177,11 +230,34 @@ public class Tags extends SQLiteOpenHelper {
     
     public List<Tag> getTagsForLocation(Location location) {
     	List<Tag> tagList = new ArrayList<Tag>();
-    	String query = "SELECT tags.id, tags.name, tags.usage, locationTags.tagId FROM tags JOIN locationTags ON (tags.id = locationTags.tagId) WHERE locationId = " +location.getId();
-//    			+ " FROM " + TABLE_TAGS + " t"
-//    			+ " INNER JOIN " + TABLE_LOCATION_TAGS + " lt ON t." + KEY_TAG_ID + " = lt." + KEY_LOCATION_TAG_TAGID 
-//    			+ " WHERE lt." + KEY_LOCATION_TAG_LOCATIONID + " = " + Integer.toString(location.getId())
-//    			+ " ORDER BY t." + KEY_TAG_USAGE + " DESC";
+    	String query = "SELECT t." + KEY_TAG_ID + ", t." + KEY_TAG_NAME + ", t." + KEY_TAG_USAGE
+    			+ " FROM " + TABLE_TAGS + " t"
+    			+ " INNER JOIN " + TABLE_LOCATION_TAGS + " lt ON t." + KEY_TAG_ID + " = lt." + KEY_LOCATION_TAG_TAGID 
+    			+ " WHERE lt." + KEY_LOCATION_TAG_LOCATIONID + " = " + Integer.toString(location.getId())
+    			+ " ORDER BY t." + KEY_TAG_USAGE + " DESC";
+    	SQLiteDatabase db = this.getReadableDatabase();
+    	Cursor cursor = db.rawQuery(query, null);
+    	if (cursor.moveToFirst()) {
+    		do {
+	        	int id = Integer.parseInt(cursor.getString(0));
+	        	Tag tag = new Tag();
+	        	tag.setId(id);
+	        	tag.setName(cursor.getString(1));
+	        	tag.setUsage(Integer.parseInt(cursor.getString(2)));
+	        	tagList.add(tag);    			
+    		} while (cursor.moveToNext());
+    	}
+    	db.close();
+    	return tagList;
+    }
+    
+    public List<Tag> getTagsForTrail(Trail trail) {
+    	List<Tag> tagList = new ArrayList<Tag>();
+    	String query = "SELECT t." + KEY_TAG_ID + ", t." + KEY_TAG_NAME + ", t." + KEY_TAG_USAGE
+    			+ " FROM " + TABLE_TAGS + " t"
+    			+ " INNER JOIN " + TABLE_TRAIL_TAGS + " tt ON t." + KEY_TAG_ID + " = tt." + KEY_TRAIL_TAG_TAGID 
+    			+ " WHERE tt." + KEY_TRAIL_TAG_TRAILID + " = " + Integer.toString(trail.getId())
+    			+ " ORDER BY t." + KEY_TAG_USAGE + " DESC";
     	SQLiteDatabase db = this.getReadableDatabase();
     	Cursor cursor = db.rawQuery(query, null);
     	if (cursor.moveToFirst()) {

@@ -58,8 +58,10 @@ public class Preferences extends PreferenceActivity {
 			public boolean onPreferenceClick(Preference preference) {
 				Locations locations = new Locations(getApplicationContext());
 				Tags tags = new Tags(getApplicationContext());
+				Trails trails = new Trails(getApplicationContext());
 				copyDatabaseToSD(locations.databaseName());
 				copyDatabaseToSD(tags.databaseName());
+				copyDatabaseToSD(trails.databaseName());
 				Toast.makeText(getApplicationContext(), "Backup Complete", Toast.LENGTH_SHORT).show();
 				return true;
 			}
@@ -72,16 +74,19 @@ public class Preferences extends PreferenceActivity {
 				boolean result;
 				Locations locations = new Locations(getApplicationContext());
 				Tags tags = new Tags(getApplicationContext());
+				Trails trails = new Trails(getApplicationContext());
 				result = (restoreDatabaseFromSD(locations.databaseName()) && 
-						restoreDatabaseFromSD(tags.databaseName()));
+						restoreDatabaseFromSD(tags.databaseName()) &&
+						restoreDatabaseFromSD(trails.databaseName()));
     	        // Access the copied database so SQLiteHelper will cache it and mark
     	        // it as created.
  				locations.getWritableDatabase().close();
  				tags.getWritableDatabase().close();
+ 				trails.getWritableDatabase().close();
  				if (result) {
  					Toast.makeText(getApplicationContext(), "Restore Complete", Toast.LENGTH_SHORT).show();
  				} else {
- 					Toast.makeText(getApplicationContext(), "Backup Failed!", Toast.LENGTH_LONG).show();
+ 					Toast.makeText(getApplicationContext(), "Restore Failed!", Toast.LENGTH_LONG).show();
  				}
 				return result;
 			}

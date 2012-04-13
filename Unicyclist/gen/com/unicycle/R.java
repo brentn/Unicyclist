@@ -22,23 +22,27 @@ public final class R {
         public static final int black_button_sparkle=0x7f020004;
         public static final int brushed_metal_texture=0x7f020005;
         public static final int button_background=0x7f020006;
-        public static final int gps_button=0x7f020007;
-        public static final int gps_button_selected=0x7f020008;
-        public static final int gps_button_unselected=0x7f020009;
-        public static final int ic_blue_pin=0x7f02000a;
-        public static final int ic_launcher=0x7f02000b;
-        public static final int ic_photo=0x7f02000c;
-        public static final int locations_btn=0x7f02000d;
-        public static final int marker=0x7f02000e;
-        public static final int mountain_uni=0x7f02000f;
-        public static final int plus=0x7f020010;
-        public static final int plus_indent=0x7f020011;
-        public static final int popup_frame=0x7f020012;
-        public static final int rides_btn=0x7f020013;
-        public static final int sat_button=0x7f020014;
-        public static final int sat_button_selected=0x7f020015;
-        public static final int sat_button_unselected=0x7f020016;
-        public static final int skills_btn=0x7f020017;
+        public static final int double_diamond=0x7f020007;
+        public static final int easiest=0x7f020008;
+        public static final int gps_button=0x7f020009;
+        public static final int gps_button_selected=0x7f02000a;
+        public static final int gps_button_unselected=0x7f02000b;
+        public static final int ic_blue_pin=0x7f02000c;
+        public static final int ic_launcher=0x7f02000d;
+        public static final int ic_photo=0x7f02000e;
+        public static final int locations_btn=0x7f02000f;
+        public static final int marker=0x7f020010;
+        public static final int more_difficult=0x7f020011;
+        public static final int most_difficult=0x7f020012;
+        public static final int mountain_uni=0x7f020013;
+        public static final int plus=0x7f020014;
+        public static final int plus_indent=0x7f020015;
+        public static final int popup_frame=0x7f020016;
+        public static final int rides_btn=0x7f020017;
+        public static final int sat_button=0x7f020018;
+        public static final int sat_button_selected=0x7f020019;
+        public static final int sat_button_unselected=0x7f02001a;
+        public static final int skills_btn=0x7f02001b;
     }
     public static final class id {
         public static final int addButton=0x7f09002a;
@@ -54,6 +58,7 @@ public final class R {
         public static final int content2=0x7f090007;
         public static final int description=0x7f09000e;
         public static final int descriptionMenu=0x7f09000c;
+        public static final int difficulty=0x7f090037;
         public static final int directions=0x7f09000f;
         public static final int distance=0x7f090025;
         public static final int drag=0x7f090028;
@@ -66,16 +71,19 @@ public final class R {
         public static final int linearLayout1=0x7f09001b;
         public static final int linearLayout2=0x7f090019;
         public static final int locationButton=0x7f090003;
+        public static final int locationName=0x7f090033;
         public static final int locationPicker=0x7f090027;
         public static final int locationsSlider=0x7f090001;
         public static final int longitude=0x7f09002d;
+        public static final int map=0x7f090034;
         public static final int mapview=0x7f090021;
         public static final int myLocationsList=0x7f090020;
         public static final int name=0x7f090009;
-        public static final int newLocation=0x7f090034;
+        public static final int newLocation=0x7f090039;
         public static final int newlocationflipper=0x7f090026;
+        public static final int numberOfFeatures=0x7f090036;
         public static final int okButton=0x7f090031;
-        public static final int preferences=0x7f090035;
+        public static final int preferences=0x7f09003a;
         public static final int relativeLayout1=0x7f090029;
         public static final int relativeLayout4=0x7f090010;
         public static final int relativeLayout5=0x7f090014;
@@ -89,10 +97,11 @@ public final class R {
         public static final int tagName=0x7f090032;
         public static final int tagarea=0x7f090018;
         public static final int tags=0x7f09001c;
+        public static final int textView1=0x7f090038;
         public static final int textView7=0x7f090016;
         public static final int thumb=0x7f090024;
         public static final int trailsButton=0x7f090012;
-        public static final int trailsList=0x7f090033;
+        public static final int trails_list=0x7f090035;
         public static final int x=0x7f09002e;
         public static final int y=0x7f09002f;
     }
@@ -103,8 +112,10 @@ public final class R {
         public static final int locations_list_item=0x7f030003;
         public static final int new_location=0x7f030004;
         public static final int popup=0x7f030005;
-        public static final int tag_picker=0x7f030006;
-        public static final int trails_list=0x7f030007;
+        public static final int ride=0x7f030006;
+        public static final int tag_picker=0x7f030007;
+        public static final int trails=0x7f030008;
+        public static final int trails_list_item=0x7f030009;
     }
     public static final class menu {
         public static final int locations=0x7f080000;
@@ -122,6 +133,10 @@ public final class R {
         public static final int add_image=0x7f07000c;
         public static final int add_to_favourites=0x7f07000e;
         public static final int all_locations=0x7f070002;
+        /**  Home 
+	<string name="maps_api_key">0Wp1747MVgskQz6SzgO1mpYZQNHRrP40R4v8aTA</string>
+	
+         */
         public static final int app_name=0x7f070001;
         public static final int challenges=0x7f070007;
         public static final int click_to_add_tags=0x7f070020;
@@ -133,14 +148,12 @@ public final class R {
         public static final int distance_filter_summary=0x7f070014;
         public static final int distances_in_miles=0x7f070011;
         public static final int favourites=0x7f070017;
+        public static final int features=0x7f070026;
         public static final int is_this_location_correct=0x7f07001a;
         public static final int location_name=0x7f070018;
         public static final int location_picker=0x7f070019;
         public static final int locations=0x7f070012;
         /**  Work 
-    <string name="maps_api_key">0Wp1747MVgsklImDthpkPZQmQXF-igwvxB_kePg</string>
-
- Home 
          */
         public static final int maps_api_key=0x7f070000;
         public static final int mapview=0x7f070009;
@@ -151,11 +164,13 @@ public final class R {
         public static final int preferences=0x7f070021;
         public static final int rating=0x7f07001d;
         public static final int remove_from_favourites=0x7f07000f;
+        public static final int ride=0x7f070024;
         public static final int settings=0x7f070010;
         public static final int tag_name=0x7f070023;
         public static final int tag_picker=0x7f070022;
         public static final int tags_by_name=0x7f07001e;
         public static final int tags_by_usage=0x7f07001f;
+        public static final int trail_name=0x7f070025;
         public static final int trails=0x7f070006;
         public static final int yes=0x7f07001b;
     }

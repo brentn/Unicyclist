@@ -36,13 +36,8 @@ public class TagsActivity extends Activity {
       	  if (location.getTagString().contains(tag.getName())) {
       		  button.setTextColor(Color.parseColor("#99CC00"));
       	  }
-      	  
-      	  TextView spacer = new TextView(this);
-      	  spacer.setWidth(5);
-      	  spacer.setText("");
 
       	  tagButtons.addView(button);
-      	  tagButtons.addView(spacer);
       	}
 
         db.close();

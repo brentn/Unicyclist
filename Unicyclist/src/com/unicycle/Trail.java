@@ -1,18 +1,87 @@
 package com.unicycle;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Trail {
+	
+	static final int DIFFICULTY_EASIEST = 1;
+	static final int DIFFICULTY_MODERATE = 2;
+	static final int DIFFICULTY_HARD = 3;
+	static final int DIFFICULTY_HARDEST = 4;
+	
 	private int _id;
 	private int _locationId;
-	private String _name;
+	private String _name = "";
 	private android.location.Location _coordinates;
-	private String _description;
-	private int _rating;
-	private int _difficulty;
-	private List<Challenge> _challenges;
-	private List<Image> _images;
-	private List<Tag> _tags;
+	private String _description = "";
+	private String _directions = "";
+	private float _length = 0;
+	private int _rating = 5;
+	private int _difficulty = 0;
+	private List<Challenge> _features = new ArrayList<Challenge>();
+	private List<GPSTrack> _tracks = new ArrayList<GPSTrack>();
+	private List<Image> _images = new ArrayList<Image>();
+	private List<Tag> _tags = new ArrayList<Tag>();
+	
+	public Trail(Location location) {
+		this._id = -1;
+		this._locationId = location.getId();
+		this._coordinates.setLatitude(location.getLatitude());
+		this._coordinates.setLongitude(location.getLongitude());
+	}
+	
+	public Trail(int id, int locationId, String name, double latitude, double longitude, 
+			String description, String directions, float length, int rating, int difficulty) {
+		this._id = id;
+		this._locationId = locationId;
+		this._name = name;
+		this._coordinates.setLatitude(latitude);
+		this._coordinates.setLongitude(longitude);
+		this._description = description;
+		this._directions = directions;
+		this._length = length;
+		this._rating = rating;
+		this._difficulty = difficulty;
+	}
+
+	public Trail(int id, int locationId, String name, double latitude, double longitude, 
+			String description, String directions, float length, int rating, int difficulty,
+			List<Challenge> features, List<GPSTrack> tracks, List<Image> images, List<Tag> tags) {
+		this._id = id;
+		this._locationId = locationId;
+		this._name = name;
+		this._coordinates.setLatitude(latitude);
+		this._coordinates.setLongitude(longitude);
+		this._description = description;
+		this._directions = directions;
+		this._length = length;
+		this._rating = rating;
+		this._difficulty = difficulty;
+		this._features = features;
+		this._tracks = tracks;
+		this._images = images;
+		this._tags = tags;
+	}
+
+	public Trail(int locationId, String name, double latitude, double longitude, 
+			String description, String directions, float length, int rating, int difficulty,
+			List<Challenge> features, List<GPSTrack> tracks, List<Image> images, List<Tag> tags) {
+		this._id = -1;
+		this._locationId = locationId;
+		this._name = name;
+		this._coordinates.setLatitude(latitude);
+		this._coordinates.setLongitude(longitude);
+		this._description = description;
+		this._directions = directions;
+		this._length = length;
+		this._rating = rating;
+		this._difficulty = difficulty;
+		this._features = features;
+		this._tracks = tracks;
+		this._images = images;
+		this._tags = tags;
+	}
 
 	public int getId() {
 		return this._id;
@@ -22,11 +91,11 @@ public class Trail {
 		this._id = id;
 	}
 	
-	public int getLocation() {
+	public int getLocationId() {
 		return this._locationId;
 	}
 	
-	public void setLocation(int id) {
+	public void setLocationId(int id) {
 		this._locationId = id;
 	}
 	
@@ -67,6 +136,22 @@ public class Trail {
 		this._description = description;
 	}
 	
+	public String getDirections() {
+		return this._directions;
+	}
+	
+	public void setDirections(String directions) {
+		this._directions = directions;
+	}
+	
+	public float getLength() {
+		return this._length;
+	}
+	
+	public void setLength(float length) {
+		this._length = length;
+	}
+	
 	public int getRating() {
 		return this._rating;
 	}
@@ -91,12 +176,20 @@ public class Trail {
 		this._images = images;
 	}
 	
-	public List<Challenge> getChallenges() {
-		return this._challenges;
+	public List<Challenge> getFeatures() {
+		return this._features;
 	}
 	
-	public void setChallenges(List<Challenge> challenges) {
-		this._challenges = challenges;
+	public void setFeatures(List<Challenge> features) {
+		this._features = features;
+	}
+	
+	public List<GPSTrack> getTracks() {
+		return this._tracks;
+	}
+	
+	public void setTracks(List<GPSTrack> tracks) {
+		this._tracks = tracks;
 	}
 	
 	public List<Tag> getTags() {

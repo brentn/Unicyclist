@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!-- Work 
+<!-- Work --> 
     <string name="maps_api_key">0Wp1747MVgsklImDthpkPZQmQXF-igwvxB_kePg</string>
--->    
-<!-- Home -->
+    
+<!-- Home 
 	<string name="maps_api_key">0Wp1747MVgskQz6SzgO1mpYZQNHRrP40R4v8aTA</string>
+	-->
     <string name="app_name">Mountain Unicyclist</string>
     <string name="all_locations">All Locations</string>
     <string name="my_locations">My Locations</string>
@@ -40,5 +41,8 @@
     <string name="preferences">Preferences</string>
     <string name="tag_picker">Tag Picker</string>
     <string name="tag_name">tag name</string>
+    <string name="ride">Ride</string>
+    <string name="trail_name">Trail Name</string>
+    <string name="features">Features</string>
 
 </resources>
