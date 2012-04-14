@@ -30,12 +30,9 @@ public class UnicyclistApplication extends Application {
 		UnicyclistApplication._currentTagSet = tagSet;
 	}
 	
-	public void getCurrentTagsFromCurrentLocation() {
+	public void copyTagsFromCurrentLocation() {
+		
 		UnicyclistApplication._currentTagSet = UnicyclistApplication._currentLocation.getTags();
 	}
 	
-	public void setCurrentLocationTagsFromCurrentTags() {
-		UnicyclistApplication._currentLocation.setTags(UnicyclistApplication._currentTagSet);
-	}
-
 }

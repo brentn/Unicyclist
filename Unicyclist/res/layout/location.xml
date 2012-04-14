@@ -176,6 +176,13 @@
 	            android:layout_width="fill_parent"
 	            android:layout_height="wrap_content"
 	            android:orientation="horizontal" >
+	            
+	            <ImageButton
+	                android:id="@+id/editTags"
+	                android:layout_width="32dip"
+	                android:layout_height="32dip"
+	                android:background="@android:drawable/ic_menu_edit" />
+	                
 	
 	            <TextView
 	                android:id="@+id/tags"
@@ -187,7 +194,7 @@
 	                android:textColor="#99CC00" />
 	            
 	            <TextView
-	                android:id="@+id/addTags"
+	                android:id="@+id/addTagsText"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:clickable="true"
@@ -196,7 +203,12 @@
 	                android:textAppearance="?android:attr/textAppearanceSmall"
 	                android:textColor="#FFBB33" />
 	            
-	
+   	            <ImageButton
+	                android:id="@+id/addTags"
+	                android:layout_width="32dip"
+	                android:layout_height="32dip"
+	                android:background="@android:drawable/ic_menu_add"
+	                android:visibility="gone"	/>
 	        </LinearLayout>
 	            
 	    </HorizontalScrollView>

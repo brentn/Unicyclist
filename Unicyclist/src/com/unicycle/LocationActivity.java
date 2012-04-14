@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -14,15 +15,14 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.Gallery;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 public class LocationActivity extends Activity {
-	
-	static final int SELECT_TAGS = 2;
-	
+		
 	private Location location;
 	private ViewFlipper page; 
 	private Animation fadeIn;
@@ -30,6 +30,8 @@ public class LocationActivity extends Activity {
 	private static final int SELECT_PICTURE = 1;
 	private String selectedImagePath;
 	private TextView tags;
+	private TextView addTagsText;
+	private ImageButton addTagsButton;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,9 @@ public class LocationActivity extends Activity {
         final TextView description = (TextView) findViewById(R.id.description);
         final TextView directions = (TextView) findViewById(R.id.directions);
         tags = (TextView) findViewById(R.id.tags);
-        TextView addTags = (TextView) findViewById(R.id.addTags);
+        addTagsText = (TextView) findViewById(R.id.addTagsText);
+        addTagsButton = (ImageButton) findViewById(R.id.addTags);
+        ImageButton editTagsButton = (ImageButton) findViewById(R.id.editTags);
         ImageView addImageButton = (ImageView) findViewById(R.id.addImageButton);
         Gallery descriptionMenu = (Gallery) findViewById(R.id.descriptionMenu);
         Button trailsButton = (Button) findViewById(R.id.trailsButton);
@@ -78,13 +82,15 @@ public class LocationActivity extends Activity {
         		startActivity(new Intent(LocationActivity.this, TrailsActivity.class));
         	}
         });
-        addTags.setOnClickListener(new OnClickListener() {
+        OnClickListener editTags = new OnClickListener() {
         	public void onClick(View view) {
-        		Location location = ((UnicyclistApplication) getApplication()).getCurrentLocation();
-        		((UnicyclistApplication) getApplication()).getCurrentTagsFromCurrentLocation();
-        		startActivityForResult(new Intent(LocationActivity.this, TagsActivity.class),SELECT_TAGS);
+        		((UnicyclistApplication) getApplication()).copyTagsFromCurrentLocation();
+        		startActivityForResult(new Intent(LocationActivity.this, TagsActivity.class),Location.SELECT_TAGS);
         	}
-        });
+        };
+        addTagsText.setOnClickListener(editTags);
+        addTagsButton.setOnClickListener(editTags);
+        editTagsButton.setOnClickListener(editTags);
         
         if ( name != null) {
         	name.setText(location.getName());
@@ -107,11 +113,9 @@ public class LocationActivity extends Activity {
 	            selectedImagePath = getPath(selectedImageUri);
 	            Toast.makeText(LocationActivity.this,selectedImagePath, Toast.LENGTH_SHORT).show();
 		    }
-		    if (requestCode == SELECT_TAGS) {
-	        	((UnicyclistApplication) getApplication()).setCurrentLocationTagsFromCurrentTags();
-	        	location.setTags(((UnicyclistApplication) getApplication()).getCurrentTagSet());
-	        	Locations db = new Locations(getBaseContext());
+		    if (requestCode == Location.SELECT_TAGS) {
 	        	showTags();
+	        	Locations db = new Locations(getBaseContext());
 	        	db.updateLocation(location);
 		    }
 	 }
@@ -126,7 +130,15 @@ public class LocationActivity extends Activity {
  	 }
 	 
 	 private void showTags() {
-		 tags.setText(location.getTagString());
+		 String tagString = location.getTagString();
+		 if (tagString == "") {
+			 addTagsText.setVisibility(View.VISIBLE);
+			 addTagsButton.setVisibility(View.GONE);
+		 } else {
+			 addTagsText.setVisibility(View.GONE);
+			 addTagsButton.setVisibility(View.VISIBLE);
+		 }
+		 tags.setText(tagString);
 	 }
 
 

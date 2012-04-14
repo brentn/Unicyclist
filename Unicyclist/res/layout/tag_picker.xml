@@ -14,8 +14,9 @@
         <LinearLayout
             android:id="@+id/byUsage"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="50dip"
             android:orientation="horizontal" >
+            
         </LinearLayout>
     </HorizontalScrollView>
     
@@ -29,7 +30,7 @@
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/okButton"
+            android:id="@+id/createButton"
             android:layout_width="80dip"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -37,10 +38,11 @@
             android:text="@string/create" />
         
         <EditText
-            android:id="@+id/tagName"
-            android:layout_width="fill_parent"
+            android:id="@+id/tagFilter"
+            android:layout_width="200dip"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/okButton"
+            android:lines="1"
             android:hint="@string/tag_name" >
 
         	<requestFocus />

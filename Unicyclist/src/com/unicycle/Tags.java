@@ -76,6 +76,7 @@ public class Tags extends SQLiteOpenHelper {
 	        values.put(KEY_TAG_NAME, tag.getName());  
 	        values.put(KEY_TAG_USAGE, tag.getUsage());
 	        int id = (int) db.insert(TABLE_TAGS, null, values);
+	        tag.setId(id);
 	        db.close();
 	        return id;
 		}
@@ -86,9 +87,11 @@ public class Tags extends SQLiteOpenHelper {
 		if (location.getId() == -1) {
 			return -1;
 		}
-		//If it is not a duplicate
+		//If it is not a duplicate location tag
 		int id = findLocationTag(location,tag);
 		if (id == -1) {
+			//ensure the Tag exists
+			addTag(tag);
 			SQLiteDatabase db = this.getWritableDatabase();
 			ContentValues values = new ContentValues();
 			values.put(KEY_LOCATION_TAG_LOCATIONID,location.getId());
@@ -319,6 +322,12 @@ public class Tags extends SQLiteOpenHelper {
       	  Tag tag = i.next();
       	  removeLocationTag(location,tag);
         }
+    }
+    
+    public void deleteTag(Tag tag) {
+    	SQLiteDatabase db = this.getWritableDatabase();
+    	db.delete(TABLE_TAGS, KEY_TAG_ID + "=?", new String[] {Integer.toString(tag.getId()) });
+    	db.close();
     }
     	
     

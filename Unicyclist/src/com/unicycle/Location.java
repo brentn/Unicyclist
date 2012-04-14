@@ -8,6 +8,8 @@ import android.content.Context;
 
 public class Location {
 	
+	public static final int SELECT_TAGS = 2;
+	
 	//private variables
 	private int _id;
 	private String _name;
