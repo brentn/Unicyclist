@@ -49,7 +49,7 @@ public final class R {
         public static final int addImageButton=0x7f09000b;
         public static final int addTags=0x7f09001d;
         public static final int allLocationsList=0x7f09001f;
-        public static final int byUsage=0x7f090030;
+        public static final int byUsage=0x7f090033;
         public static final int cancelButton=0x7f09002b;
         public static final int challengesButton=0x7f090013;
         public static final int comments=0x7f09001a;
@@ -58,32 +58,36 @@ public final class R {
         public static final int content2=0x7f090007;
         public static final int description=0x7f09000e;
         public static final int descriptionMenu=0x7f09000c;
-        public static final int difficulty=0x7f090037;
+        public static final int difficulty=0x7f09003a;
         public static final int directions=0x7f09000f;
         public static final int distance=0x7f090025;
         public static final int drag=0x7f090028;
+        public static final int editText1=0x7f09002c;
+        public static final int editText2=0x7f09002d;
+        public static final int editText3=0x7f09002e;
         public static final int feature=0x7f090000;
         public static final int flipper=0x7f09000d;
         public static final int gallery=0x7f09001e;
         public static final int gallery1=0x7f09000a;
         public static final int gpsButton=0x7f090022;
-        public static final int latitude=0x7f09002c;
+        public static final int latitude=0x7f09002f;
         public static final int linearLayout1=0x7f09001b;
         public static final int linearLayout2=0x7f090019;
         public static final int locationButton=0x7f090003;
-        public static final int locationName=0x7f090033;
+        public static final int locationName=0x7f090036;
         public static final int locationPicker=0x7f090027;
         public static final int locationsSlider=0x7f090001;
-        public static final int longitude=0x7f09002d;
-        public static final int map=0x7f090034;
+        public static final int longitude=0x7f090030;
+        public static final int mapView=0x7f090037;
         public static final int mapview=0x7f090021;
         public static final int myLocationsList=0x7f090020;
         public static final int name=0x7f090009;
-        public static final int newLocation=0x7f090039;
+        public static final int newLocation=0x7f09003c;
+        public static final int newTrail=0x7f09003e;
         public static final int newlocationflipper=0x7f090026;
-        public static final int numberOfFeatures=0x7f090036;
-        public static final int okButton=0x7f090031;
-        public static final int preferences=0x7f09003a;
+        public static final int numberOfFeatures=0x7f090039;
+        public static final int okButton=0x7f090034;
+        public static final int preferences=0x7f09003d;
         public static final int relativeLayout1=0x7f090029;
         public static final int relativeLayout4=0x7f090010;
         public static final int relativeLayout5=0x7f090014;
@@ -94,16 +98,16 @@ public final class R {
         public static final int skillsButton=0x7f090008;
         public static final int skillsSlider=0x7f090006;
         public static final int strut1=0x7f090011;
-        public static final int tagName=0x7f090032;
+        public static final int tagName=0x7f090035;
         public static final int tagarea=0x7f090018;
         public static final int tags=0x7f09001c;
-        public static final int textView1=0x7f090038;
+        public static final int textView1=0x7f09003b;
         public static final int textView7=0x7f090016;
         public static final int thumb=0x7f090024;
         public static final int trailsButton=0x7f090012;
-        public static final int trails_list=0x7f090035;
-        public static final int x=0x7f09002e;
-        public static final int y=0x7f09002f;
+        public static final int trails_list=0x7f090038;
+        public static final int x=0x7f090031;
+        public static final int y=0x7f090032;
     }
     public static final class layout {
         public static final int home=0x7f030000;
@@ -111,15 +115,17 @@ public final class R {
         public static final int locations_list=0x7f030002;
         public static final int locations_list_item=0x7f030003;
         public static final int new_location=0x7f030004;
-        public static final int popup=0x7f030005;
-        public static final int ride=0x7f030006;
-        public static final int tag_picker=0x7f030007;
-        public static final int trails=0x7f030008;
-        public static final int trails_list_item=0x7f030009;
+        public static final int new_trail=0x7f030005;
+        public static final int popup=0x7f030006;
+        public static final int ride=0x7f030007;
+        public static final int tag_picker=0x7f030008;
+        public static final int trails=0x7f030009;
+        public static final int trails_list_item=0x7f03000a;
     }
     public static final class menu {
         public static final int locations=0x7f080000;
         public static final int main=0x7f080001;
+        public static final int trails=0x7f080002;
     }
     public static final class raw {
         public static final int click=0x7f050000;
@@ -135,12 +141,13 @@ public final class R {
         public static final int all_locations=0x7f070002;
         /**  Home 
 	<string name="maps_api_key">0Wp1747MVgskQz6SzgO1mpYZQNHRrP40R4v8aTA</string>
-	
+
          */
         public static final int app_name=0x7f070001;
         public static final int challenges=0x7f070007;
         public static final int click_to_add_tags=0x7f070020;
         public static final int comments=0x7f070008;
+        public static final int create=0x7f070028;
         public static final int delete_location=0x7f07000d;
         public static final int description=0x7f070004;
         public static final int directions=0x7f070005;
@@ -153,13 +160,14 @@ public final class R {
         public static final int location_name=0x7f070018;
         public static final int location_picker=0x7f070019;
         public static final int locations=0x7f070012;
-        /**  Work 
+        /**  Work  
          */
         public static final int maps_api_key=0x7f070000;
         public static final int mapview=0x7f070009;
         public static final int my_locations=0x7f070003;
         public static final int name=0x7f070015;
         public static final int new_location=0x7f07000a;
+        public static final int new_trail=0x7f070027;
         public static final int no=0x7f07001c;
         public static final int preferences=0x7f070021;
         public static final int rating=0x7f07001d;

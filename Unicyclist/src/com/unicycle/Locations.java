@@ -150,7 +150,6 @@ public class Locations extends SQLiteOpenHelper {
         values.put(KEY_LOCATION_DIRECTIONS, location.getDirections());
         values.put(KEY_LOCATION_RATING, location.getRating());
         int id = (int) db.insert(TABLE_LOCATIONS, null, values);
-        db.close();
         if (location.isFavourite()) {
         	this.addFavourite(id);
         }
@@ -160,6 +159,7 @@ public class Locations extends SQLiteOpenHelper {
         	  Tag tag = i.next();
         	  tags.addLocationTag(location, tag);
         }
+        db.close();
         return id;
     }
     
@@ -178,11 +178,11 @@ public class Locations extends SQLiteOpenHelper {
 		                cursor.getString(1), Integer.parseInt(cursor.getString(2))/1e6, Integer.parseInt(cursor.getString(3))/1e6,
 		                cursor.getString(4), cursor.getString(5), 
 		                Integer.parseInt(cursor.getString(6)));
-		        db.close();
 		        if (this.isFavourite(location.getId())) {
 		        	location.setFavourite();
 		        }
 		        location.setTags(tags.getTagsForLocation(location));
+		        db.close();
 		        return location;
 	        } 
 	        db.close();
@@ -209,6 +209,7 @@ public class Locations extends SQLiteOpenHelper {
 		            location.setDescription(cursor.getString(4));
 		            location.setDirections(cursor.getString(5));
 		            location.setRating(Integer.parseInt(cursor.getString(6)));
+
 		            if (this.isFavourite(location.getId())) {
 		            	location.setFavourite();
 		            }
@@ -232,7 +233,6 @@ public class Locations extends SQLiteOpenHelper {
         values.put(KEY_LOCATION_DIRECTIONS, location.getDirections());
         values.put(KEY_LOCATION_RATING, location.getRating());
         int result = db.update(TABLE_LOCATIONS, values, KEY_LOCATION_ID + " = ?", new String[] { String.valueOf(id) });
-        db.close();
         
         if (location.isFavourite()) {
         	this.addFavourite(id);
@@ -249,6 +249,7 @@ public class Locations extends SQLiteOpenHelper {
         	  Tag tag = i.next();
         	  tags.addLocationTag(location, tag);
         }
+        db.close();
         return result;
     }
     

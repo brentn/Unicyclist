@@ -1,47 +1,73 @@
 package com.unicycle;
 
 import java.util.Iterator;
+import java.util.List;
 
 import android.app.Activity;
-import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.ToggleButton;
 
 public class TagsActivity extends Activity {
+	
+	static final int SELECTED_COLOR = Color.parseColor("#669900");
+	static final int UNSELECTED_COLOR = Color.BLACK;
+	
+	List<Tag> tagSet;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tag_picker);
-        
+        tagSet = ((UnicyclistApplication) getApplication()).getCurrentTagSet();
         LinearLayout tagButtons = (LinearLayout) findViewById(R.id.byUsage);
         
-        Location location = ((UnicyclistApplication) getApplication()).getCurrentLocation();
-        Tags db = new Tags(getApplicationContext());
+        final Tags db = new Tags(getApplicationContext());
+        List<Tag> allTags = db.getAllTags(Tags.SORT_BY_USAGE);
         
-        for(Iterator<Tag> i = db.getAllTags(Tags.SORT_BY_USAGE).iterator(); i.hasNext(); ) {
+        for(Iterator<Tag> i = allTags.iterator(); i.hasNext(); ) {
       	  Tag tag = i.next();
-      	  Button button = new Button(this);
-      	  button.setBackgroundResource(R.drawable.black_button);
+      	  ToggleButton button = new ToggleButton(this);
       	  button.setLines(1);
       	  button.setTextSize(20);
       	  button.setMaxWidth(200);
-      	  button.setTextColor(Color.WHITE);
       	  button.setText(tag.getName());
-      	  if (location.getTagString().contains(tag.getName())) {
-      		  button.setTextColor(Color.parseColor("#99CC00"));
+      	  button.setTextOn(tag.getName());
+      	  button.setTextOff(tag.getName());
+      	  if (tagSet.contains(tag)) {
+      		  button.setChecked(true);
+      		  button.setTextColor(Color.parseColor("#669900"));
       	  }
+
+          button.setOnClickListener(new OnClickListener() {
+          	@Override
+          	public void onClick(View view) {
+      			Tag tag = db.findTagByName(((ToggleButton) view).getText().toString());
+          		if (((ToggleButton) view).isChecked()) {
+          			((ToggleButton) view).setTextColor(SELECTED_COLOR);
+          			tagSet.add(tag);
+          		} else {
+          			((ToggleButton) view).setTextColor(UNSELECTED_COLOR);
+          			tagSet.remove(tag);
+          		}
+          	}
+          });
 
       	  tagButtons.addView(button);
       	}
 
         db.close();
         
+	}
+	
+	protected void onPause() {
+		super.onPause();
+		Intent _result = new Intent();
+		setResult(Activity.RESULT_OK,_result);
 	}
 
 }

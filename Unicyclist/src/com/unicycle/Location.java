@@ -69,6 +69,16 @@ public class Location {
 		this._images = new ArrayList<Image>();
 	}
 	
+	@Override 
+	public boolean equals(Object that) {
+		return (this._id == ((Location) that).getId());
+	}
+	
+	@Override
+	public int hashCode() {
+		return this._id;
+	}
+	
 	public void setId(int id) {
 		this._id = id;
 	}

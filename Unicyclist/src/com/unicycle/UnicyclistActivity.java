@@ -21,7 +21,6 @@ public class UnicyclistActivity extends Activity {
 	SlidingDrawer locationsButton;
 	SlidingDrawer ridesButton;
 	SlidingDrawer skillsButton;
-//	SoundManager mSoundManager;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,14 +31,9 @@ public class UnicyclistActivity extends Activity {
         ridesButton = (SlidingDrawer) findViewById(R.id.ridesSlider);
         skillsButton = (SlidingDrawer) findViewById(R.id.skillsSlider);
         
-//        mSoundManager = new SoundManager();
-//        mSoundManager.initSounds(getBaseContext());
-//        mSoundManager.addSound(1, R.raw.clock);
-
         locationsButton.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View arg0, MotionEvent arg1) {
-//        		mSoundManager.playSound(1);
 				return false;
 			}
         });
@@ -56,7 +50,6 @@ public class UnicyclistActivity extends Activity {
         ridesButton.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View arg0, MotionEvent arg1) {
-//        		mSoundManager.playSound(1);
 				return false;
 			}
         });
@@ -71,7 +64,6 @@ public class UnicyclistActivity extends Activity {
         skillsButton.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View arg0, MotionEvent arg1) {
-//        		mSoundManager.playSound(1);
 				return false;
 			}
         });

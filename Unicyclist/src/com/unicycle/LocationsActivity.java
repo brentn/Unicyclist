@@ -57,7 +57,6 @@ public class LocationsActivity extends MapActivity {
 	private LocationListener locationListener;
 	private ToggleButton satButton;
 	private ToggleButton gpsButton;
-//	private SoundManager mSoundManager;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,10 +76,6 @@ public class LocationsActivity extends MapActivity {
       	  }
       	}
         
-//        mSoundManager = new SoundManager();
-//        mSoundManager.initSounds(getBaseContext());
-//        mSoundManager.addSound(1, R.raw.click);
-
         //Find View Components
         Gallery menu = (Gallery) findViewById(R.id.gallery);
         page = (ViewFlipper)findViewById(R.id.flipper);
@@ -128,7 +123,6 @@ public class LocationsActivity extends MapActivity {
 	        @Override
 	        public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {	        	page.setInAnimation(fadeIn);
 	        	page.setOutAnimation(fadeOut);
-//	        	mSoundManager.playSound(1);
 	        	page.setDisplayedChild(position);
 	        }
 	        @Override
@@ -140,9 +134,9 @@ public class LocationsActivity extends MapActivity {
         clickListener = new ListView.OnItemClickListener() {
         	@Override
         	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        		Location l = (Location) ((ListView) parent).getItemAtPosition(position);
+        		((UnicyclistApplication) getApplication()).setCurrentLocation(l);
         		Intent locationIntent = new Intent(LocationsActivity.this, LocationActivity.class);
-        		((UnicyclistApplication) getApplication()).setCurrentLocation(new Locations(getBaseContext()).getLocation((int) id));
-//        		locationIntent.putExtra("id",id);
         		LocationsActivity.this.startActivity(locationIntent);
         	}
         };
@@ -170,6 +164,25 @@ public class LocationsActivity extends MapActivity {
               locationsOverlay.addOverlay(overlayitem);
         	}
         mapOverlays.add(locationsOverlay);
+    }
+    
+    @Override
+    protected void onResume() {
+    	super.onResume();
+    	Location location = ((UnicyclistApplication) getApplication()).getCurrentLocation();
+    	if (location != null) {
+    		int position = locationList.indexOf(location);
+	    	locationList.remove(location);
+	    	locationList.add(position, location);
+	    	locationsListAdapter.notifyDataSetChanged();
+	    	if (location.isFavourite()) {
+	    		position = favouritesList.indexOf(location);
+	    		favouritesList.remove(location);
+	    		favouritesList.add(position, location);
+	        	favouritesListAdapter.notifyDataSetChanged();
+	    	}
+	    	mapView.invalidate();
+    	}
     }
     
     @Override
@@ -308,7 +321,7 @@ public class LocationsActivity extends MapActivity {
     			favouritesList.remove(location);
     			favouritesListAdapter.notifyDataSetChanged();
     		}
-//FIX    		//remove from map
+//TODO    		//remove from map
     		
     		return true;
     	}
@@ -318,7 +331,6 @@ public class LocationsActivity extends MapActivity {
     private class MyLocationListener implements LocationListener{
 
   	  public void onLocationChanged(android.location.Location argLocation) {
-  	   // TODO Auto-generated method stub
   	   GeoPoint myGeoPoint = new GeoPoint(
   	    (int)(argLocation.getLatitude()*1000000),
   	    (int)(argLocation.getLongitude()*1000000));

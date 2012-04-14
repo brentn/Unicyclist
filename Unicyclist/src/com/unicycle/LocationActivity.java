@@ -21,23 +21,22 @@ import android.widget.ViewFlipper;
 
 public class LocationActivity extends Activity {
 	
+	static final int SELECT_TAGS = 2;
+	
+	private Location location;
 	private ViewFlipper page; 
 	private Animation fadeIn;
 	private Animation fadeOut;
 	private static final int SELECT_PICTURE = 1;
 	private String selectedImagePath;
+	private TextView tags;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.location);
-//        Intent intent = getIntent();
-//        int id = (int) intent.getLongExtra("id",0);
         
-//        Locations db = new Locations(this);
-//        Location location = new Location();
-        
-        Location location = ((UnicyclistApplication) getApplication()).getCurrentLocation();
+        location = ((UnicyclistApplication) getApplication()).getCurrentLocation();
         
         page = (ViewFlipper) findViewById(R.id.flipper);
         fadeIn = AnimationUtils.loadAnimation(this,android.R.anim.fade_in);
@@ -46,7 +45,7 @@ public class LocationActivity extends Activity {
         TextView name = (TextView) findViewById(R.id.name);
         final TextView description = (TextView) findViewById(R.id.description);
         final TextView directions = (TextView) findViewById(R.id.directions);
-        TextView tags = (TextView) findViewById(R.id.tags);
+        tags = (TextView) findViewById(R.id.tags);
         TextView addTags = (TextView) findViewById(R.id.addTags);
         ImageView addImageButton = (ImageView) findViewById(R.id.addImageButton);
         Gallery descriptionMenu = (Gallery) findViewById(R.id.descriptionMenu);
@@ -81,8 +80,9 @@ public class LocationActivity extends Activity {
         });
         addTags.setOnClickListener(new OnClickListener() {
         	public void onClick(View view) {
-        		
-        		startActivity(new Intent(LocationActivity.this, TagsActivity.class));
+        		Location location = ((UnicyclistApplication) getApplication()).getCurrentLocation();
+        		((UnicyclistApplication) getApplication()).getCurrentTagsFromCurrentLocation();
+        		startActivityForResult(new Intent(LocationActivity.this, TagsActivity.class),SELECT_TAGS);
         	}
         });
         
@@ -96,18 +96,23 @@ public class LocationActivity extends Activity {
         	directions.setText(location.getDirections());
         }
         if ( tags != null) {
-       		tags.setText(location.getTagString());
+       		showTags();
         }
        
 	 }
 	 
 	 public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		    if (resultCode == RESULT_OK) {
-		        if (requestCode == SELECT_PICTURE) {
-		            Uri selectedImageUri = data.getData();
-		            selectedImagePath = getPath(selectedImageUri);
-		            Toast.makeText(LocationActivity.this,selectedImagePath, Toast.LENGTH_SHORT).show();
-		        }
+		    if ((requestCode == SELECT_PICTURE) && (resultCode == RESULT_OK)) {
+	            Uri selectedImageUri = data.getData();
+	            selectedImagePath = getPath(selectedImageUri);
+	            Toast.makeText(LocationActivity.this,selectedImagePath, Toast.LENGTH_SHORT).show();
+		    }
+		    if (requestCode == SELECT_TAGS) {
+	        	((UnicyclistApplication) getApplication()).setCurrentLocationTagsFromCurrentTags();
+	        	location.setTags(((UnicyclistApplication) getApplication()).getCurrentTagSet());
+	        	Locations db = new Locations(getBaseContext());
+	        	showTags();
+	        	db.updateLocation(location);
 		    }
 	 }
 	 
@@ -118,6 +123,11 @@ public class LocationActivity extends Activity {
 		            .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
 		    cursor.moveToFirst();
 		    return cursor.getString(column_index);
-		}
+ 	 }
+	 
+	 private void showTags() {
+		 tags.setText(location.getTagString());
+	 }
+
 
 }

@@ -1,7 +1,7 @@
 package com.unicycle;
 
 
-public class Tag {
+public class Tag extends Object{
 	
 	private int _id;
 	private String _name;
@@ -40,6 +40,16 @@ public class Tag {
 	
 	public void setUsage(int usage) {
 		this._usage = usage;
+	}
+	
+	@Override
+	public boolean equals(Object that) {
+		return (this.hashCode() == that.hashCode());
+	}
+	
+	@Override
+	public  int hashCode() {
+		return this._name.hashCode();
 	}
 	
 }	
