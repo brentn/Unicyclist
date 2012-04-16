@@ -44,7 +44,8 @@
     <string name="ride">Ride</string>
     <string name="trail_name">Trail Name</string>
     <string name="features">Features</string>
-    <string name="new_trail">Add a New Trail</string>
+    <string name="new_trail">New Trail</string>
     <string name="create">Create</string>
+    <string name="mark_trail_head">Mark Trail Head...</string>
 
 </resources>

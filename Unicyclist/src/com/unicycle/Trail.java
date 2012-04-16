@@ -13,7 +13,8 @@ public class Trail {
 	private int _id;
 	private int _locationId;
 	private String _name = "";
-	private android.location.Location _coordinates;
+	private double _latitude;
+	private double _longitude;
 	private String _description = "";
 	private String _directions = "";
 	private float _length = 0;
@@ -27,8 +28,8 @@ public class Trail {
 	public Trail(Location location) {
 		this._id = -1;
 		this._locationId = location.getId();
-		this._coordinates.setLatitude(location.getLatitude());
-		this._coordinates.setLongitude(location.getLongitude());
+		this._latitude = location.getLatitude();
+		this._longitude = location.getLongitude();
 	}
 	
 	public Trail(int id, int locationId, String name, double latitude, double longitude, 
@@ -36,8 +37,8 @@ public class Trail {
 		this._id = id;
 		this._locationId = locationId;
 		this._name = name;
-		this._coordinates.setLatitude(latitude);
-		this._coordinates.setLongitude(longitude);
+		this._latitude = latitude;
+		this._longitude = longitude;
 		this._description = description;
 		this._directions = directions;
 		this._length = length;
@@ -51,8 +52,8 @@ public class Trail {
 		this._id = id;
 		this._locationId = locationId;
 		this._name = name;
-		this._coordinates.setLatitude(latitude);
-		this._coordinates.setLongitude(longitude);
+		this._latitude = latitude;
+		this._longitude = longitude;
 		this._description = description;
 		this._directions = directions;
 		this._length = length;
@@ -65,13 +66,27 @@ public class Trail {
 	}
 
 	public Trail(int locationId, String name, double latitude, double longitude, 
+			String description, String directions, float length, int rating, int difficulty) {
+		this._id = -1;
+		this._locationId = locationId;
+		this._name = name;
+		this._latitude = latitude;
+		this._longitude = longitude;
+		this._description = description;
+		this._directions = directions;
+		this._length = length;
+		this._rating = rating;
+		this._difficulty = difficulty;
+	}
+
+	public Trail(int locationId, String name, double latitude, double longitude, 
 			String description, String directions, float length, int rating, int difficulty,
 			List<Challenge> features, List<GPSTrack> tracks, List<Image> images, List<Tag> tags) {
 		this._id = -1;
 		this._locationId = locationId;
 		this._name = name;
-		this._coordinates.setLatitude(latitude);
-		this._coordinates.setLongitude(longitude);
+		this._latitude = latitude;
+		this._longitude = longitude;
 		this._description = description;
 		this._directions = directions;
 		this._length = length;
@@ -108,24 +123,21 @@ public class Trail {
 	}
 	
 	public double getLatitude() {
-		return this._coordinates.getLatitude();
+		return this._latitude;
 	}
 	
 	public double getLongitude() {
-		return this._coordinates.getLongitude();
-	}
-	
-	public android.location.Location getCoordinates() {
-		return this._coordinates;
+		return this._longitude;
 	}
 	
 	public void setCoordinates(double latitude, double longitude) {
-		this._coordinates.setLatitude(latitude);
-		this._coordinates.setLongitude(longitude);
+		this._latitude = latitude;
+		this._longitude = longitude;
 	}
 	
 	public void setCoordinates(android.location.Location location) {
-		this._coordinates = location;
+		this._latitude = location.getLatitude();
+		this._longitude = location.getLongitude();
 	}
 	
 	public String getDescription() {

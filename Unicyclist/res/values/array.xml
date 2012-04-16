@@ -14,5 +14,11 @@
 	        <item>200</item>
 	        <item>1000000</item>
 	</string-array>
+	<string-array name="trail_difficulties">
+		<item >easiest</item>
+		<item >more difficult</item>
+		<item >most difficult</item>
+		<item >extreme</item>
+	</string-array>
     
 </resources>

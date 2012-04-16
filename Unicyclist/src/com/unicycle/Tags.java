@@ -15,7 +15,7 @@ public class Tags extends SQLiteOpenHelper {
 	public static final int SORT_BY_NAME = 1;
 	public static final int SORT_BY_USAGE = 2;
 
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	private static final String DATABASE_NAME = "tags";
 
 	//table names
