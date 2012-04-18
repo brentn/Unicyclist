@@ -5,25 +5,21 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
@@ -57,37 +53,28 @@ public class LocationActivity extends Activity {
         fadeIn = AnimationUtils.loadAnimation(this,android.R.anim.fade_in);
         fadeOut = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
 
+        //get view objects
         TextView name = (TextView) findViewById(R.id.name);
-        Gallery imageGallery = (Gallery) findViewById(R.id.images);
+        ViewGroup images = (ViewGroup) findViewById(R.id.imagesGoHere);
+        Gallery descriptionMenu = (Gallery) findViewById(R.id.descriptionMenu);
         description = (TextView) findViewById(R.id.description);
         directions = (TextView) findViewById(R.id.directions);
+        Button trailsButton = (Button) findViewById(R.id.trailsButton);
+        Button featuresButton = (Button) findViewById(R.id.featuresButton);
+        ViewGroup comments = (ViewGroup) findViewById(R.id.commentsGoHere);
         tags = (TextView) findViewById(R.id.tags);
         addTagsText = (TextView) findViewById(R.id.addTagsText);
         addTagsButton = (ImageButton) findViewById(R.id.addTags);
         ImageButton editTagsButton = (ImageButton) findViewById(R.id.editTags);
-        ImageView addImageButton = (ImageView) findViewById(R.id.addImageButton);
-        Gallery descriptionMenu = (Gallery) findViewById(R.id.descriptionMenu);
-        Button trailsButton = (Button) findViewById(R.id.trailsButton);
-        RelativeLayout commentsSection = (RelativeLayout) findViewById(R.id.commentsSection);
 
-        //Images images = new Images(this);
-        //imageGallery.setAdapter(new ImageAdapter(this, images.getImagesForLocation(location.getId()) ));       
-        ListView commentsView = new Comments(this).getLocationCommentsView(location);
-        RelativeLayout.LayoutParams relativeParams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-        relativeParams.addRule(RelativeLayout.BELOW,findViewById(R.id.commentsTitle).getId());
-        relativeParams.addRule(RelativeLayout.ABOVE,findViewById(R.id.tagarea).getId());
-        commentsSection.addView(commentsView,relativeParams);
-        
-        commentsSection.setOnLongClickListener( new OnLongClickListener() {
-			@Override
-			public boolean onLongClick(View arg0) {
-				Toast.makeText(LocationActivity.this,"CLICK",Toast.LENGTH_SHORT).show();
-				return false;
-			}
-        });
+        //add dynamic view objects
+        images.addView(new Images(this).getLocationImagesView(location));
+        comments.addView(new Comments(this).getLocationCommentsView(location));
 
+        //set up adapters
         descriptionMenu.setAdapter(new DescriptionMenuAdapter(this, new String[] {"Description","Directions"}));
 
+        //set up listeners
         descriptionMenu.setOnItemSelectedListener(new OnItemSelectedListener() {
 	        @Override
 	        public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
@@ -101,14 +88,6 @@ public class LocationActivity extends Activity {
 	        }
         });
       
-        addImageButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View arg0) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent,"Select Picture"), SELECT_PICTURE);
-            }
-        });
         description.setOnLongClickListener(new OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View arg0) {
