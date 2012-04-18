@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.ImageView;
 import android.widget.SlidingDrawer;
 import android.widget.SlidingDrawer.OnDrawerOpenListener;
 
@@ -30,7 +31,8 @@ public class UnicyclistActivity extends Activity {
         locationsButton = (SlidingDrawer) findViewById(R.id.locationsSlider);
         ridesButton = (SlidingDrawer) findViewById(R.id.ridesSlider);
         skillsButton = (SlidingDrawer) findViewById(R.id.skillsSlider);
-        
+        ImageView feature = (ImageView) findViewById(R.id.feature);
+
         locationsButton.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View arg0, MotionEvent arg1) {

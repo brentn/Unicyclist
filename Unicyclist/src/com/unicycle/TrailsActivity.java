@@ -3,12 +3,15 @@ package com.unicycle;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -17,7 +20,6 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
-import com.google.android.maps.OverlayItem;
 
 public class TrailsActivity extends MapActivity {
 	
@@ -47,6 +49,9 @@ public class TrailsActivity extends MapActivity {
         ListView trailsView = (ListView) findViewById(R.id.trails_list);
         ToggleButton satButton = (ToggleButton) findViewById(R.id.satButton);
         
+        View footerView = ((LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.trails_list_add, null, false);
+        trailsView.addFooterView(footerView);
+
         //Set up adapters
         trailsListAdapter = new TrailsListAdapter(this.getBaseContext(), R.layout.trails_list_item, trailsList);
         trailsView.setAdapter(trailsListAdapter);
@@ -59,8 +64,13 @@ public class TrailsActivity extends MapActivity {
         mapView.setSatellite(true);
         satButton.setChecked(true);
         mapController.setZoom(16);
+        
     }
 
+    public void onClick(View footerView) {
+    	startActivityForResult(new Intent(TrailsActivity.this, NewTrailActivity.class), GET_NEW_TRAIL);
+    }
+    
 	@Override
 	protected boolean isRouteDisplayed() {
 		// TODO Auto-generated method stub

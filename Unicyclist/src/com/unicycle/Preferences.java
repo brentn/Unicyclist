@@ -56,12 +56,11 @@ public class Preferences extends PreferenceActivity {
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				Locations locations = new Locations(getApplicationContext());
-				Tags tags = new Tags(getApplicationContext());
-				Trails trails = new Trails(getApplicationContext());
-				copyDatabaseToSD(locations.databaseName());
-				copyDatabaseToSD(tags.databaseName());
-				copyDatabaseToSD(trails.databaseName());
+				copyDatabaseToSD(new Locations(getApplicationContext()).databaseName());
+				copyDatabaseToSD(new Tags(getApplicationContext()).databaseName());
+				copyDatabaseToSD(new Trails(getApplicationContext()).databaseName());
+				copyDatabaseToSD(new Images(getApplicationContext()).databaseName());
+				copyDatabaseToSD(new Comments(getApplicationContext()).databaseName());
 				Toast.makeText(getApplicationContext(), "Backup Complete", Toast.LENGTH_SHORT).show();
 				return true;
 			}
@@ -75,14 +74,20 @@ public class Preferences extends PreferenceActivity {
 				Locations locations = new Locations(getApplicationContext());
 				Tags tags = new Tags(getApplicationContext());
 				Trails trails = new Trails(getApplicationContext());
+				Images images = new Images(getApplicationContext());
+				Comments comments = new Comments(getApplicationContext());
 				result = (restoreDatabaseFromSD(locations.databaseName()) && 
 						restoreDatabaseFromSD(tags.databaseName()) &&
-						restoreDatabaseFromSD(trails.databaseName()));
+						restoreDatabaseFromSD(trails.databaseName()) &&
+						restoreDatabaseFromSD(images.databaseName())) &&
+						restoreDatabaseFromSD(comments.databaseName());
     	        // Access the copied database so SQLiteHelper will cache it and mark
     	        // it as created.
  				locations.getWritableDatabase().close();
  				tags.getWritableDatabase().close();
  				trails.getWritableDatabase().close();
+ 				images.getWritableDatabase().close();
+ 				comments.getWritableDatabase().close();
  				if (result) {
  					Toast.makeText(getApplicationContext(), "Restore Complete", Toast.LENGTH_SHORT).show();
  				} else {

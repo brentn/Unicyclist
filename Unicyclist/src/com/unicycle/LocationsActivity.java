@@ -1,6 +1,8 @@
 package com.unicycle;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -14,6 +16,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -61,7 +64,7 @@ public class LocationsActivity extends MapActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.locations_list);
+        setContentView(R.layout.locations);
         
         //Read data from DB
         Locations db = new Locations(this);
@@ -75,9 +78,22 @@ public class LocationsActivity extends MapActivity {
       		  favouritesList.add(location);
       	  }
       	}
+        Collections.sort(locationList, new Comparator<Location>() {
+            @Override
+            public int compare(Location location1, Location location2) {
+                return location1.sortByDistance(((UnicyclistApplication) getApplication()).getMyLocation(),location2);
+            }
+        });
+        
+        Collections.sort(favouritesList, new Comparator<Location>() {
+            @Override
+            public int compare(Location location1, Location location2) {
+                return location1.sortByDistance(((UnicyclistApplication) getApplication()).getMyLocation(),location2);
+            }
+        });
         
         //Find View Components
-        Gallery menu = (Gallery) findViewById(R.id.gallery);
+        Gallery menu = (Gallery) findViewById(R.id.menu);
         page = (ViewFlipper)findViewById(R.id.flipper);
         ListView locationsView = (ListView) findViewById(R.id.allLocationsList);
         ListView favouritesView = (ListView) findViewById(R.id.myLocationsList);
@@ -88,15 +104,24 @@ public class LocationsActivity extends MapActivity {
         //Find other resources
         fadeIn = AnimationUtils.loadAnimation(this,android.R.anim.fade_in);
         fadeOut = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
+        
+        //Add list buttons
+        View footerView = ((LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.locations_list_add, null, false);
+        locationsView.addFooterView(footerView);
+        View favFooterView = ((LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.locations_list_add, null, false);
+        favouritesView.addFooterView(favFooterView);
 
         //Set up Adapters
-        locationsListAdapter = new LocationsListAdapter(this.getBaseContext(), R.layout.locations_list_item, locationList);
+        locationsListAdapter = new LocationsListAdapter(((UnicyclistApplication) getApplication()).getMyLocation(),LocationsActivity.this, R.layout.locations_list_item, locationList);
         locationsView.setAdapter(locationsListAdapter);
-        favouritesListAdapter = new LocationsListAdapter(this.getBaseContext(), R.layout.locations_list_item, favouritesList);
+        favouritesListAdapter = new LocationsListAdapter(((UnicyclistApplication) getApplication()).getMyLocation(),LocationsActivity.this, R.layout.locations_list_item, favouritesList);
         favouritesView.setAdapter(favouritesListAdapter);
         menu.setAdapter(new GalleryMenuAdapter(this, new String[] {getString(R.string.locations),getString(R.string.favourites),getString(R.string.mapview)}));
         
         //Set Up Menus
+        if (favouritesList.size() > 0 ) {
+        	menu.setSelection(1);
+        }
         registerForContextMenu(locationsView);
         registerForContextMenu(favouritesView);
         
@@ -164,6 +189,10 @@ public class LocationsActivity extends MapActivity {
               locationsOverlay.addOverlay(overlayitem);
         	}
         mapOverlays.add(locationsOverlay);
+    }
+    
+    public void onClick(View footerView) {
+    	startActivityForResult(new Intent(LocationsActivity.this, NewLocationActivity.class), GET_NEW_LOCATION);
     }
     
     @Override
@@ -338,16 +367,13 @@ public class LocationsActivity extends MapActivity {
   	  }
 
   	  public void onProviderDisabled(String provider) {
-  	   // TODO Auto-generated method stub
   	  }
 
   	  public void onProviderEnabled(String provider) {
-  	   // TODO Auto-generated method stub
   	  }
 
   	  public void onStatusChanged(String provider,
   	    int status, Bundle extras) {
-  	   // TODO Auto-generated method stub
   	  }
 	 }
     

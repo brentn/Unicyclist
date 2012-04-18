@@ -153,13 +153,29 @@ public class Locations extends SQLiteOpenHelper {
         if (location.isFavourite()) {
         	this.addFavourite(id);
         }
+        //add tags
         Tags tags = new Tags(mContext);
         List<Tag> tagList = location.getTags();
         for(Iterator<Tag> i = tagList.iterator(); i.hasNext(); ) {
         	  Tag tag = i.next();
         	  tags.addLocationTag(location, tag);
         }
+        //add images
+        Images images = new Images(mContext);
+        List<Image> imageList = location.getImages();
+        for(Iterator<Image> j = imageList.iterator(); j.hasNext(); ) {
+        	Image image = j.next();
+        	images.addLocationImage(location, image);
+        }
+        //add comments
+        Comments comments = new Comments(mContext);
+        List<Comment> commentList = location.getComments();
+        for(Iterator<Comment> k = commentList.iterator(); k.hasNext(); ) {
+        	Comment comment = k.next();
+        	comments.addLocationComment(location, comment);
+        }
         db.close();
+        
         return id;
     }
     

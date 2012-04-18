@@ -16,7 +16,7 @@
         android:orientation="horizontal">
 
 	    <Gallery
-	        android:id="@+id/gallery1"
+	        android:id="@+id/images"
 	        android:layout_width="fill_parent"
 	        android:layout_height="80dip" />
 	
@@ -41,6 +41,7 @@
         android:layout_gravity="top"
         android:adjustViewBounds="true"
         android:cropToPadding="true"
+        android:longClickable="true"
         android:scaleType="fitStart"
         android:src="@drawable/background" />
     
@@ -61,6 +62,7 @@
 	            android:layout_width="fill_parent"
 	            android:layout_height="100dip"
 	            android:padding="5dp"
+		        android:longClickable="true"
 	            android:textColor="#33b5e5" />
 		
 		    <TextView
@@ -68,6 +70,7 @@
 		        android:layout_width="fill_parent"
 		        android:layout_height="100dip"
 		        android:padding="5dp"
+		        android:longClickable="true"
 		        android:textColor="#ffbb33"
 		        android:visibility="gone" />
 	
@@ -118,7 +121,7 @@
     </RelativeLayout>
 
      <RelativeLayout
-        android:id="@+id/relativeLayout5"
+        android:id="@+id/commentsSection"
         android:layout_height="fill_parent"
         android:layout_width="fill_parent"
         android:layout_gravity="top" >
@@ -129,39 +132,47 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:adjustViewBounds="false"
+            android:longClickable="true"
             android:cropToPadding="false"
             android:scaleType="centerCrop"
             android:src="@drawable/background" />
         
         <TextView
-            android:id="@+id/textView7"
+            android:id="@+id/commentsTitle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
 	        android:padding="7dp"
             android:text="@string/comments" />
 	
-	    <ScrollView
-	        android:id="@+id/scrollView1"
-	        android:layout_width="fill_parent"
-	        android:layout_height="fill_parent"
-	        android:layout_below="@+id/textView7"
-	        android:layout_above="@+id/tagarea" >
+<!-- 	    <ScrollView -->
+<!-- 	        android:id="@+id/scrollView1" -->
+<!-- 	        android:layout_width="fill_parent" -->
+<!-- 	        android:layout_height="fill_parent" -->
+<!-- 	        android:layout_below="@+id/textView7" -->
+<!-- 	        android:layout_above="@+id/tagarea" > -->
 	
-	        <LinearLayout
-	            android:id="@+id/linearLayout2"
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content" >
+<!-- 	        <LinearLayout -->
+<!-- 	            android:id="@+id/linearLayout2" -->
+<!-- 	            android:layout_width="fill_parent" -->
+<!-- 	            android:layout_height="wrap_content" > -->
 	
-	            <TextView
-	                android:id="@+id/comments"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:padding="10dp"
-	                 />
+<!-- 	            <TextView -->
+<!-- 	                android:id="@+id/comments" -->
+<!-- 	                android:layout_width="wrap_content" -->
+<!-- 	                android:layout_height="wrap_content" -->
+<!-- 	                android:padding="10dp" -->
+<!-- 	                 /> -->
 	
-	        </LinearLayout>
-	    </ScrollView>
+<!-- 	        </LinearLayout> -->
+<!-- 	    </ScrollView> -->
+
+	     <TextView android:id="@android:id/empty"
+               android:layout_width="fill_parent"
+               android:layout_height="fill_parent"
+               android:layout_below="@+id/commentsTitle"
+               android:layout_above="@+id/tagarea"
+               android:text="No data"/>
 	    
 
 	    <HorizontalScrollView

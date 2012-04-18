@@ -4,7 +4,7 @@ public class Image {
 	
 	public static final int LOCATION_IMAGE = 1;
 	public static final int TRAIL_IMAGE = 2;
-	public static final int CHALLENGE_IMAGE = 3;
+	public static final int FEATURE_IMAGE = 3;
 
 	private int _id;
 	private int _type;
@@ -14,7 +14,7 @@ public class Image {
 	private Double _longitude;
 	private String _description;
 	
-	public Image(String fileLocation) {
+	public Image(int type, String fileLocation) {
 		if (fileLocation.toLowerCase().substring(0,4) == "http" ) {
 			_url = fileLocation;
 			_localPath = "";
@@ -22,32 +22,35 @@ public class Image {
 			_url = "";
 			_localPath = fileLocation;
 		}
-		_localPath = "";
+		_type = type;
 		_latitude=0d;
 		_longitude=0d;
 		_description = "";
 	}
 	
-	public Image (String  url, String path) {
+	public Image (int type, String  url, String path) {
 		_url = url;
 		_localPath = path;
+		_type = type;
 		_latitude = 0d;
 		_longitude = 0d;
 		_description = "";
 	}
 	
-	public Image (String url, String path, double lat, double lon, String desc) {
+	public Image (int type, String url, String path, double lat, double lon, String desc) {
 		_url = url;
 		_localPath = path;
+		_type = type;
 		_latitude = lat;
 		_longitude = lon;
 		_description = desc;
 	}
 	
-	public Image (int id,String url, String path, double lat, double lon, String desc) {
+	public Image (int id, int type, String url, String path, double lat, double lon, String desc) {
 		_id = id;
 		_url = url;
 		_localPath = path;
+		_type = type;
 		_latitude = lat;
 		_longitude = lon;
 		_description = desc;
@@ -67,6 +70,18 @@ public class Image {
 	
 	public void setType(int type) {
 		_type = type;
+	}
+	
+	public String getURL() {
+		return _url;
+	}
+	
+	public String getPath() {
+		return _localPath;
+	}
+	
+	public void setPath(String path) {
+		this._localPath = path;
 	}
 	
 	public double getLatitude() {

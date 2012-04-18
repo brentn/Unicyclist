@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -119,6 +120,12 @@ public class TagsActivity extends Activity implements TextWatcher {
       		  }
       	  });
     	 
+	}
+	
+	@Override
+	public void onBackPressed() {
+	    setResult(RESULT_OK, new Intent());
+	    super.onBackPressed();
 	}
 
 	@Override

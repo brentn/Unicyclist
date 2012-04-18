@@ -22,6 +22,7 @@ public class Location {
 	private boolean _deleted;
 	private List<Image> _images;
 	private List<Tag> _tags;
+	private List<Comment> _comments;
 	
 	//constructors
 	public Location() {
@@ -186,6 +187,7 @@ public class Location {
 		tag.setId(tags.addTag(tag));
 		tags.addLocationTag(this, tag);
 		_tags.add(tag);
+		tags.close();
 	}
 	
 	public void removeTag(Context context, String name) {
@@ -195,5 +197,57 @@ public class Location {
 			tags.removeLocationTag(this, tag);
 			_tags.remove(tag);
 		}
+		tags.close();
+	}
+	
+	public List<Image> getImages() {
+		return this._images;
+	}
+	
+	public void setImages(List<Image> images) {
+		this._images = images;
+	}
+	
+	public void addImage(Context context, Image image) {
+		Images images = new Images(context);
+		if (image != null) {
+			images.addImage(image);
+			_images.add(image);
+		}
+	}
+	
+	public List<Comment> getComments() {
+		return this._comments;
+	}
+	
+	public void setComments(List<Comment> comments) {
+		this._comments = comments;
+	}
+	
+	public void addComment(Context context, Comment comment) {
+		Comments comments = new Comments(context);
+		comments.addLocationComment(this, comment);
+		_comments.add(0, comment);
+		comments.close();
+	}
+	
+	public int sortByDistance(android.location.Location myLocation, com.unicycle.Location otherLocation) {
+		android.location.Location dest1 = new android.location.Location("");
+		android.location.Location dest2 = new android.location.Location("");
+		
+		dest1.setLatitude(this.getLatitude());
+		dest1.setLongitude(this.getLongitude());
+		dest2.setLatitude(otherLocation.getLatitude());
+		dest2.setLongitude(otherLocation.getLongitude());
+		
+		double dist1 = myLocation.distanceTo(dest1);
+		double dist2 = myLocation.distanceTo(dest2);
+		
+		if (dist1 < dist2) {
+			return -1;
+		} else if (dist1 > dist2) {
+			return 1;
+		}
+		return 0;
 	}
 }

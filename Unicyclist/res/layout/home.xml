@@ -5,12 +5,13 @@
     android:gravity="bottom"
     android:orientation="vertical" >
     
-    <RelativeLayout
-        android:id="@+id/feature"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
-        
-    </RelativeLayout>
+    <ImageView
+	    android:id="@+id/feature"        	
+       	android:layout_width="fill_parent"
+       	android:layout_height="250dip"
+       	android:src="@drawable/muni"
+       	android:layout_gravity="center"
+       	android:scaleType="centerCrop" />
 
     <SlidingDrawer
         android:id="@+id/locationsSlider"

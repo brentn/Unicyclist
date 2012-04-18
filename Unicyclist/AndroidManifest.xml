@@ -20,12 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="LocationsActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-            </intent-filter>
-        </activity>
+        <activity android:name="LocationsActivity"></activity>
         <activity android:name="LocationActivity"></activity>
         <activity android:name="NewLocationActivity" android:theme="@android:style/Theme.Dialog" android:label="@string/new_location"></activity><activity android:name="Preferences"></activity>
         <activity android:name="TrailsActivity"></activity>

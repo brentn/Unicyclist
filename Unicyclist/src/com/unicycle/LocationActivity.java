@@ -1,32 +1,46 @@
 package com.unicycle;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.view.View.OnTouchListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 public class LocationActivity extends Activity {
+	
+	private static final int SELECT_PICTURE = 1;
 		
 	private Location location;
 	private ViewFlipper page; 
 	private Animation fadeIn;
 	private Animation fadeOut;
-	private static final int SELECT_PICTURE = 1;
+	private TextView description;
+	private TextView directions;
 	private String selectedImagePath;
 	private TextView tags;
 	private TextView addTagsText;
@@ -44,8 +58,9 @@ public class LocationActivity extends Activity {
         fadeOut = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
 
         TextView name = (TextView) findViewById(R.id.name);
-        final TextView description = (TextView) findViewById(R.id.description);
-        final TextView directions = (TextView) findViewById(R.id.directions);
+        Gallery imageGallery = (Gallery) findViewById(R.id.images);
+        description = (TextView) findViewById(R.id.description);
+        directions = (TextView) findViewById(R.id.directions);
         tags = (TextView) findViewById(R.id.tags);
         addTagsText = (TextView) findViewById(R.id.addTagsText);
         addTagsButton = (ImageButton) findViewById(R.id.addTags);
@@ -53,8 +68,26 @@ public class LocationActivity extends Activity {
         ImageView addImageButton = (ImageView) findViewById(R.id.addImageButton);
         Gallery descriptionMenu = (Gallery) findViewById(R.id.descriptionMenu);
         Button trailsButton = (Button) findViewById(R.id.trailsButton);
-        descriptionMenu.setAdapter(new DescriptionMenuAdapter(this, new String[] {"Description","Directions"}));
+        RelativeLayout commentsSection = (RelativeLayout) findViewById(R.id.commentsSection);
+
+        //Images images = new Images(this);
+        //imageGallery.setAdapter(new ImageAdapter(this, images.getImagesForLocation(location.getId()) ));       
+        ListView commentsView = new Comments(this).getLocationCommentsView(location);
+        RelativeLayout.LayoutParams relativeParams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+        relativeParams.addRule(RelativeLayout.BELOW,findViewById(R.id.commentsTitle).getId());
+        relativeParams.addRule(RelativeLayout.ABOVE,findViewById(R.id.tagarea).getId());
+        commentsSection.addView(commentsView,relativeParams);
         
+        commentsSection.setOnLongClickListener( new OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View arg0) {
+				Toast.makeText(LocationActivity.this,"CLICK",Toast.LENGTH_SHORT).show();
+				return false;
+			}
+        });
+
+        descriptionMenu.setAdapter(new DescriptionMenuAdapter(this, new String[] {"Description","Directions"}));
+
         descriptionMenu.setOnItemSelectedListener(new OnItemSelectedListener() {
 	        @Override
 	        public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
@@ -75,7 +108,67 @@ public class LocationActivity extends Activity {
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent,"Select Picture"), SELECT_PICTURE);
             }
-        });    
+        });
+        description.setOnLongClickListener(new OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View arg0) {
+				AlertDialog.Builder alert = new AlertDialog.Builder(LocationActivity.this);
+
+				alert.setTitle("Description");
+				// Set an EditText view to get user input 
+				final EditText input = new EditText(LocationActivity.this);
+				input.setText(description.getText());
+				alert.setView(input);
+				alert.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+					description.setText(input.getText().toString());
+					location.setDescription(input.getText().toString());
+		        	Locations db = new Locations(getBaseContext());
+		        	db.updateLocation(location);
+		        	db.close();
+				  }
+				});
+
+				alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				  public void onClick(DialogInterface dialog, int whichButton) {
+				    // Canceled.
+				  }
+				});
+
+				alert.show();
+				return false;
+			}
+        });
+        directions.setOnLongClickListener(new OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View arg0) {
+				AlertDialog.Builder alert = new AlertDialog.Builder(LocationActivity.this);
+
+				alert.setTitle("Directions");
+				// Set an EditText view to get user input 
+				final EditText input = new EditText(LocationActivity.this);
+				input.setText(directions.getText());
+				alert.setView(input);
+				alert.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+					directions.setText(input.getText().toString());
+					location.setDirections(input.getText().toString());
+		        	Locations db = new Locations(getBaseContext());
+		        	db.updateLocation(location);
+		        	db.close();
+				  }
+				});
+
+				alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				  public void onClick(DialogInterface dialog, int whichButton) {
+				    // Canceled.
+				  }
+				});
+
+				alert.show();
+				return false;
+			}
+        });
         trailsButton.setOnClickListener(new OnClickListener() {
         	public void onClick(View view) {
         		startActivity(new Intent(LocationActivity.this, TrailsActivity.class));
@@ -107,16 +200,20 @@ public class LocationActivity extends Activity {
 	 }
 	 
 	 public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		    if ((requestCode == SELECT_PICTURE) && (resultCode == RESULT_OK)) {
+		 if (resultCode == RESULT_OK) {
+		    if (requestCode == SELECT_PICTURE) {
 	            Uri selectedImageUri = data.getData();
 	            selectedImagePath = getPath(selectedImageUri);
-	            Toast.makeText(LocationActivity.this,selectedImagePath, Toast.LENGTH_SHORT).show();
+	            Image image = new Image(Image.LOCATION_IMAGE,selectedImagePath);
+	            location.addImage(LocationActivity.this, image);
 		    }
 		    if (requestCode == Location.SELECT_TAGS) {
 	        	showTags();
-	        	Locations db = new Locations(getBaseContext());
+	        	Locations db = new Locations(LocationActivity.this);
 	        	db.updateLocation(location);
+	        	db.close();
 		    }
+		 }
 	 }
 	 
 	 public String getPath(Uri uri) {
@@ -139,6 +236,5 @@ public class LocationActivity extends Activity {
 		 }
 		 tags.setText(tagString);
 	 }
-
 
 }

@@ -3,9 +3,12 @@
 <!-- Work  
     <string name="maps_api_key">0Wp1747MVgsklImDthpkPZQmQXF-igwvxB_kePg</string>
 -->
-<!-- Home --> 
+<!-- Home--> 
 	<string name="maps_api_key">0Wp1747MVgskQz6SzgO1mpYZQNHRrP40R4v8aTA</string>
-   	
+
+<!-- Laptop  
+	<string name="maps_api_key">0uU3CgeK14j7-Y1uuKGDdFZ7MveW4BEX72coW1Q</string>
+-->   	
     <string name="app_name">Mountain Unicyclist</string>
     <string name="all_locations">All Locations</string>
     <string name="my_locations">My Locations</string>
@@ -47,5 +50,8 @@
     <string name="new_trail">New Trail</string>
     <string name="create">Create</string>
     <string name="mark_trail_head">Mark Trail Head...</string>
-
+    <string name="update">Update</string>
+    <string name="add_new_trail">Add a New Trail</string>
+    <string name="add_new_location">Add a New Location</string>
+    
 </resources>
