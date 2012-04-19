@@ -64,6 +64,54 @@
 	
 	    </ViewFlipper>
     </RelativeLayout>
+	    <HorizontalScrollView
+	        android:id="@+id/tagarea"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:layout_gravity="bottom" >
+	
+	        <LinearLayout
+	            android:id="@+id/linearLayout1"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:orientation="horizontal" >
+	            
+	            <ImageButton
+	                android:id="@+id/editTags"
+	                android:layout_width="32dip"
+	                android:layout_height="32dip"
+	                android:background="@android:drawable/ic_menu_edit" />
+	                
+	
+	            <TextView
+	                android:id="@+id/tags"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:clickable="true"
+	                android:padding="5dp"
+	                android:textAppearance="?android:attr/textAppearanceSmall"
+	                android:textColor="#99CC00" />
+	            
+	            <TextView
+	                android:id="@+id/addTagsText"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:clickable="true"
+	                android:padding="5dp"
+	                android:text="@string/click_to_add_tags"
+	                android:textAppearance="?android:attr/textAppearanceSmall"
+	                android:textColor="#FFBB33" />
+	            
+   	            <ImageButton
+	                android:id="@+id/addTags"
+	                android:layout_width="32dip"
+	                android:layout_height="32dip"
+	                android:background="@android:drawable/ic_menu_add"
+	                android:visibility="gone"	/>
+	        </LinearLayout>
+	            
+	    </HorizontalScrollView>
 
     <RelativeLayout
         android:id="@+id/buttonArea"
@@ -114,105 +162,12 @@
         android:layout_width="fill_parent"
         android:layout_gravity="top" >
         
-	    <ScrollView
+	    <LinearLayout
 	        android:id="@+id/commentsGoHere"
 	        android:layout_width="fill_parent"
 	        android:layout_height="fill_parent"
-	        android:layout_alignParentTop="true"
-	        android:layout_above="@+id/tagarea" />
+	        android:layout_alignParentTop="true" />
          
-        
-<!--         <ImageView -->
-<!--             android:id="@+id/commentsBackground" -->
-<!--             android:layout_width="fill_parent" -->
-<!--             android:layout_height="wrap_content" -->
-<!--             android:layout_gravity="top" -->
-<!--             android:adjustViewBounds="false" -->
-<!--             android:longClickable="true" -->
-<!--             android:cropToPadding="false" -->
-<!--             android:scaleType="centerCrop" -->
-<!--             android:src="@drawable/background" /> -->
-        
-<!--         <TextView -->
-<!--             android:id="@+id/commentsTitle" -->
-<!--             android:layout_width="fill_parent" -->
-<!--             android:layout_height="wrap_content" -->
-<!--             android:layout_alignParentTop="true" -->
-<!-- 	        android:padding="7dp" -->
-<!--             android:text="@string/comments" /> -->
-	
-	
-<!-- 	        <LinearLayout -->
-<!-- 	            android:id="@+id/linearLayout2" -->
-<!-- 	            android:layout_width="fill_parent" -->
-<!-- 	            android:layout_height="wrap_content" > -->
-	
-<!-- 	            <TextView -->
-<!-- 	                android:id="@+id/comments" -->
-<!-- 	                android:layout_width="wrap_content" -->
-<!-- 	                android:layout_height="wrap_content" -->
-<!-- 	                android:padding="10dp" -->
-<!-- 	                 /> -->
-	
-<!-- 	        </LinearLayout> -->
-<!-- 	    </ScrollView> -->
-
-<!-- 	     <TextView android:id="@android:id/empty" -->
-<!--                android:layout_width="fill_parent" -->
-<!--                android:layout_height="fill_parent" -->
-<!--                android:layout_below="@+id/commentsTitle" -->
-<!--                android:layout_above="@+id/tagarea" -->
-<!--                android:text="No data"/> -->
-	    
-
-	    <HorizontalScrollView
-	        android:id="@+id/tagarea"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentBottom="true"
-	        android:layout_gravity="bottom" >
-	
-	        <LinearLayout
-	            android:id="@+id/linearLayout1"
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
-	            android:orientation="horizontal" >
-	            
-	            <ImageButton
-	                android:id="@+id/editTags"
-	                android:layout_width="32dip"
-	                android:layout_height="32dip"
-	                android:background="@android:drawable/ic_menu_edit" />
-	                
-	
-	            <TextView
-	                android:id="@+id/tags"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:clickable="true"
-	                android:padding="5dp"
-	                android:textAppearance="?android:attr/textAppearanceSmall"
-	                android:textColor="#99CC00" />
-	            
-	            <TextView
-	                android:id="@+id/addTagsText"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:clickable="true"
-	                android:padding="5dp"
-	                android:text="@string/click_to_add_tags"
-	                android:textAppearance="?android:attr/textAppearanceSmall"
-	                android:textColor="#FFBB33" />
-	            
-   	            <ImageButton
-	                android:id="@+id/addTags"
-	                android:layout_width="32dip"
-	                android:layout_height="32dip"
-	                android:background="@android:drawable/ic_menu_add"
-	                android:visibility="gone"	/>
-	        </LinearLayout>
-	            
-	    </HorizontalScrollView>
     </RelativeLayout>
 
 </LinearLayout>

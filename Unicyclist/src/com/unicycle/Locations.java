@@ -153,27 +153,27 @@ public class Locations extends SQLiteOpenHelper {
         if (location.isFavourite()) {
         	this.addFavourite(id);
         }
-        //add tags
-        Tags tags = new Tags(mContext);
-        List<Tag> tagList = location.getTags();
-        for(Iterator<Tag> i = tagList.iterator(); i.hasNext(); ) {
-        	  Tag tag = i.next();
-        	  tags.addLocationTag(location, tag);
-        }
-        //add images
-        Images images = new Images(mContext);
-        List<Image> imageList = location.getImages();
-        for(Iterator<Image> j = imageList.iterator(); j.hasNext(); ) {
-        	Image image = j.next();
-        	images.addLocationImage(location, image);
-        }
-        //add comments
-        Comments comments = new Comments(mContext);
-        List<Comment> commentList = location.getComments();
-        for(Iterator<Comment> k = commentList.iterator(); k.hasNext(); ) {
-        	Comment comment = k.next();
-        	comments.addLocationComment(location, comment);
-        }
+//        //add tags
+//        Tags tags = new Tags(mContext);
+//        List<Tag> tagList = location.getTags();
+//        for(Iterator<Tag> i = tagList.iterator(); i.hasNext(); ) {
+//        	  Tag tag = i.next();
+//        	  tags.addLocationTag(location, tag);
+//        }
+//        //add images
+//        Images images = new Images(mContext);
+//        List<Image> imageList = location.getImages();
+//        for(Iterator<Image> j = imageList.iterator(); j.hasNext(); ) {
+//        	Image image = j.next();
+//        	images.addLocationImage(location, image);
+//        }
+//        //add comments
+//        Comments comments = new Comments(mContext);
+//        List<Comment> commentList = location.getComments();
+//        for(Iterator<Comment> k = commentList.iterator(); k.hasNext(); ) {
+//        	Comment comment = k.next();
+//        	comments.addLocationComment(location, comment);
+//        }
         db.close();
         
         return id;
@@ -181,6 +181,8 @@ public class Locations extends SQLiteOpenHelper {
     
     public Location getLocation(int id) {
         Tags tags = new Tags(mContext);
+        Comments comments = new Comments(mContext);
+        Images images = new Images(mContext);
     	if ( ! this.isDeleted(id)) {
 	    	String query = "SELECT " + KEY_LOCATION_ID + "," + KEY_LOCATION_NAME + ","
 			    			+ KEY_LOCATION_LAT + "," + KEY_LOCATION_LONG + ","
@@ -197,7 +199,9 @@ public class Locations extends SQLiteOpenHelper {
 		        if (this.isFavourite(location.getId())) {
 		        	location.setFavourite();
 		        }
+		        location.setImages(images.getImagesForLocationId(location.getId()));
 		        location.setTags(tags.getTagsForLocation(location));
+		        location.setComments(comments.getCommentsForLocation(location));
 		        db.close();
 		        return location;
 	        } 
@@ -208,28 +212,17 @@ public class Locations extends SQLiteOpenHelper {
     
     public List<Location> getAllLocations() {
 	    List<Location> locationList = new ArrayList<Location>();
-	    Tags tags = new Tags(mContext);
-	    String selectQuery = "SELECT  * FROM " + TABLE_LOCATIONS;
-	 
+	    String selectQuery = "SELECT " + KEY_LOCATION_ID + "   FROM " + TABLE_LOCATIONS;
 	    SQLiteDatabase db = this.getReadableDatabase();
 	    Cursor cursor = db.rawQuery(selectQuery, null);
-	 
 	    if (cursor.moveToFirst()) {
 	        do {
 	        	int id = Integer.parseInt(cursor.getString(0));
 	        	if (! this.isDeleted(id)) {
-		            Location location = new Location();
-		            location.setId(id);
-		            location.setName(cursor.getString(1));
-		            location.setCoordinatesE6(Integer.parseInt(cursor.getString(2)),Integer.parseInt(cursor.getString(3)));
-		            location.setDescription(cursor.getString(4));
-		            location.setDirections(cursor.getString(5));
-		            location.setRating(Integer.parseInt(cursor.getString(6)));
-
+		            Location location = this.getLocation(id);
 		            if (this.isFavourite(location.getId())) {
 		            	location.setFavourite();
 		            }
-		            location.setTags(tags.getTagsForLocation(location));
 		            locationList.add(location);
 	        	}
 	        } while (cursor.moveToNext());
@@ -265,6 +258,7 @@ public class Locations extends SQLiteOpenHelper {
         	  Tag tag = i.next();
         	  tags.addLocationTag(location, tag);
         }
+//TODO: add comments and images here too??        
         db.close();
         return result;
     }

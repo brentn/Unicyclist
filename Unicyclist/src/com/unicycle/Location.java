@@ -31,6 +31,7 @@ public class Location {
 		this._deleted = false;
 		this._tags = new ArrayList<Tag>();
 		this._images = new ArrayList<Image>();
+		this._comments = new ArrayList<Comment>();
 	}
 	
 	public Location(int id, String name, double latitude, double longitude) {
@@ -42,6 +43,7 @@ public class Location {
 		this._deleted = false;
 		this._tags = new ArrayList<Tag>();
 		this._images = new ArrayList<Image>();
+		this._comments = new ArrayList<Comment>();
 	}
 	
 	public Location(String name, double latitude, double longitude, String description, String directions, int rating) {
@@ -56,6 +58,7 @@ public class Location {
 		this._deleted = false;
 		this._tags = new ArrayList<Tag>();
 		this._images = new ArrayList<Image>();
+		this._comments = new ArrayList<Comment>();
 	}
 	
 	public Location(int id, String name, double latitude, double longitude, String description, String directions, int rating) {
@@ -70,6 +73,7 @@ public class Location {
 		this._deleted = false;
 		this._tags = new ArrayList<Tag>();
 		this._images = new ArrayList<Image>();
+		this._comments = new ArrayList<Comment>();
 	}
 	
 	@Override 
