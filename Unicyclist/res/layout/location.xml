@@ -8,23 +8,15 @@
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textColor="#33b5e5"
+        android:textSize="30dip"/>
     
-    <LinearLayout 
-        android:id="@+id/imagesGoHere"
-        android:layout_width="wrap_content" 
+    <Gallery
+        android:id="@+id/images"
+        android:layout_width="fill_parent"
         android:layout_height="80dip"
-        android:orientation="horizontal">
+        android:spacing="10dip" />
         
-        <ImageButton
-        	android:id="@+id/addImageButton"
-        	android:layout_width="wrap_content"
-        	android:layout_height="80dip"
-        	android:background="@drawable/ic_photo"
-        	android:src="@drawable/ic_menu_add" />
-
-    </LinearLayout>
-
     <RelativeLayout
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
@@ -71,6 +63,13 @@
 	
 	    </ViewFlipper>
     </RelativeLayout>
+    	<LinearLayout 
+    	    android:id="@+id/tagsGoHere"
+    	    android:layout_width="fill_parent"
+    	    android:layout_height="wrap_content" 
+   	        android:layout_alignParentBottom="true"
+	        android:layout_gravity="bottom" />
+    	
 	    <HorizontalScrollView
 	        android:id="@+id/tagarea"
 	        android:layout_width="fill_parent"

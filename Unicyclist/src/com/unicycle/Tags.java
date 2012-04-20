@@ -9,6 +9,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Color;
+import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class Tags extends SQLiteOpenHelper {
 
@@ -35,9 +41,12 @@ public class Tags extends SQLiteOpenHelper {
 	private static final String KEY_TRAIL_TAG_ID = "id";
 	private static final String KEY_TRAIL_TAG_TAGID = "tagId";
 	private static final String KEY_TRAIL_TAG_TRAILID = "trailId";
+	
+	private Context mContext;
 
 	public Tags(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		mContext = context;
 	}
 
 	@Override
@@ -277,20 +286,40 @@ public class Tags extends SQLiteOpenHelper {
     	return tagList;
     }
     
-    public List<Integer> getLocationIdsForTag(Tag tag) {
-    	List<Integer> locationList = new ArrayList<Integer>();
+    public List<Location> getLocationsForTag(Tag tag) {
+    	List<Location> locationList = new ArrayList<Location>();
     	String query = "SELECT " + KEY_LOCATION_TAG_LOCATIONID 
     			+ " FROM " + TABLE_LOCATION_TAGS
     			+ " WHERE " + KEY_LOCATION_TAG_TAGID + " = " + Integer.toString(tag.getId());
     	SQLiteDatabase db = this.getReadableDatabase();
     	Cursor cursor = db.rawQuery(query, null);
+    	Locations locations = new Locations(mContext);
     	if (cursor.moveToFirst()) {
     		do {
-    			locationList.add(Integer.parseInt(cursor.getString(0)));
+    			int id = Integer.parseInt(cursor.getString(0));
+    			locationList.add(locations.getLocation(id));
     		} while (cursor.moveToNext());
     	}
     	db.close();
     	return locationList;
+    }
+    
+    public List<Trail> getTrailsForTag(Tag tag) {
+    	List<Trail> trailList = new ArrayList<Trail>();
+    	String query = "SELECT " + KEY_TRAIL_TAG_TRAILID 
+    			+ " FROM " + TABLE_TRAIL_TAGS
+    			+ " WHERE " + KEY_TRAIL_TAG_TAGID + " = " + Integer.toString(tag.getId());
+    	SQLiteDatabase db = this.getReadableDatabase();
+    	Cursor cursor = db.rawQuery(query, null);
+    	Trails trails = new Trails(mContext);
+    	if (cursor.moveToFirst()) {
+    		do {
+    			int id = Integer.parseInt(cursor.getString(0));
+    			trailList.add(trails.getTrail(id));
+    		} while (cursor.moveToNext());
+    	}
+    	db.close();
+    	return trailList;
     }
     
     public int updateTag(Tag tag) {
@@ -330,5 +359,38 @@ public class Tags extends SQLiteOpenHelper {
     	db.close();
     }
     	
+    public ViewGroup getLocationTagsView(Location location) {
+    	HorizontalScrollView view = new HorizontalScrollView(mContext);
+    	if (location.getTags().size() == 0) {
+    		TextView noTags = new TextView(mContext);
+    		noTags.setText(mContext.getString(R.string.click_to_add_tags));
+    		noTags.setClickable(true);
+    		noTags.setTextColor(Color.parseColor("#FFBB33"));
+    		view.addView(noTags);
+    	} else {
+		    	LinearLayout llview = new LinearLayout(mContext);
+			    	ImageButton editButton = new ImageButton(mContext);
+			    	editButton.setBackgroundResource(R.drawable.ic_menu_edit);
+		   		LinearLayout.LayoutParams layout = new LinearLayout.LayoutParams(36, 36);
+		    	llview.addView(editButton,layout);
+		    	Iterator<Tag> i = location.getTags().iterator();
+		    	while (i.hasNext()) {
+			    		TextView tagText = new TextView(mContext);
+			    		tagText.setTextColor(Color.parseColor("#99CC00"));
+			    		tagText.setClickable(true);
+			    		tagText.setText(i.next().getName());
+			    		TextView spacer = new TextView(mContext);
+			    		spacer.setText("     ");
+		    		llview.addView(tagText);
+		    		llview.addView(spacer);
+		    	}
+			    	ImageButton addButton = new ImageButton(mContext);
+		    		addButton.setBackgroundResource(R.drawable.ic_menu_add);
+	    		layout = new LinearLayout.LayoutParams(36, 36);
+		    	llview.addView(addButton,layout);
+	    	view.addView(llview);
+    	}
+    	return view;
+    }
     
 }

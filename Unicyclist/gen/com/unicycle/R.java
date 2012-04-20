@@ -33,72 +33,78 @@ public final class R {
         public static final int ic_blue_pin=0x7f02000e;
         public static final int ic_launcher=0x7f02000f;
         public static final int ic_menu_add=0x7f020010;
-        public static final int ic_photo=0x7f020011;
-        public static final int locations_btn=0x7f020012;
-        public static final int marker=0x7f020013;
-        public static final int more_difficult=0x7f020014;
-        public static final int most_difficult=0x7f020015;
-        public static final int mountain_uni=0x7f020016;
-        public static final int muni=0x7f020017;
-        public static final int plus=0x7f020018;
-        public static final int plus_indent=0x7f020019;
-        public static final int popup_frame=0x7f02001a;
-        public static final int rides_btn=0x7f02001b;
-        public static final int sat_button=0x7f02001c;
-        public static final int sat_button_selected=0x7f02001d;
-        public static final int sat_button_unselected=0x7f02001e;
-        public static final int skills_btn=0x7f02001f;
+        public static final int ic_menu_edit=0x7f020011;
+        public static final int ic_menu_mylocation=0x7f020012;
+        public static final int ic_photo=0x7f020013;
+        public static final int locations_btn=0x7f020014;
+        public static final int marker=0x7f020015;
+        public static final int more_difficult=0x7f020016;
+        public static final int most_difficult=0x7f020017;
+        public static final int mountain_uni=0x7f020018;
+        public static final int muni=0x7f020019;
+        public static final int plus=0x7f02001a;
+        public static final int plus_indent=0x7f02001b;
+        public static final int popup_frame=0x7f02001c;
+        public static final int rides_btn=0x7f02001d;
+        public static final int sat_button=0x7f02001e;
+        public static final int sat_button_selected=0x7f02001f;
+        public static final int sat_button_unselected=0x7f020020;
+        public static final int skills_btn=0x7f020021;
     }
     public static final class id {
         public static final int addButton=0x7f09002c;
-        public static final int addImageButton=0x7f09000e;
+        public static final int addComment=0x7f090045;
+        public static final int addImage=0x7f090044;
         public static final int addNewTrail=0x7f090025;
         public static final int addTags=0x7f090018;
         public static final int addTagsText=0x7f090017;
         public static final int allLocationsList=0x7f090020;
         public static final int bottomSection=0x7f09001d;
         public static final int buttonArea=0x7f090019;
-        public static final int byUsage=0x7f090037;
+        public static final int byUsage=0x7f09003b;
         public static final int cancelButton=0x7f09002d;
         public static final int comment=0x7f090002;
         public static final int commentsGoHere=0x7f09001e;
         public static final int content=0x7f090005;
         public static final int content2=0x7f09000a;
-        public static final int createButton=0x7f090038;
+        public static final int createButton=0x7f09003c;
         public static final int date=0x7f090001;
-        public static final int description=0x7f090011;
-        public static final int descriptionMenu=0x7f09000f;
-        public static final int difficulty=0x7f09003f;
+        public static final int description=0x7f090010;
+        public static final int descriptionMenu=0x7f09000e;
+        public static final int difficulty=0x7f090043;
         public static final int difficultyGallery=0x7f090031;
-        public static final int directions=0x7f090012;
+        public static final int directions=0x7f090011;
         public static final int distance=0x7f090027;
         public static final int drag=0x7f09002a;
         public static final int editTags=0x7f090015;
         public static final int feature=0x7f090003;
         public static final int featuresButton=0x7f09001c;
-        public static final int flipper=0x7f090010;
+        public static final int featuresList=0x7f09003a;
+        public static final int flipper=0x7f09000f;
         public static final int gpsButton=0x7f090023;
-        public static final int imagesGoHere=0x7f09000d;
+        public static final int image=0x7f090026;
+        public static final int images=0x7f09000d;
         public static final int latitude=0x7f090033;
         public static final int linearLayout1=0x7f090014;
         public static final int linearLayout2=0x7f09002f;
         public static final int locationButton=0x7f090006;
-        public static final int locationName=0x7f09003b;
+        public static final int locationName=0x7f09003f;
         public static final int locationPicker=0x7f090029;
+        public static final int locationsList=0x7f090038;
         public static final int locationsSlider=0x7f090004;
         public static final int longitude=0x7f090034;
-        public static final int mapView=0x7f09003c;
+        public static final int mapView=0x7f090040;
         public static final int mapview=0x7f090022;
         public static final int menu=0x7f09001f;
         public static final int myLocationsList=0x7f090021;
         public static final int name=0x7f09000c;
-        public static final int newLocation=0x7f090040;
-        public static final int newTrail=0x7f090042;
+        public static final int newLocation=0x7f090046;
+        public static final int newTrail=0x7f090048;
         public static final int newlocationflipper=0x7f090028;
-        public static final int numberOfFeatures=0x7f09003e;
-        public static final int okButton=0x7f09003a;
+        public static final int numberOfFeatures=0x7f090042;
+        public static final int okButton=0x7f09003e;
         public static final int photoButton=0x7f09002e;
-        public static final int preferences=0x7f090041;
+        public static final int preferences=0x7f090047;
         public static final int relativeLayout1=0x7f09002b;
         public static final int ridesButton=0x7f090008;
         public static final int ridesSlider=0x7f090007;
@@ -106,14 +112,16 @@ public final class R {
         public static final int skillsButton=0x7f09000b;
         public static final int skillsSlider=0x7f090009;
         public static final int strut1=0x7f09001a;
-        public static final int tagFilter=0x7f090039;
+        public static final int tagFilter=0x7f09003d;
+        public static final int tagName=0x7f090037;
         public static final int tagarea=0x7f090013;
         public static final int tags=0x7f090016;
-        public static final int thumb=0x7f090026;
+        public static final int tagsGoHere=0x7f090012;
         public static final int trailCoordinates=0x7f090030;
         public static final int trailName=0x7f090032;
         public static final int trailsButton=0x7f09001b;
-        public static final int trails_list=0x7f09003d;
+        public static final int trailsList=0x7f090039;
+        public static final int trails_list=0x7f090041;
         public static final int user=0x7f090000;
         public static final int x=0x7f090035;
         public static final int y=0x7f090036;
@@ -129,15 +137,17 @@ public final class R {
         public static final int new_trail=0x7f030007;
         public static final int popup=0x7f030008;
         public static final int ride=0x7f030009;
-        public static final int tag_picker=0x7f03000a;
-        public static final int trails=0x7f03000b;
-        public static final int trails_list_add=0x7f03000c;
-        public static final int trails_list_item=0x7f03000d;
+        public static final int tag=0x7f03000a;
+        public static final int tag_picker=0x7f03000b;
+        public static final int trails=0x7f03000c;
+        public static final int trails_list_add=0x7f03000d;
+        public static final int trails_list_item=0x7f03000e;
     }
     public static final class menu {
-        public static final int locations=0x7f080000;
-        public static final int main=0x7f080001;
-        public static final int trails=0x7f080002;
+        public static final int location=0x7f080000;
+        public static final int locations=0x7f080001;
+        public static final int main=0x7f080002;
+        public static final int trails=0x7f080003;
     }
     public static final class raw {
         public static final int click=0x7f050000;
@@ -148,12 +158,16 @@ public final class R {
     public static final class string {
         public static final int New=0x7f07000b;
         public static final int add=0x7f070016;
+        public static final int add_comment=0x7f07002e;
         public static final int add_image=0x7f07000c;
         public static final int add_new_location=0x7f07002c;
         public static final int add_new_trail=0x7f07002b;
         public static final int add_to_favourites=0x7f07000e;
         public static final int all_locations=0x7f070002;
-        /**  Laptop  
+        /**  Home 
+	<string name="maps_api_key">0Wp1747MVgskQz6SzgO1mpYZQNHRrP40R4v8aTA</string>
+
+ Laptop  
 	<string name="maps_api_key">0uU3CgeK14j7-Y1uuKGDdFZ7MveW4BEX72coW1Q</string>
 
          */
@@ -175,9 +189,6 @@ public final class R {
         public static final int location_picker=0x7f070019;
         public static final int locations=0x7f070012;
         /**  Work  
-    <string name="maps_api_key">0Wp1747MVgsklImDthpkPZQmQXF-igwvxB_kePg</string>
-
- Home
          */
         public static final int maps_api_key=0x7f070000;
         public static final int mapview=0x7f070009;

@@ -1,18 +1,18 @@
 package com.unicycle;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -38,9 +38,10 @@ public class LocationActivity extends Activity {
 	private TextView description;
 	private TextView directions;
 	private String selectedImagePath;
-	private TextView tags;
+	private TextView tagString;
 	private TextView addTagsText;
 	private ImageButton addTagsButton;
+	private ImageAdapter imageAdapter;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class LocationActivity extends Activity {
         setContentView(R.layout.location);
         
         location = ((UnicyclistApplication) getApplication()).getCurrentLocation();
+        Typeface roboto = Typeface.createFromAsset(this.getAssets(),"fonts/Roboto-Thin.ttf");
         
         page = (ViewFlipper) findViewById(R.id.flipper);
         fadeIn = AnimationUtils.loadAnimation(this,android.R.anim.fade_in);
@@ -55,35 +57,39 @@ public class LocationActivity extends Activity {
 
         //get view objects
         TextView name = (TextView) findViewById(R.id.name);
-        ViewGroup images = (ViewGroup) findViewById(R.id.imagesGoHere);
-        ImageButton addImage = (ImageButton) findViewById(R.id.addImageButton);
+        Gallery images = (Gallery) findViewById(R.id.images);
         Gallery descriptionMenu = (Gallery) findViewById(R.id.descriptionMenu);
         description = (TextView) findViewById(R.id.description);
         directions = (TextView) findViewById(R.id.directions);
         Button trailsButton = (Button) findViewById(R.id.trailsButton);
         Button featuresButton = (Button) findViewById(R.id.featuresButton);
         ViewGroup comments = (ViewGroup) findViewById(R.id.commentsGoHere);
-        tags = (TextView) findViewById(R.id.tags);
+        tagString = (TextView) findViewById(R.id.tags);
+        ViewGroup tags = (ViewGroup) findViewById(R.id.tagsGoHere);
         addTagsText = (TextView) findViewById(R.id.addTagsText);
         addTagsButton = (ImageButton) findViewById(R.id.addTags);
         ImageButton editTagsButton = (ImageButton) findViewById(R.id.editTags);
 
         //add dynamic view objects
-        images.addView(new Images(this).getLocationImagesView(location));
         comments.addView(new Comments(this).getLocationCommentsView(location));
+        tags.addView(new Tags(this).getLocationTagsView(location));
 
         //set up adapters
+        imageAdapter = new ImageAdapter(this,location.getImages());
+        images.setAdapter(imageAdapter);
         descriptionMenu.setAdapter(new DescriptionMenuAdapter(this, new String[] {"Description","Directions"}));
 
         //set up listeners
-        addImage.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-				startActivityForResult(intent, Images.SELECT_PICTURE);
-    		}
-        });
+//        addImage.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View arg0) {
+//				Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//				startActivityForResult(intent, Images.SELECT_PICTURE);
+//    		}
+//        });
         
+    	//Menus
+     
         descriptionMenu.setOnItemSelectedListener(new OnItemSelectedListener() {
 	        @Override
 	        public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
@@ -178,6 +184,7 @@ public class LocationActivity extends Activity {
         
         if ( name != null) {
         	name.setText(location.getName());
+        	name.setTypeface(roboto);
         }
         if ( description != null) {
         	description.setText(location.getDescription());
@@ -192,6 +199,27 @@ public class LocationActivity extends Activity {
 	 }
 
 	
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.location, menu);
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.addImage:	
+            	Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+				startActivityForResult(intent, Images.SELECT_PICTURE);
+            	break; 
+            case R.id.addComment:
+            	Comments comments = new Comments(LocationActivity.this);
+            	comments.newLocationComment(location);
+            	break;
+        }
+        return true;
+    }
 	 @Override
 	 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		 super.onActivityResult(requestCode, resultCode, data);
@@ -200,6 +228,7 @@ public class LocationActivity extends Activity {
 		    	Uri selectedImageUri = data.getData();
 		    	if (selectedImageUri != null) {
 		            location.addImage(LocationActivity.this, new Image(LocationActivity.this,selectedImageUri));
+		            imageAdapter.notifyDataSetChanged();
 		    	}
 		    }
 		    if (requestCode == Location.SELECT_TAGS) {
@@ -221,15 +250,15 @@ public class LocationActivity extends Activity {
  	 }
 	 
 	 private void showTags() {
-		 String tagString = location.getTagString();
-		 if (tagString == "") {
+		 String tagText = location.getTagString();
+		 if (tagText == "") {
 			 addTagsText.setVisibility(View.VISIBLE);
 			 addTagsButton.setVisibility(View.GONE);
 		 } else {
 			 addTagsText.setVisibility(View.GONE);
 			 addTagsButton.setVisibility(View.VISIBLE);
 		 }
-		 tags.setText(tagString);
+		 tagString.setText(tagText);
 	 }
 
 }

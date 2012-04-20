@@ -1,5 +1,6 @@
 package com.unicycle;
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.List;
@@ -7,10 +8,12 @@ import java.util.List;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class LocationsListAdapter extends android.widget.ArrayAdapter<Location> {
@@ -39,10 +42,20 @@ public class LocationsListAdapter extends android.widget.ArrayAdapter<Location> 
       
         Location location = locations.get(position);
         if (location != null) {
+        	ImageView image = (ImageView) v.findViewById(R.id.image);
             TextView name = (TextView) v.findViewById(R.id.name);
             TextView description = (TextView) v.findViewById(R.id.description);
             TextView distance = (TextView) v.findViewById(R.id.distance);
             TextView tags = (TextView) v.findViewById(R.id.tags);
+            
+            if (image != null) {
+            	if (location.getImages().size() > 0 ) {
+            		Uri uri = location.getImages().get(0).getUri();
+            		image.setImageBitmap(Image.decodeFile(new File(uri.getPath())));
+            	} else {
+            		image.setImageResource(R.drawable.ic_photo);
+            	}            	
+            }
 
             if (name != null) {
         		name.setText(location.getName());

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!-- Work  
+<!-- Work  -->
     <string name="maps_api_key">0Wp1747MVgsklImDthpkPZQmQXF-igwvxB_kePg</string>
--->
-<!-- Home--> 
-	<string name="maps_api_key">0Wp1747MVgskQz6SzgO1mpYZQNHRrP40R4v8aTA</string>
 
+<!-- Home 
+	<string name="maps_api_key">0Wp1747MVgskQz6SzgO1mpYZQNHRrP40R4v8aTA</string>
+-->
 <!-- Laptop  
 	<string name="maps_api_key">0uU3CgeK14j7-Y1uuKGDdFZ7MveW4BEX72coW1Q</string>
 -->   	
@@ -20,7 +20,7 @@
     <string name="mapview">map view</string>
     <string name="new_location">New Location</string>
     <string name="New">New</string>
-    <string name="add_image">Add Image</string>
+    <string name="add_image">Add a new image</string>
     <string name="delete_location">Delete this Location</string>
     <string name="add_to_favourites">Add to \"Favourites\"</string>
     <string name="remove_from_favourites">Remove from \"Favourites\"</string>
@@ -54,5 +54,6 @@
     <string name="add_new_trail">Add a New Trail</string>
     <string name="add_new_location">Add a New Location</string>
     <string name="submit">Submit</string>
+    <string name="add_comment">Add a new comment</string>
     
 </resources>
