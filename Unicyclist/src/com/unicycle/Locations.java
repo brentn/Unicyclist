@@ -1,10 +1,8 @@
 package com.unicycle;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,7 +11,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Environment;
 
 public class Locations extends SQLiteOpenHelper {
 	
@@ -153,27 +150,6 @@ public class Locations extends SQLiteOpenHelper {
         if (location.isFavourite()) {
         	this.addFavourite(id);
         }
-//        //add tags
-//        Tags tags = new Tags(mContext);
-//        List<Tag> tagList = location.getTags();
-//        for(Iterator<Tag> i = tagList.iterator(); i.hasNext(); ) {
-//        	  Tag tag = i.next();
-//        	  tags.addLocationTag(location, tag);
-//        }
-//        //add images
-//        Images images = new Images(mContext);
-//        List<Image> imageList = location.getImages();
-//        for(Iterator<Image> j = imageList.iterator(); j.hasNext(); ) {
-//        	Image image = j.next();
-//        	images.addLocationImage(location, image);
-//        }
-//        //add comments
-//        Comments comments = new Comments(mContext);
-//        List<Comment> commentList = location.getComments();
-//        for(Iterator<Comment> k = commentList.iterator(); k.hasNext(); ) {
-//        	Comment comment = k.next();
-//        	comments.addLocationComment(location, comment);
-//        }
         db.close();
         
         return id;
@@ -199,7 +175,7 @@ public class Locations extends SQLiteOpenHelper {
 		        if (this.isFavourite(location.getId())) {
 		        	location.setFavourite();
 		        }
-		        location.setImages(images.getImagesForLocationId(location.getId()));
+		        location.setImages(images.getImagesForLocation(location));
 		        location.setTags(tags.getTagsForLocation(location));
 		        location.setComments(comments.getCommentsForLocation(location));
 		        db.close();
@@ -230,7 +206,7 @@ public class Locations extends SQLiteOpenHelper {
 	    db.close();
 	    return locationList;
     }
-    
+
     public int updateLocation(Location location) {
     	int id = location.getId();
     	SQLiteDatabase db = this.getWritableDatabase(); 

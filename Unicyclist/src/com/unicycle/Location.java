@@ -76,14 +76,23 @@ public class Location {
 		this._comments = new ArrayList<Comment>();
 	}
 	
-	@Override 
-	public boolean equals(Object that) {
-		return (this._id == ((Location) that).getId());
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) { return true;}
+		if (! (o instanceof Location)) { return false; }
+		Location that = (Location) o;
+		return this._name == that._name &&
+				(this._latitude - that._latitude < .0001) &&
+				(this._longitude - that._longitude < .0001);
 	}
 	
 	@Override
-	public int hashCode() {
-		return this._id;
+	public  int hashCode() {
+		int result = 43;
+		result = 31 * this._name.hashCode();
+		result = 31*result + (int) Double.doubleToLongBits(this._latitude);
+		result = 31*result + (int) Double.doubleToLongBits(this._longitude);
+		return result;
 	}
 	
 	public void setId(int id) {

@@ -3,7 +3,6 @@ package com.unicycle;
 import java.util.List;
 
 import android.app.Application;
-import android.location.Location;
 
 import com.unicycle.MyLocation.LocationResult;
 

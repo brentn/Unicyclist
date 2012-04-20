@@ -176,7 +176,9 @@ public class LocationsActivity extends MapActivity {
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		locationListener = new MyLocationListener();
 //		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-		gpsButton.setChecked(mapView.isSatellite());
+		mapView.setSatellite(false);
+		satButton.setChecked(false);
+		gpsButton.setChecked(false);
 		
         //add stuff to the map
         List<Overlay> mapOverlays = mapView.getOverlays();
@@ -201,16 +203,19 @@ public class LocationsActivity extends MapActivity {
     	Location location = ((UnicyclistApplication) getApplication()).getCurrentLocation();
     	if (location != null) {
     		int position = locationList.indexOf(location);
-	    	locationList.remove(location);
-	    	locationList.add(position, location);
-	    	locationsListAdapter.notifyDataSetChanged();
-	    	if (location.isFavourite()) {
-	    		position = favouritesList.indexOf(location);
-	    		favouritesList.remove(location);
-	    		favouritesList.add(position, location);
-	        	favouritesListAdapter.notifyDataSetChanged();
-	    	}
-	    	mapView.invalidate();
+    		if (position > -1) {
+		    	locationList.remove(location);
+		    	locationList.add(position, location);
+		    	locationsListAdapter.notifyDataSetChanged();
+		    	if (location.isFavourite()) {
+		    		position = favouritesList.indexOf(location);
+		    		favouritesList.remove(location);
+		    		favouritesList.add(position, location);
+		        	favouritesListAdapter.notifyDataSetChanged();
+		    	}
+		    	satButton.setChecked(mapView.isSatellite());
+		    	mapView.invalidate();
+    		}
     	}
     }
     
@@ -270,6 +275,12 @@ public class LocationsActivity extends MapActivity {
             		db.close();
             		//Add to location list in memory
             		locationList.add(location);
+            		Collections.sort(locationList, new Comparator<Location>() {
+                        @Override
+                        public int compare(Location location1, Location location2) {
+                            return location1.sortByDistance(((UnicyclistApplication) getApplication()).getMyLocation(),location2);
+                        }
+                    });
             		locationsListAdapter.notifyDataSetChanged();
             		//Add to map
             		GeoPoint point = new GeoPoint((int) (location.getLatitude()*1e6),(int) (location.getLongitude()*1e6));

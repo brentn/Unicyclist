@@ -3,6 +3,7 @@ package com.unicycle;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,7 @@ public class GalleryMenuAdapter extends BaseAdapter {
     	tv.setText(menuItems[position]);
     	tv.setMinWidth(380);
     	tv.setPadding(0, 0, 0,0);
-    	tv.setTextSize(60);
+    	tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP,50);
     	tv.setTypeface(tf);
     	tv.setGravity(Gravity.CENTER);
     	tv.setTextColor(Color.parseColor("#33b5e5"));

@@ -1,13 +1,18 @@
 package com.unicycle;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -20,16 +25,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 public class LocationActivity extends Activity {
 	
-	private static final int SELECT_PICTURE = 1;
 		
 	private Location location;
 	private ViewFlipper page; 
@@ -56,6 +56,7 @@ public class LocationActivity extends Activity {
         //get view objects
         TextView name = (TextView) findViewById(R.id.name);
         ViewGroup images = (ViewGroup) findViewById(R.id.imagesGoHere);
+        ImageButton addImage = (ImageButton) findViewById(R.id.addImageButton);
         Gallery descriptionMenu = (Gallery) findViewById(R.id.descriptionMenu);
         description = (TextView) findViewById(R.id.description);
         directions = (TextView) findViewById(R.id.directions);
@@ -75,6 +76,14 @@ public class LocationActivity extends Activity {
         descriptionMenu.setAdapter(new DescriptionMenuAdapter(this, new String[] {"Description","Directions"}));
 
         //set up listeners
+        addImage.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+				startActivityForResult(intent, Images.SELECT_PICTURE);
+    		}
+        });
+        
         descriptionMenu.setOnItemSelectedListener(new OnItemSelectedListener() {
 	        @Override
 	        public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
@@ -97,6 +106,8 @@ public class LocationActivity extends Activity {
 				// Set an EditText view to get user input 
 				final EditText input = new EditText(LocationActivity.this);
 				input.setText(description.getText());
+				input.setLines(6);
+				input.setGravity(Gravity.TOP);
 				alert.setView(input);
 				alert.setPositiveButton("Update", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int whichButton) {
@@ -127,6 +138,8 @@ public class LocationActivity extends Activity {
 				// Set an EditText view to get user input 
 				final EditText input = new EditText(LocationActivity.this);
 				input.setText(directions.getText());
+				input.setLines(6);
+				input.setGravity(Gravity.TOP);
 				alert.setView(input);
 				alert.setPositiveButton("Update", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int whichButton) {
@@ -177,14 +190,17 @@ public class LocationActivity extends Activity {
         }
        
 	 }
-	 
-	 public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+	
+	 @Override
+	 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		 super.onActivityResult(requestCode, resultCode, data);
 		 if (resultCode == RESULT_OK) {
-		    if (requestCode == SELECT_PICTURE) {
-	            Uri selectedImageUri = data.getData();
-	            selectedImagePath = getPath(selectedImageUri);
-	            Image image = new Image(Image.LOCATION_IMAGE,selectedImagePath);
-	            location.addImage(LocationActivity.this, image);
+		    if (requestCode == Images.SELECT_PICTURE) {
+		    	Uri selectedImageUri = data.getData();
+		    	if (selectedImageUri != null) {
+		            location.addImage(LocationActivity.this, new Image(selectedImageUri));
+		    	}
 		    }
 		    if (requestCode == Location.SELECT_TAGS) {
 	        	showTags();

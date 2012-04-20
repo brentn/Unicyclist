@@ -15,6 +15,13 @@
         android:layout_width="wrap_content" 
         android:layout_height="80dip"
         android:orientation="horizontal">
+        
+        <ImageButton
+        	android:id="@+id/addImageButton"
+        	android:layout_width="wrap_content"
+        	android:layout_height="80dip"
+        	android:background="@drawable/ic_photo"
+        	android:src="@drawable/ic_menu_add" />
 
     </LinearLayout>
 

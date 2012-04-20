@@ -44,6 +44,8 @@ public class Tag extends Object{
 	
 	@Override
 	public boolean equals(Object that) {
+		if (this == that) { return true;}
+		if (! (that instanceof Tag)) { return false; }
 		return (this.hashCode() == that.hashCode());
 	}
 	

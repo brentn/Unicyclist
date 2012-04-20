@@ -49,7 +49,7 @@
     <string name="features">Features</string>
     <string name="new_trail">New Trail</string>
     <string name="create">Create</string>
-    <string name="mark_trail_head">Mark Trail Head...</string>
+    <string name="mark_trail_head">Mark Trail Head&#8230;</string>
     <string name="update">Update</string>
     <string name="add_new_trail">Add a New Trail</string>
     <string name="add_new_location">Add a New Location</string>

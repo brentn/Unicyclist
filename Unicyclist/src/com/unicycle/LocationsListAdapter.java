@@ -59,10 +59,12 @@ public class LocationsListAdapter extends android.widget.ArrayAdapter<Location> 
             if (distance != null) {
             	_destLocation.setLatitude(location.getLatitude());
             	_destLocation.setLongitude(location.getLongitude());
-            	if (miles) {
-            		distance.setText(d.format(_myLocation.distanceTo(_destLocation)/1609.344)+"\nmi");
-            	} else {
-            		distance.setText(d.format(_myLocation.distanceTo(_destLocation)/1000)+"\nkm");
+            	if (_myLocation != null) {
+	            	if (miles) {
+	            		distance.setText(d.format(_myLocation.distanceTo(_destLocation)/1609.344)+"\nmi");
+	            	} else {
+	            		distance.setText(d.format(_myLocation.distanceTo(_destLocation)/1000)+"\nkm");
+	            	}
             	}
             }
             if (tags != null) {

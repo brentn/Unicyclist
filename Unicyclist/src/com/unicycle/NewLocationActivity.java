@@ -21,7 +21,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 import android.widget.ViewFlipper;
@@ -72,12 +71,14 @@ public class NewLocationActivity extends MapActivity {
         
 
         //Set up Listeners
+        satButton.setChecked(false);
         satButton.setOnClickListener(new OnClickListener() {
         	@Override
         	public void onClick(View arg0) {
         		locationPicker.setSatellite(satButton.isChecked());
         	}
         });
+        gpsButton.setChecked(false);
         gpsButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {

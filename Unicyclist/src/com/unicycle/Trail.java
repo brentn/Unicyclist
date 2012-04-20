@@ -20,7 +20,7 @@ public class Trail {
 	private float _length = 0;
 	private int _rating = 5;
 	private int _difficulty = 0;
-	private List<Challenge> _features = new ArrayList<Challenge>();
+	private List<Feature> _features = new ArrayList<Feature>();
 	private List<GPSTrack> _tracks = new ArrayList<GPSTrack>();
 	private List<Image> _images = new ArrayList<Image>();
 	private List<Tag> _tags = new ArrayList<Tag>();
@@ -48,7 +48,7 @@ public class Trail {
 
 	public Trail(int id, int locationId, String name, double latitude, double longitude, 
 			String description, String directions, float length, int rating, int difficulty,
-			List<Challenge> features, List<GPSTrack> tracks, List<Image> images, List<Tag> tags) {
+			List<Feature> features, List<GPSTrack> tracks, List<Image> images, List<Tag> tags) {
 		this._id = id;
 		this._locationId = locationId;
 		this._name = name;
@@ -81,7 +81,7 @@ public class Trail {
 
 	public Trail(int locationId, String name, double latitude, double longitude, 
 			String description, String directions, float length, int rating, int difficulty,
-			List<Challenge> features, List<GPSTrack> tracks, List<Image> images, List<Tag> tags) {
+			List<Feature> features, List<GPSTrack> tracks, List<Image> images, List<Tag> tags) {
 		this._id = -1;
 		this._locationId = locationId;
 		this._name = name;
@@ -97,6 +97,26 @@ public class Trail {
 		this._images = images;
 		this._tags = tags;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) { return true;}
+		if (! (o instanceof Trail)) { return false; }
+		Trail that = (Trail) o;
+		return this._name == that._name &&
+				(this._latitude - that._latitude < .0001) &&
+				(this._longitude - that._longitude < .0001);
+	}
+	
+	@Override
+	public  int hashCode() {
+		int result = 43;
+		result = this._name.hashCode();
+		result = 31*result + (int) Double.doubleToLongBits(this._latitude);
+		result = 31*result + (int) Double.doubleToLongBits(this._longitude);
+		return result;
+	}
+	
 
 	public int getId() {
 		return this._id;
@@ -188,11 +208,11 @@ public class Trail {
 		this._images = images;
 	}
 	
-	public List<Challenge> getFeatures() {
+	public List<Feature> getFeatures() {
 		return this._features;
 	}
 	
-	public void setFeatures(List<Challenge> features) {
+	public void setFeatures(List<Feature> features) {
 		this._features = features;
 	}
 	
