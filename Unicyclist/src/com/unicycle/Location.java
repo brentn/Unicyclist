@@ -224,7 +224,7 @@ public class Location {
 	public void addImage(Context context, Image image) {
 		Images images = new Images(context);
 		if (image != null) {
-			images.addImage(image);
+			images.addLocationImage(Location.this,image);
 			_images.add(image);
 		}
 	}

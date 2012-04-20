@@ -199,7 +199,7 @@ public class LocationActivity extends Activity {
 		    if (requestCode == Images.SELECT_PICTURE) {
 		    	Uri selectedImageUri = data.getData();
 		    	if (selectedImageUri != null) {
-		            location.addImage(LocationActivity.this, new Image(selectedImageUri));
+		            location.addImage(LocationActivity.this, new Image(LocationActivity.this,selectedImageUri));
 		    	}
 		    }
 		    if (requestCode == Location.SELECT_TAGS) {

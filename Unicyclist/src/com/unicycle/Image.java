@@ -5,14 +5,16 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
 public class Image {
 	
-	private static final String IMAGE_STORE = "com.unicycle/images/";
+	private static final String IMAGE_STORE = "/com.unicycle/images/";
 	
 	private int _id;
 	private Uri _uri;
@@ -21,8 +23,11 @@ public class Image {
 	private Double _longitude;
 	private String _description;
 	
-	public Image(Uri uri) {
+	Context mContext;
+	
+	public Image(Context context,Uri uri) {
 		//ensure data directory exists
+		mContext = context;
 		String dirname = Environment.getExternalStorageDirectory() + IMAGE_STORE;;
 		File sddir = new File(dirname);
 		sddir.mkdirs();
@@ -34,7 +39,8 @@ public class Image {
 		_description = "";
 	}
 	
-	public Image (int id, int hash, Uri uri, double lat, double lon, String desc) {
+	public Image (Context context,int id, int hash, Uri uri, double lat, double lon, String desc) {
+		mContext = context;
 		//ensure data directory exists
 		String dirname = Environment.getExternalStorageDirectory() + IMAGE_STORE;;
 		File sddir = new File(dirname);
@@ -69,20 +75,22 @@ public class Image {
 		String filename = "image0";
 		File dest = new File(correctPath);
 		File[] files = dest.listFiles();
-		if (files != null) {
-			filename = "image"+files[files.length].getName().substring(5);
+		if (files.length > 0) {
+			filename = "image"+Integer.toString(Integer.parseInt(files[files.length-1].getName().substring(5))+1);
 		}
 		Log.d("com.unicycle","Path is: "+uri.getPath());
 		if (uri.getPath().contains(correctPath)) {
 			return uri; //the image is already where it should be
 		}
 		try {
-			FileInputStream source = new FileInputStream(new File(uri.getPath()));
+			InputStream is = mContext.getContentResolver().openInputStream(uri);;
+			FileInputStream source = (FileInputStream) is;
 			try {
 				File destFile = new File(dest,filename);
 				FileOutputStream destination = new FileOutputStream(destFile);
 				try {
 					FileUtils.copyFile(source, destination);
+					Log.i("com.unicycle","file copied successully");
 					return uri.fromFile(destFile);
 				} catch (IOException e) {
 					e.printStackTrace();
