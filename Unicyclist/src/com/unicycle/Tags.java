@@ -4,12 +4,18 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
+import android.view.Gravity;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
@@ -359,38 +365,64 @@ public class Tags extends SQLiteOpenHelper {
     	db.close();
     }
     	
-    public ViewGroup getLocationTagsView(Location location) {
+    public ViewGroup getLocationTagsView(final Activity activity,Location location) {
+        OnClickListener editTags = new OnClickListener() {
+        	public void onClick(View view) {
+        		((UnicyclistApplication) activity.getApplication()).copyTagsFromCurrentLocation();
+        		activity.startActivityForResult(new Intent(activity, TagsActivity.class),Location.SELECT_TAGS);
+        	}
+        };
     	HorizontalScrollView view = new HorizontalScrollView(mContext);
     	if (location.getTags().size() == 0) {
     		TextView noTags = new TextView(mContext);
     		noTags.setText(mContext.getString(R.string.click_to_add_tags));
     		noTags.setClickable(true);
+    		noTags.setOnClickListener(editTags);
+    		noTags.setPadding(0, 0, 0, 10);
+    		noTags.setGravity(Gravity.CENTER);
     		noTags.setTextColor(Color.parseColor("#FFBB33"));
     		view.addView(noTags);
     	} else {
 		    	LinearLayout llview = new LinearLayout(mContext);
 			    	ImageButton editButton = new ImageButton(mContext);
+			    	editButton.setOnClickListener(editTags);
 			    	editButton.setBackgroundResource(R.drawable.ic_menu_edit);
 		   		LinearLayout.LayoutParams layout = new LinearLayout.LayoutParams(36, 36);
 		    	llview.addView(editButton,layout);
+	    		TextView spacer = new TextView(mContext);
+	    		spacer.setText("     ");
+	    		llview.addView(spacer);
 		    	Iterator<Tag> i = location.getTags().iterator();
 		    	while (i.hasNext()) {
+		    			final String name = i.next().getName();
 			    		TextView tagText = new TextView(mContext);
 			    		tagText.setTextColor(Color.parseColor("#99CC00"));
 			    		tagText.setClickable(true);
-			    		tagText.setText(i.next().getName());
-			    		TextView spacer = new TextView(mContext);
+			    		tagText.setText(name);
+			    		tagText.setOnClickListener(new OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								((TextView) v).setTextSize(30);
+								Intent intent = new Intent(activity, TagActivity.class);
+								intent.putExtra("tagName", name);
+				        		activity.startActivity(intent);
+							}
+			    		});
+			    		spacer = new TextView(mContext);
 			    		spacer.setText("     ");
 		    		llview.addView(tagText);
 		    		llview.addView(spacer);
 		    	}
 			    	ImageButton addButton = new ImageButton(mContext);
+			    	addButton.setOnClickListener(editTags);
 		    		addButton.setBackgroundResource(R.drawable.ic_menu_add);
 	    		layout = new LinearLayout.LayoutParams(36, 36);
 		    	llview.addView(addButton,layout);
 	    	view.addView(llview);
     	}
+
     	return view;
     }
     
+   
 }

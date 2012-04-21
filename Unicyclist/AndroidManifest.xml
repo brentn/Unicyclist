@@ -26,6 +26,9 @@
         <activity android:name="TrailsActivity"></activity>
         <activity android:name="TagsActivity" android:theme="@android:style/Theme.Dialog" android:label="@string/tag_picker"></activity>
         <activity android:name="NewTrailActivity" android:theme="@android:style/Theme.Dialog" android:label="@string/new_trail"></activity>
+        <activity android:name="TagActivity"><intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter></activity>
         
         
     </application>

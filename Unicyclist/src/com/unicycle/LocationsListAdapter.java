@@ -39,7 +39,7 @@ public class LocationsListAdapter extends android.widget.ArrayAdapter<Location> 
             LayoutInflater vi = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = vi.inflate(R.layout.locations_list_item, null);
         }
-      
+        v.setBackgroundColor(Color.TRANSPARENT);
         Location location = locations.get(position);
         if (location != null) {
         	ImageView image = (ImageView) v.findViewById(R.id.image);

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!-- Work  -->
+<!-- Work  
     <string name="maps_api_key">0Wp1747MVgsklImDthpkPZQmQXF-igwvxB_kePg</string>
-
-<!-- Home 
-	<string name="maps_api_key">0Wp1747MVgskQz6SzgO1mpYZQNHRrP40R4v8aTA</string>
 -->
-<!-- Laptop  
+<!-- Home -->
+	<string name="maps_api_key">0Wp1747MVgskQz6SzgO1mpYZQNHRrP40R4v8aTA</string>
+
+<!-- Laptop   
 	<string name="maps_api_key">0uU3CgeK14j7-Y1uuKGDdFZ7MveW4BEX72coW1Q</string>
 -->   	
     <string name="app_name">Mountain Unicyclist</string>
@@ -40,7 +40,7 @@
     <string name="rating">Rating</string>
     <string name="tags_by_name">Tags by name</string>
     <string name="tags_by_usage">Tags by usage</string>
-    <string name="click_to_add_tags"> - Click here to add TAGS - </string>
+    <string name="click_to_add_tags"> - Click here to add tags - </string>
     <string name="preferences">Preferences</string>
     <string name="tag_picker">Tag Picker</string>
     <string name="tag_name">tag name</string>

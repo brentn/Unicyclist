@@ -1,179 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#33b5e5"
-        android:textSize="30dip"/>
-    
-    <Gallery
-        android:id="@+id/images"
-        android:layout_width="fill_parent"
-        android:layout_height="80dip"
-        android:spacing="10dip" />
-        
-    <RelativeLayout
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:layout_gravity="top" >
-        
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:adjustViewBounds="true"
-        android:cropToPadding="true"
-        android:longClickable="true"
-        android:scaleType="fitStart"
-        android:src="@drawable/background" />
-    
-    <Gallery
-        android:id="@+id/descriptionMenu"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top" />
-        
-    <ViewFlipper
-	        android:id="@+id/flipper"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_below="@id/descriptionMenu" >
-	
-	        <TextView
-	            android:id="@+id/description"
-	            android:layout_width="fill_parent"
-	            android:layout_height="100dip"
-	            android:padding="5dp"
-		        android:longClickable="true"
-	            android:textColor="#33b5e5" />
+<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/flipper"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" >
 		
-		    <TextView
-		        android:id="@+id/directions"
-		        android:layout_width="fill_parent"
-		        android:layout_height="100dip"
-		        android:padding="5dp"
-		        android:longClickable="true"
-		        android:textColor="#ffbb33"
-		        android:visibility="gone" />
+	<LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:orientation="vertical" >
 	
-	    </ViewFlipper>
-    </RelativeLayout>
-    	<LinearLayout 
-    	    android:id="@+id/tagsGoHere"
-    	    android:layout_width="fill_parent"
-    	    android:layout_height="wrap_content" 
-   	        android:layout_alignParentBottom="true"
-	        android:layout_gravity="bottom" />
-    	
-	    <HorizontalScrollView
-	        android:id="@+id/tagarea"
+	    <TextView
+	        android:id="@+id/name"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textColor="#33b5e5"
+	        android:textSize="30dip"/>
+	    
+	    <LinearLayout
+	    	android:id="@+id/imagesGoHere"
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="80dip" />
+	        
+	    <RelativeLayout
+	        android:layout_height="wrap_content"
+	        android:layout_width="fill_parent"
+	        android:layout_gravity="top" >
+	        
+	    <ImageView
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_alignParentBottom="true"
-	        android:layout_gravity="bottom" >
-	
-	        <LinearLayout
-	            android:id="@+id/linearLayout1"
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
-	            android:orientation="horizontal" >
-	            
-	            <ImageButton
-	                android:id="@+id/editTags"
-	                android:layout_width="32dip"
-	                android:layout_height="32dip"
-	                android:background="@android:drawable/ic_menu_edit" />
-	                
-	
-	            <TextView
-	                android:id="@+id/tags"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:clickable="true"
-	                android:padding="5dp"
-	                android:textAppearance="?android:attr/textAppearanceSmall"
-	                android:textColor="#99CC00" />
-	            
-	            <TextView
-	                android:id="@+id/addTagsText"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:clickable="true"
-	                android:padding="5dp"
-	                android:text="@string/click_to_add_tags"
-	                android:textAppearance="?android:attr/textAppearanceSmall"
-	                android:textColor="#FFBB33" />
-	            
-   	            <ImageButton
-	                android:id="@+id/addTags"
-	                android:layout_width="32dip"
-	                android:layout_height="32dip"
-	                android:background="@android:drawable/ic_menu_add"
-	                android:visibility="gone"	/>
-	        </LinearLayout>
-	            
-	    </HorizontalScrollView>
-
-    <RelativeLayout
-        android:id="@+id/buttonArea"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
-    	
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="25dp"
-            android:layout_gravity="top"
-            android:adjustViewBounds="true"
-            android:cropToPadding="true"
-            android:scaleType="fitStart"
-            android:src="@drawable/background" />
-
-        <View android:id="@+id/strut1"
-	        android:layout_width="0dp"
-	        android:layout_height="0dp" 
-	        android:layout_centerHorizontal="true"/>
-
-        <Button
-            android:id="@+id/trailsButton"
-            android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignRight="@id/strut1"
-            android:background="@drawable/black_button"
-            android:textColor="#FFFFFF"
-            android:textAppearance="?android:attr/textAppearanceMedium" 
-            android:text="@string/trails" />
-
-        <Button
-            android:id="@+id/featuresButton"
-            android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:layout_alignLeft="@id/strut1"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/black_button"
-            android:textColor="#FFFFFF"
-            android:textAppearance="?android:attr/textAppearanceMedium" 
-            android:text="@string/features" />
-
-    </RelativeLayout>
-
-     <RelativeLayout
-        android:id="@+id/bottomSection"
-        android:layout_height="fill_parent"
-        android:layout_width="fill_parent"
-        android:layout_gravity="top" >
-        
-	    <LinearLayout
-	        android:id="@+id/commentsGoHere"
+	        android:layout_gravity="top"
+	        android:adjustViewBounds="true"
+	        android:cropToPadding="true"
+	        android:longClickable="true"
+	        android:scaleType="fitStart"
+	        android:src="@drawable/background" />
+	    
+	    <Gallery
+	        android:id="@+id/descriptionMenu"
 	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="top" />
+	        
+	    <ViewFlipper
+		        android:id="@+id/flipper"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_below="@id/descriptionMenu" >
+		
+		        <TextView
+		            android:id="@+id/description"
+		            android:layout_width="fill_parent"
+		            android:layout_height="100dip"
+		            android:padding="5dp"
+			        android:longClickable="true"
+		            android:textColor="#33b5e5" />
+			
+			    <TextView
+			        android:id="@+id/directions"
+			        android:layout_width="fill_parent"
+			        android:layout_height="100dip"
+			        android:padding="5dp"
+			        android:longClickable="true"
+			        android:textColor="#ffbb33"
+			        android:visibility="gone" />
+		
+		    </ViewFlipper>
+	    </RelativeLayout>
+	   	<LinearLayout 
+	   	    android:id="@+id/tagsGoHere"
+	   	    android:layout_width="fill_parent"
+	   	    android:layout_height="wrap_content" 
+	   	    android:gravity="center"
+	        android:layout_gravity="bottom" />
+	   	
+	    <RelativeLayout
+	        android:id="@+id/buttonArea"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content" >
+	    	
+	        <ImageView
+	            android:layout_width="fill_parent"
+	            android:layout_height="25dp"
+	            android:layout_gravity="top"
+	            android:adjustViewBounds="true"
+	            android:cropToPadding="true"
+	            android:scaleType="fitStart"
+	            android:src="@drawable/background" />
+	
+	        <View android:id="@+id/strut1"
+		        android:layout_width="0dp"
+		        android:layout_height="0dp" 
+		        android:layout_centerHorizontal="true"/>
+	
+	        <Button
+	            android:id="@+id/trailsButton"
+	            android:layout_width="0dp"
+	            android:layout_height="45dp"
+	            android:layout_alignParentLeft="true"
+	            android:layout_alignRight="@id/strut1"
+	            android:background="@drawable/black_button"
+	            android:textColor="#FFFFFF"
+	            android:textAppearance="?android:attr/textAppearanceMedium" 
+	            android:text="@string/trails" />
+	
+	        <Button
+	            android:id="@+id/featuresButton"
+	            android:layout_width="0dp"
+	            android:layout_height="45dp"
+	            android:layout_alignLeft="@id/strut1"
+	            android:layout_alignParentRight="true"
+	            android:background="@drawable/black_button"
+	            android:textColor="#FFFFFF"
+	            android:textAppearance="?android:attr/textAppearanceMedium" 
+	            android:text="@string/features" />
+	
+	    </RelativeLayout>
+	
+	     <RelativeLayout
+	        android:id="@+id/bottomSection"
 	        android:layout_height="fill_parent"
-	        android:layout_alignParentTop="true" />
-         
-    </RelativeLayout>
-
-</LinearLayout>
+	        android:layout_width="fill_parent"
+	        android:layout_gravity="top" >
+	        
+		    <LinearLayout
+		        android:id="@+id/commentsGoHere"
+		        android:layout_width="fill_parent"
+		        android:layout_height="fill_parent"
+		        android:layout_alignParentTop="true" />
+	         
+	    </RelativeLayout>
+	
+	</LinearLayout>
+	
+	<ImageView
+		android:id="@+id/fullScreen"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent" />
+		
+</ViewFlipper>

@@ -24,7 +24,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Gallery;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -35,13 +35,12 @@ public class LocationActivity extends Activity {
 	private ViewFlipper page; 
 	private Animation fadeIn;
 	private Animation fadeOut;
+	private ViewGroup images;
 	private TextView description;
 	private TextView directions;
-	private String selectedImagePath;
-	private TextView tagString;
-	private TextView addTagsText;
-	private ImageButton addTagsButton;
-	private ImageAdapter imageAdapter;
+	private ViewGroup tags;
+	private ViewFlipper flipper;
+	private ImageView fullScreen;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,38 +56,33 @@ public class LocationActivity extends Activity {
 
         //get view objects
         TextView name = (TextView) findViewById(R.id.name);
-        Gallery images = (Gallery) findViewById(R.id.images);
+        images = (ViewGroup) findViewById(R.id.imagesGoHere);
         Gallery descriptionMenu = (Gallery) findViewById(R.id.descriptionMenu);
         description = (TextView) findViewById(R.id.description);
         directions = (TextView) findViewById(R.id.directions);
         Button trailsButton = (Button) findViewById(R.id.trailsButton);
         Button featuresButton = (Button) findViewById(R.id.featuresButton);
         ViewGroup comments = (ViewGroup) findViewById(R.id.commentsGoHere);
-        tagString = (TextView) findViewById(R.id.tags);
-        ViewGroup tags = (ViewGroup) findViewById(R.id.tagsGoHere);
-        addTagsText = (TextView) findViewById(R.id.addTagsText);
-        addTagsButton = (ImageButton) findViewById(R.id.addTags);
-        ImageButton editTagsButton = (ImageButton) findViewById(R.id.editTags);
+        tags = (ViewGroup) findViewById(R.id.tagsGoHere);
+        flipper = (ViewFlipper) findViewById(R.id.flipper);
+        fullScreen = (ImageView) findViewById(R.id.fullScreen);
 
         //add dynamic view objects
+        images.addView(new Images(this).getLocationImagesView(LocationActivity.this,location));
         comments.addView(new Comments(this).getLocationCommentsView(location));
-        tags.addView(new Tags(this).getLocationTagsView(location));
+        tags.addView(new Tags(this).getLocationTagsView(LocationActivity.this,location));
 
         //set up adapters
-        imageAdapter = new ImageAdapter(this,location.getImages());
-        images.setAdapter(imageAdapter);
         descriptionMenu.setAdapter(new DescriptionMenuAdapter(this, new String[] {"Description","Directions"}));
 
-        //set up listeners
-//        addImage.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View arg0) {
-//				Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//				startActivityForResult(intent, Images.SELECT_PICTURE);
-//    		}
-//        });
-        
-    	//Menus
+         
+        fullScreen.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				flipper.setDisplayedChild(0);
+			}
+        	
+        });
      
         descriptionMenu.setOnItemSelectedListener(new OnItemSelectedListener() {
 	        @Override
@@ -172,15 +166,6 @@ public class LocationActivity extends Activity {
         		startActivity(new Intent(LocationActivity.this, TrailsActivity.class));
         	}
         });
-        OnClickListener editTags = new OnClickListener() {
-        	public void onClick(View view) {
-        		((UnicyclistApplication) getApplication()).copyTagsFromCurrentLocation();
-        		startActivityForResult(new Intent(LocationActivity.this, TagsActivity.class),Location.SELECT_TAGS);
-        	}
-        };
-        addTagsText.setOnClickListener(editTags);
-        addTagsButton.setOnClickListener(editTags);
-        editTagsButton.setOnClickListener(editTags);
         
         if ( name != null) {
         	name.setText(location.getName());
@@ -191,9 +176,6 @@ public class LocationActivity extends Activity {
         }
         if ( directions != null) {
         	directions.setText(location.getDirections());
-        }
-        if ( tags != null) {
-       		showTags();
         }
        
 	 }
@@ -228,14 +210,16 @@ public class LocationActivity extends Activity {
 		    	Uri selectedImageUri = data.getData();
 		    	if (selectedImageUri != null) {
 		            location.addImage(LocationActivity.this, new Image(LocationActivity.this,selectedImageUri));
-		            imageAdapter.notifyDataSetChanged();
+		            images.removeAllViews();
+		            images.addView(new Images(this).getLocationImagesView(LocationActivity.this,location));
 		    	}
 		    }
 		    if (requestCode == Location.SELECT_TAGS) {
-	        	showTags();
 	        	Locations db = new Locations(LocationActivity.this);
 	        	db.updateLocation(location);
 	        	db.close();
+	        	tags.removeAllViews();
+	        	tags.addView(new Tags(this).getLocationTagsView(LocationActivity.this,location));
 		    }
 		 }
 	 }
@@ -249,16 +233,4 @@ public class LocationActivity extends Activity {
 		    return cursor.getString(column_index);
  	 }
 	 
-	 private void showTags() {
-		 String tagText = location.getTagString();
-		 if (tagText == "") {
-			 addTagsText.setVisibility(View.VISIBLE);
-			 addTagsButton.setVisibility(View.GONE);
-		 } else {
-			 addTagsText.setVisibility(View.GONE);
-			 addTagsButton.setVisibility(View.VISIBLE);
-		 }
-		 tagString.setText(tagText);
-	 }
-
 }
