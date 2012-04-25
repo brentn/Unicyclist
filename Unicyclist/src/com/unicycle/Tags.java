@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -369,7 +368,7 @@ public class Tags extends SQLiteOpenHelper {
         OnClickListener editTags = new OnClickListener() {
         	public void onClick(View view) {
         		((UnicyclistApplication) activity.getApplication()).copyTagsFromCurrentLocation();
-        		activity.startActivityForResult(new Intent(activity, TagsActivity.class),Location.SELECT_TAGS);
+        		activity.startActivityForResult(new Intent(activity, TagsActivity.class),UnicyclistActivity.SELECT_TAGS);
         	}
         };
     	HorizontalScrollView view = new HorizontalScrollView(mContext);
@@ -384,14 +383,7 @@ public class Tags extends SQLiteOpenHelper {
     		view.addView(noTags);
     	} else {
 		    	LinearLayout llview = new LinearLayout(mContext);
-			    	ImageButton editButton = new ImageButton(mContext);
-			    	editButton.setOnClickListener(editTags);
-			    	editButton.setBackgroundResource(R.drawable.ic_menu_edit);
-		   		LinearLayout.LayoutParams layout = new LinearLayout.LayoutParams(36, 36);
-		    	llview.addView(editButton,layout);
 	    		TextView spacer = new TextView(mContext);
-	    		spacer.setText("     ");
-	    		llview.addView(spacer);
 		    	Iterator<Tag> i = location.getTags().iterator();
 		    	while (i.hasNext()) {
 		    			final String name = i.next().getName();
@@ -405,6 +397,9 @@ public class Tags extends SQLiteOpenHelper {
 								((TextView) v).setTextSize(30);
 								Intent intent = new Intent(activity, TagActivity.class);
 								intent.putExtra("tagName", name);
+								if (activity instanceof LocationActivity) {
+									((LocationActivity) activity).showTagProgress();
+								}
 				        		activity.startActivity(intent);
 							}
 			    		});
@@ -413,11 +408,11 @@ public class Tags extends SQLiteOpenHelper {
 		    		llview.addView(tagText);
 		    		llview.addView(spacer);
 		    	}
-			    	ImageButton addButton = new ImageButton(mContext);
-			    	addButton.setOnClickListener(editTags);
-		    		addButton.setBackgroundResource(R.drawable.ic_menu_add);
-	    		layout = new LinearLayout.LayoutParams(36, 36);
-		    	llview.addView(addButton,layout);
+		    	ImageButton editButton = new ImageButton(mContext);
+		    	editButton.setOnClickListener(editTags);
+		    	editButton.setBackgroundResource(R.drawable.ic_menu_edit);
+	   		LinearLayout.LayoutParams layout = new LinearLayout.LayoutParams(36, 36);
+	    	llview.addView(editButton,layout);
 	    	view.addView(llview);
     	}
 

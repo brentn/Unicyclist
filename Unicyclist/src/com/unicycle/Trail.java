@@ -3,7 +3,7 @@ package com.unicycle;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Trail {
+public class Trail extends ObjectThatRequiresVerification {
 	
 	static final int DIFFICULTY_EASIEST = 1;
 	static final int DIFFICULTY_MODERATE = 2;

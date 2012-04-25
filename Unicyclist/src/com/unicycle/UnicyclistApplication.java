@@ -1,8 +1,16 @@
+//TODO: Start with location.  fix crash on GPS start
+//TODO: Handle map ID properly
+//TODO: confirm backup/restore DB
+//TODO: make GPS work less
+
+
 package com.unicycle;
 
 import java.util.List;
 
 import android.app.Application;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.unicycle.MyLocation.LocationResult;
 
@@ -12,15 +20,15 @@ public class UnicyclistApplication extends Application {
 	private static com.unicycle.Location _currentLocation;
 	private static List<Tag> _currentTagSet;
 	
-	{_myLocation.setLatitude(90);
-	_myLocation.setLongitude(0);
-	}
-	
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		  //get location from last run
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+		_myLocation.setLatitude(settings.getInt("latitude", 90)/1e6);
+		_myLocation.setLongitude(settings.getInt("longitude",0)/1e6);
 		MyLocation myLocation = new MyLocation();
-		myLocation.getLocation(getApplicationContext(), locationResult);
+		myLocation.getLocation(this, locationResult);
 	}
 	
 	public android.location.Location getMyLocation() {

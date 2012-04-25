@@ -8,6 +8,7 @@ import java.nio.channels.FileChannel;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.CheckBoxPreference;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -32,10 +33,12 @@ public class Preferences extends PreferenceActivity {
         //get the specified preferences using the key declared in preferences.xml
         CheckBoxPreference miles = (CheckBoxPreference) findPreference("miles");
         ListPreference distFilter = (ListPreference) findPreference("distance_filter");
+        EditTextPreference username = (EditTextPreference) findPreference("username");
         Preference backup = (Preference) findPreference("backup");
         Preference restore = (Preference) findPreference("restore");
  
         distFilter.setSummary(distFilter.getEntry());
+        username.setSummary(username.getText());
  
         distFilter.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override

@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" android:key="settings">
-    <PreferenceCategory android:key="@string/locations" android:title="@string/locations"><CheckBoxPreference android:key="miles" android:persistent="true" android:defaultValue="false" android:title="@string/distances_in_miles"/>
+    <EditTextPreference android:key="username" android:title="@string/username" /><PreferenceCategory android:key="@string/locations" android:title="@string/locations"><CheckBoxPreference android:key="miles" android:persistent="true" android:defaultValue="false" android:title="@string/distances_in_miles"/>
     <ListPreference android:defaultValue="80" android:title="@string/distance_filter" android:entries="@array/distance_filter_array" android:entryValues="@array/distance_filter_values" android:persistent="true" android:key="distance_filter" android:summary="@string/distance_filter_summary"/>
+    
 </PreferenceCategory>
     <PreferenceCategory android:title="Database" android:key="database"><Preference android:key="backup" android:selectable="true" android:title="Backup Databases to SD card" /><Preference android:key="restore" android:selectable="true" android:title="Restore Databases from SD card"/></PreferenceCategory>
+    <Preference android:key="longitude"/>
+    <Preference android:key="latitude"/>
     
 
 </PreferenceScreen>

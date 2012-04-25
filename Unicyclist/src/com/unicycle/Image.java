@@ -73,27 +73,25 @@ public class Image {
 	}
 	
 	private Uri getLocalImage(Uri uri) {
+		Uri result = uri;
 		String correctPath = Environment.getExternalStorageDirectory()+IMAGE_STORE;
-		String filename = "image0";
+		Images images = new Images(mContext);
 		File dest = new File(correctPath);
-		File[] files = dest.listFiles();
-		if (files.length > 0) {
-			filename = "image"+Integer.toString(Integer.parseInt(files[files.length-1].getName().substring(5))+1);
-		}
 		Log.d("com.unicycle","Path is: "+uri.getPath());
 		if (uri.getPath().contains(correctPath)) {
-			return uri; //the image is already where it should be
+			return result; //the image is already where it should be
 		}
 		try {
 			InputStream is = mContext.getContentResolver().openInputStream(uri);;
 			FileInputStream source = (FileInputStream) is;
 			try {
+				String filename = images.getNextFileName(correctPath);
 				File destFile = new File(dest,filename);
 				FileOutputStream destination = new FileOutputStream(destFile);
 				try {
 					FileUtils.copyFile(source, destination);
 					Log.i("com.unicycle","file copied successully");
-					return uri.fromFile(destFile);
+					result = Uri.fromFile(destFile);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -103,7 +101,7 @@ public class Image {
 		} catch (FileNotFoundException e) {
 			Log.e("com.unicycle","The input file was missing: "+uri.getPath());
 		}
-		return uri;
+		return result;
 	}
 	
 	  //decodes image and scales it to reduce memory consumption

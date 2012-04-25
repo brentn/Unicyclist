@@ -6,9 +6,9 @@ import java.util.List;
 
 import android.content.Context;
 
-public class Location {
+public class Location extends ObjectThatRequiresVerification {
 	
-	public static final int SELECT_TAGS = 2;
+	
 	
 	//private variables
 	private int _id;

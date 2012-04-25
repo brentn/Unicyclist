@@ -12,9 +12,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+import android.widget.ViewFlipper;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -28,6 +32,10 @@ public class TrailsActivity extends MapActivity {
 	private TrailsListAdapter trailsListAdapter;
 	private Location location;
 	private List<Trail> trailsList;
+	private TextView trailName;
+	private ViewFlipper flipper;
+	private MapView mapView;
+	private ToggleButton satButton;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,10 +52,12 @@ public class TrailsActivity extends MapActivity {
         trailsList = db.getAllTrailsForLocation(location);
         
         //Find View Components
+        flipper = (ViewFlipper) findViewById(R.id.flipper);
         TextView locationName = (TextView) findViewById(R.id.locationName);
-        MapView mapView = (MapView) findViewById(R.id.mapView);
+        mapView = (MapView) findViewById(R.id.mapView);
         ListView trailsView = (ListView) findViewById(R.id.trails_list);
-        ToggleButton satButton = (ToggleButton) findViewById(R.id.satButton);
+        satButton = (ToggleButton) findViewById(R.id.satButton);
+        trailName = (TextView) findViewById(R.id.trailName);
         
         View footerView = ((LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.trails_list_add, null, false);
         trailsView.addFooterView(footerView);
@@ -64,6 +74,26 @@ public class TrailsActivity extends MapActivity {
         mapView.setSatellite(true);
         satButton.setChecked(true);
         mapController.setZoom(16);
+        
+        trailsView.setOnItemLongClickListener( new OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View view, int position, long id) {
+//				((TextView) findViewById(R.id.trailName)).setText(trailsList.get(position).getName());
+//				((TextView) findViewById(R.id.description)).setText(trailsList.get(position).getDescription());				
+//				flipper.setDisplayedChild(1);
+				startActivity(new Intent(TrailsActivity.this, TrailActivity.class));
+				return false;
+			}
+        	
+        });
+        
+        satButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+        		mapView.setSatellite(satButton.isChecked());
+
+			}
+        });
         
     }
 

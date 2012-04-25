@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,6 +18,12 @@ import android.widget.SlidingDrawer;
 import android.widget.SlidingDrawer.OnDrawerOpenListener;
 
 public class UnicyclistActivity extends Activity {
+	
+	public static final int CREATE_LOCATION = 1;
+	public static final int SELECT_TAGS = 2;
+	public static final int SELECT_LOCATION = 3;
+	public static final int CAMERA_REQUEST = 1888; 
+
 
 	private Context mContext = this;
 	ProgressDialog pd = null;

@@ -9,11 +9,14 @@ import java.util.List;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -41,9 +44,7 @@ import com.google.android.maps.OverlayItem;
 
 public class LocationsActivity extends MapActivity {
 	
-	final int GET_NEW_LOCATION = 1;
-
-    ListView.OnItemClickListener clickListener;
+	ListView.OnItemClickListener clickListener;
     
 	private ViewFlipper page; 
 	private Animation fadeIn;
@@ -65,10 +66,10 @@ public class LocationsActivity extends MapActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.locations);
+
         
         //Read data from DB
         Locations db = new Locations(this);
-//this.addSampleData();
         locationList = db.getAllLocations();
         db.close();
         favouritesList = new ArrayList<Location>();
@@ -136,6 +137,9 @@ public class LocationsActivity extends MapActivity {
 			@Override
 			public void onClick(View arg0) {
 				if (gpsButton.isChecked()) {
+					SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(LocationsActivity.this);
+					GeoPoint myGeoPoint = new GeoPoint(settings.getInt("latitude",50),settings.getInt("longitude", 120));
+ 	 		  	    mapController.animateTo(myGeoPoint);
 					locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 				} else {
 					locationManager.removeUpdates(locationListener);
@@ -160,9 +164,7 @@ public class LocationsActivity extends MapActivity {
         	@Override
         	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         		Location l = (Location) ((ListView) parent).getItemAtPosition(position);
-        		((UnicyclistApplication) getApplication()).setCurrentLocation(l);
-        		Intent locationIntent = new Intent(LocationsActivity.this, LocationActivity.class);
-        		LocationsActivity.this.startActivity(locationIntent);
+        		launchLocation(l);
         	}
         };
         ((ListView) findViewById(R.id.allLocationsList)).setOnItemClickListener(clickListener);
@@ -188,13 +190,13 @@ public class LocationsActivity extends MapActivity {
         	  Location location = i.next();
         	  GeoPoint point = new GeoPoint((int) (location.getLatitude()*1e6),(int) (location.getLongitude()*1e6));
         	  OverlayItem overlayitem = new OverlayItem(point, location.getName(), location.getDescription());
-              locationsOverlay.addOverlay(overlayitem);
+              locationsOverlay.addOverlay(overlayitem,location.getId());
         	}
         mapOverlays.add(locationsOverlay);
     }
     
     public void onClick(View footerView) {
-    	startActivityForResult(new Intent(LocationsActivity.this, NewLocationActivity.class), GET_NEW_LOCATION);
+    	startActivityForResult(new Intent(LocationsActivity.this, NewLocationActivity.class), UnicyclistActivity.CREATE_LOCATION);
     }
     
     @Override
@@ -249,7 +251,7 @@ public class LocationsActivity extends MapActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.newLocation:	
-            	startActivityForResult(new Intent(LocationsActivity.this, NewLocationActivity.class), GET_NEW_LOCATION);
+            	startActivityForResult(new Intent(LocationsActivity.this, NewLocationActivity.class), UnicyclistActivity.CREATE_LOCATION);
             	break;   
         }
         return true;
@@ -259,7 +261,7 @@ public class LocationsActivity extends MapActivity {
     protected void onActivityResult(
         int aRequestCode, int aResultCode, Intent aData) {
         switch (aRequestCode) {
-            case GET_NEW_LOCATION:
+            case UnicyclistActivity.CREATE_LOCATION:
             	if ((aData != null) && (aResultCode == Activity.RESULT_OK)) {
             		//Retrieve Data
             		String name = aData.getStringExtra("name");
@@ -285,7 +287,7 @@ public class LocationsActivity extends MapActivity {
             		//Add to map
             		GeoPoint point = new GeoPoint((int) (location.getLatitude()*1e6),(int) (location.getLongitude()*1e6));
               	  	OverlayItem overlayitem = new OverlayItem(point, location.getName(), location.getDescription());
-                    locationsOverlay.addOverlay(overlayitem);
+                    locationsOverlay.addOverlay(overlayitem,location.getId());
                     //Add to favourites ONLY if favourites list is currently displayed
             		if (page.getDisplayedChild() == 1) {
                 		location.setFavourite();
@@ -371,10 +373,15 @@ public class LocationsActivity extends MapActivity {
     private class MyLocationListener implements LocationListener{
 
   	  public void onLocationChanged(android.location.Location argLocation) {
+          
   	   GeoPoint myGeoPoint = new GeoPoint(
   	    (int)(argLocation.getLatitude()*1000000),
   	    (int)(argLocation.getLongitude()*1000000));
   	   mapController.animateTo(myGeoPoint);
+		  //remember this location:
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(LocationsActivity.this);
+		settings.edit().putInt("latitude", myGeoPoint.getLatitudeE6()).commit();
+		settings.edit().putInt("longitude", myGeoPoint.getLongitudeE6()).commit();
   	  }
 
   	  public void onProviderDisabled(String provider) {
@@ -391,6 +398,7 @@ public class LocationsActivity extends MapActivity {
     public class LocationsOverlay extends ItemizedOverlay {
 
     	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
+    	private List<Integer> locationIds = new ArrayList<Integer>();
     	Context mContext;
     	
     	public LocationsOverlay(Drawable defaultMarker, Context context) {
@@ -398,8 +406,9 @@ public class LocationsActivity extends MapActivity {
     	  mContext = context;
     	}
     	
-    	public void addOverlay(OverlayItem overlay) {
+    	public void addOverlay(OverlayItem overlay,int id) {
     	    mOverlays.add(overlay);
+    	    locationIds.add(id);
     	    populate();
     	}
     	
@@ -415,43 +424,37 @@ public class LocationsActivity extends MapActivity {
     	
     	@Override
     	protected boolean onTap(int index) {
+    		final int id = index;
     	  OverlayItem item = mOverlays.get(index);
     	  AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
     	  dialog.setTitle(item.getTitle());
     	  dialog.setMessage(item.getSnippet());
+    	  dialog.setPositiveButton(R.string.view, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Locations locations = new Locations(LocationsActivity.this);
+        		Location location = locations.getLocation(locationIds.get(id));
+        		launchLocation(location);				
+			}
+
+    	  });
+    	  dialog.setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+        		dialog.dismiss();
+			}
+
+    	  });
     	  dialog.show();
     	  return true;
     	}
 
     }
-
-         
-    private void addSampleData() {
-    	Locations db = new Locations(this);
-    	Location location = new Location();
-    	Location location2 = new Location();
-    	
-    	
-    	location.setName("Downes Bowl");
-    	location.setCoordinates( 49.068208, -122.327056);
-    	location.setDescription("Right in town. A good workout.  Lots of hills.");
-    	location.setDirections("Park at the Ag Rec center across the street.  Then follow the paved pathway under the road to get to the entrance.");
-    	location.setRating(3);
-    	location.setId(db.addLocation(location));
-    	location.addTag(this,"MUni");
-    	
-    	location2.setName("Ledgeview");
-    	location2.setCoordinates( 49.070808, -122.222654);
-    	location2.setDescription("Right in town. Ride up in 45 mins, down in about 30.  Can be muddy.");
-    	location2.setDirections("Drive just past Ledgeview Golf course, and park on the shoulder of the road.  There's a big muddy area on the right, and a yellow gate where the trails begin.");
-    	location2.setRating(7);
-    	location2.setFavourite();
-    	location2.setId(db.addLocation(location2));
-    	location2.addTag(this,"Shared Trail");
-    	location2.addTag(this,"MUni");
-    	location2.addTag(this,"MyNameIsBrent");
-    	location2.addTag(this,"There is more to this Mountain Unicycling than meets the eye");
-    	location2.addTag(this,"Red and blue");
-    	location2.addTag(this,"Go away");
+    
+    private void launchLocation(Location location) {
+		((UnicyclistApplication) getApplication()).setCurrentLocation(location);
+		Intent locationIntent = new Intent(LocationsActivity.this, LocationActivity.class);
+		LocationsActivity.this.startActivity(locationIntent);
     }
+
 }

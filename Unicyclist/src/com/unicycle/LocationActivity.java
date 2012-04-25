@@ -2,6 +2,7 @@ package com.unicycle;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -40,7 +41,7 @@ public class LocationActivity extends Activity {
 	private TextView directions;
 	private ViewGroup tags;
 	private ViewFlipper flipper;
-	private ImageView fullScreen;
+	private ProgressDialog pd = null;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,6 @@ public class LocationActivity extends Activity {
         ViewGroup comments = (ViewGroup) findViewById(R.id.commentsGoHere);
         tags = (ViewGroup) findViewById(R.id.tagsGoHere);
         flipper = (ViewFlipper) findViewById(R.id.flipper);
-        fullScreen = (ImageView) findViewById(R.id.fullScreen);
 
         //add dynamic view objects
         images.addView(new Images(this).getLocationImagesView(LocationActivity.this,location));
@@ -74,16 +74,7 @@ public class LocationActivity extends Activity {
 
         //set up adapters
         descriptionMenu.setAdapter(new DescriptionMenuAdapter(this, new String[] {"Description","Directions"}));
-
          
-        fullScreen.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				flipper.setDisplayedChild(0);
-			}
-        	
-        });
-     
         descriptionMenu.setOnItemSelectedListener(new OnItemSelectedListener() {
 	        @Override
 	        public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
@@ -214,7 +205,7 @@ public class LocationActivity extends Activity {
 		            images.addView(new Images(this).getLocationImagesView(LocationActivity.this,location));
 		    	}
 		    }
-		    if (requestCode == Location.SELECT_TAGS) {
+		    if (requestCode == UnicyclistActivity.SELECT_TAGS) {
 	        	Locations db = new Locations(LocationActivity.this);
 	        	db.updateLocation(location);
 	        	db.close();
@@ -233,4 +224,22 @@ public class LocationActivity extends Activity {
 		    return cursor.getString(column_index);
  	 }
 	 
+    public void showTagProgress() {
+        pd = ProgressDialog.show(LocationActivity.this, "Searching for tag", "Please wait...", true, false);
+    }
+
+    @Override
+    protected void onResume() {
+    	super.onResume();
+		if (pd!=null) {
+			pd.dismiss();
+		}
+    	Location location = ((UnicyclistApplication) getApplication()).getCurrentLocation();
+    	if (location != null) {
+    		tags.removeAllViews();
+    		tags.addView(new Tags(this).getLocationTagsView(LocationActivity.this,location)); 
+    	}
+    }
+	 
+	   
 }
