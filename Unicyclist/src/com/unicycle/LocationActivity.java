@@ -40,7 +40,7 @@ public class LocationActivity extends Activity {
 	private TextView description;
 	private TextView directions;
 	private ViewGroup tags;
-	private ViewFlipper flipper;
+	private ViewGroup comments;
 	private ProgressDialog pd = null;
 
 	@Override
@@ -63,14 +63,13 @@ public class LocationActivity extends Activity {
         directions = (TextView) findViewById(R.id.directions);
         Button trailsButton = (Button) findViewById(R.id.trailsButton);
         Button featuresButton = (Button) findViewById(R.id.featuresButton);
-        ViewGroup comments = (ViewGroup) findViewById(R.id.commentsGoHere);
+        comments = (ViewGroup) findViewById(R.id.commentsGoHere);
         tags = (ViewGroup) findViewById(R.id.tagsGoHere);
-        flipper = (ViewFlipper) findViewById(R.id.flipper);
 
         //add dynamic view objects
         images.addView(new Images(this).getLocationImagesView(LocationActivity.this,location));
-        comments.addView(new Comments(this).getLocationCommentsView(location));
-        tags.addView(new Tags(this).getLocationTagsView(LocationActivity.this,location));
+        comments.addView(new Comments(this).getCommentsView(location));
+        tags.addView(new Tags(this).getTagsView(LocationActivity.this,location));
 
         //set up adapters
         descriptionMenu.setAdapter(new DescriptionMenuAdapter(this, new String[] {"Description","Directions"}));
@@ -188,7 +187,7 @@ public class LocationActivity extends Activity {
             	break; 
             case R.id.addComment:
             	Comments comments = new Comments(LocationActivity.this);
-            	comments.newLocationComment(location);
+            	comments.newComment(location);
             	break;
         }
         return true;
@@ -210,7 +209,7 @@ public class LocationActivity extends Activity {
 	        	db.updateLocation(location);
 	        	db.close();
 	        	tags.removeAllViews();
-	        	tags.addView(new Tags(this).getLocationTagsView(LocationActivity.this,location));
+	        	tags.addView(new Tags(this).getTagsView(LocationActivity.this,location));
 		    }
 		 }
 	 }
@@ -236,8 +235,10 @@ public class LocationActivity extends Activity {
 		}
     	Location location = ((UnicyclistApplication) getApplication()).getCurrentLocation();
     	if (location != null) {
+    		comments.removeAllViews();
+    		comments.addView(new Comments(LocationActivity.this).getCommentsView(location));
     		tags.removeAllViews();
-    		tags.addView(new Tags(this).getLocationTagsView(LocationActivity.this,location)); 
+    		tags.addView(new Tags(this).getTagsView(LocationActivity.this,location)); 
     	}
     }
 	 

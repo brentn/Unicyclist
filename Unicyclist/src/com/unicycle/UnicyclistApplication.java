@@ -18,6 +18,7 @@ public class UnicyclistApplication extends Application {
 
 	private static android.location.Location _myLocation = new android.location.Location("");
 	private static com.unicycle.Location _currentLocation;
+	private static Trail _currentTrail;
 	private static List<Tag> _currentTagSet;
 	
 	@Override
@@ -47,6 +48,14 @@ public class UnicyclistApplication extends Application {
 		UnicyclistApplication._currentLocation = location;
 	}
 	
+	public Trail getCurrentTrail() {
+		return UnicyclistApplication._currentTrail;
+	}
+	
+	public void setCurrentTrail(Trail trail) {
+		UnicyclistApplication._currentTrail = trail;
+	}
+	
 	public List<Tag> getCurrentTagSet() {
 		return UnicyclistApplication._currentTagSet;
 	}
@@ -56,8 +65,11 @@ public class UnicyclistApplication extends Application {
 	}
 	
 	public void copyTagsFromCurrentLocation() {
-		
 		UnicyclistApplication._currentTagSet = UnicyclistApplication._currentLocation.getTags();
+	}
+	
+	public void copyTagsFromCurrentTrail() {
+		UnicyclistApplication._currentTagSet = UnicyclistApplication._currentTrail.getTags();
 	}
 	
 	public LocationResult locationResult = new LocationResult(){

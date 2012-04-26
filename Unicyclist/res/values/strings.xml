@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!-- Work  
+<!-- Work 
     <string name="maps_api_key">0Wp1747MVgsklImDthpkPZQmQXF-igwvxB_kePg</string>
 -->
-<!-- Home --> 
+<!-- Home  -->
 	<string name="maps_api_key">0Wp1747MVgskQz6SzgO1mpYZQNHRrP40R4v8aTA</string>
 
 <!-- Laptop   
@@ -61,5 +61,8 @@
     <string name="view">View</string>
     <string name="close">Close</string>
     <string name="save_location">Save location</string>
+    <string name="get_photo">Get Photo</string>
+    <string name="using_camera">Using Camera</string>
+    <string name="using_gallery">Using Gallery</string>
     
 </resources>

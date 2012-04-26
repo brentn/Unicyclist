@@ -23,6 +23,7 @@ public class UnicyclistActivity extends Activity {
 	public static final int SELECT_TAGS = 2;
 	public static final int SELECT_LOCATION = 3;
 	public static final int CAMERA_REQUEST = 1888; 
+	public static final int SELECT_PICTURE = 1889;
 
 
 	private Context mContext = this;

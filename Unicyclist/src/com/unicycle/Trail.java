@@ -24,6 +24,7 @@ public class Trail extends ObjectThatRequiresVerification {
 	private List<GPSTrack> _tracks = new ArrayList<GPSTrack>();
 	private List<Image> _images = new ArrayList<Image>();
 	private List<Tag> _tags = new ArrayList<Tag>();
+	private List<Comment> _comments = new ArrayList<Comment>();
 	
 	public Trail(Location location) {
 		this._id = -1;
@@ -48,7 +49,8 @@ public class Trail extends ObjectThatRequiresVerification {
 
 	public Trail(int id, int locationId, String name, double latitude, double longitude, 
 			String description, String directions, float length, int rating, int difficulty,
-			List<Feature> features, List<GPSTrack> tracks, List<Image> images, List<Tag> tags) {
+			List<Feature> features, List<GPSTrack> tracks, List<Image> images, List<Tag> tags,
+			List<Comment> comments) {
 		this._id = id;
 		this._locationId = locationId;
 		this._name = name;
@@ -63,6 +65,7 @@ public class Trail extends ObjectThatRequiresVerification {
 		this._tracks = tracks;
 		this._images = images;
 		this._tags = tags;
+		this._comments = comments;
 	}
 
 	public Trail(int locationId, String name, double latitude, double longitude, 
@@ -81,7 +84,8 @@ public class Trail extends ObjectThatRequiresVerification {
 
 	public Trail(int locationId, String name, double latitude, double longitude, 
 			String description, String directions, float length, int rating, int difficulty,
-			List<Feature> features, List<GPSTrack> tracks, List<Image> images, List<Tag> tags) {
+			List<Feature> features, List<GPSTrack> tracks, List<Image> images, List<Tag> tags,
+			List<Comment> comments) {
 		this._id = -1;
 		this._locationId = locationId;
 		this._name = name;
@@ -96,6 +100,7 @@ public class Trail extends ObjectThatRequiresVerification {
 		this._tracks = tracks;
 		this._images = images;
 		this._tags = tags;
+		this._comments = comments;
 	}
 	
 	@Override
@@ -231,4 +236,14 @@ public class Trail extends ObjectThatRequiresVerification {
 	public void setTags(List<Tag> tags) {
 		this._tags = tags;
 	}
+	
+	public void setComments(List<Comment> comments) {
+		this._comments = comments;
+	}
+	
+	public List<Comment> getComments() {
+		return this._comments;
+	}
+	
+
 }

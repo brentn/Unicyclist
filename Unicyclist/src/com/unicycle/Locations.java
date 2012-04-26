@@ -177,7 +177,7 @@ public class Locations extends SQLiteOpenHelper {
 		        }
 		        location.setImages(images.getImagesForLocation(location));
 		        location.setTags(tags.getTagsForLocation(location));
-		        location.setComments(comments.getCommentsForLocation(location));
+		        location.setComments(comments.getCommentsFor(location));
 		        db.close();
 		        return location;
 	        } 

@@ -364,15 +364,29 @@ public class Tags extends SQLiteOpenHelper {
     	db.close();
     }
     	
-    public ViewGroup getLocationTagsView(final Activity activity,Location location) {
+    public ViewGroup getTagsView(final Activity activity,final Object o) {
+    	List<Tag> _tags = new ArrayList<Tag>();
+    	int _tagType = 0;
+    	if (o instanceof Location) {
+    		_tags = ((Location) o).getTags();
+    		_tagType = Tag.LOCATION_TAG;
+    	} else if (o instanceof Trail) {
+    		_tags = ((Trail) o ).getTags();
+    		_tagType = Tag.TRAIL_TAG;
+    	}
+    	final int _finalTagType = _tagType;
         OnClickListener editTags = new OnClickListener() {
         	public void onClick(View view) {
-        		((UnicyclistApplication) activity.getApplication()).copyTagsFromCurrentLocation();
+        		if (o instanceof Location) {
+        			((UnicyclistApplication) activity.getApplication()).copyTagsFromCurrentLocation();
+        		} else if (o instanceof Trail) {
+        			((UnicyclistApplication) activity.getApplication()).copyTagsFromCurrentTrail();
+        		}
         		activity.startActivityForResult(new Intent(activity, TagsActivity.class),UnicyclistActivity.SELECT_TAGS);
         	}
         };
     	HorizontalScrollView view = new HorizontalScrollView(mContext);
-    	if (location.getTags().size() == 0) {
+    	if (_tags.size() == 0) {
     		TextView noTags = new TextView(mContext);
     		noTags.setText(mContext.getString(R.string.click_to_add_tags));
     		noTags.setClickable(true);
@@ -384,7 +398,7 @@ public class Tags extends SQLiteOpenHelper {
     	} else {
 		    	LinearLayout llview = new LinearLayout(mContext);
 	    		TextView spacer = new TextView(mContext);
-		    	Iterator<Tag> i = location.getTags().iterator();
+		    	Iterator<Tag> i = _tags.iterator();
 		    	while (i.hasNext()) {
 		    			final String name = i.next().getName();
 			    		TextView tagText = new TextView(mContext);
@@ -396,9 +410,12 @@ public class Tags extends SQLiteOpenHelper {
 							public void onClick(View v) {
 								((TextView) v).setTextSize(30);
 								Intent intent = new Intent(activity, TagActivity.class);
+								intent.putExtra("tagType", _finalTagType);
 								intent.putExtra("tagName", name);
 								if (activity instanceof LocationActivity) {
 									((LocationActivity) activity).showTagProgress();
+								} else	if (activity instanceof TrailActivity) {
+									((TrailActivity) activity).showTagProgress();
 								}
 				        		activity.startActivity(intent);
 							}
@@ -415,9 +432,9 @@ public class Tags extends SQLiteOpenHelper {
 	    	llview.addView(editButton,layout);
 	    	view.addView(llview);
     	}
-
     	return view;
     }
     
+
    
 }

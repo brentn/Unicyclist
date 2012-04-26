@@ -245,6 +245,9 @@ public class Location extends ObjectThatRequiresVerification {
 	}
 	
 	public int sortByDistance(android.location.Location myLocation, com.unicycle.Location otherLocation) {
+		if ((myLocation==null) || (otherLocation==null)) {
+			return 0; //abort to avoid nullPointerExeption
+		}
 		android.location.Location dest1 = new android.location.Location("");
 		android.location.Location dest2 = new android.location.Location("");
 		
