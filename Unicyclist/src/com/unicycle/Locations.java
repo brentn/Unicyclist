@@ -159,6 +159,7 @@ public class Locations extends SQLiteOpenHelper {
         Tags tags = new Tags(mContext);
         Comments comments = new Comments(mContext);
         Images images = new Images(mContext);
+        Features features = new Features(mContext);
     	if ( ! this.isDeleted(id)) {
 	    	String query = "SELECT " + KEY_LOCATION_ID + "," + KEY_LOCATION_NAME + ","
 			    			+ KEY_LOCATION_LAT + "," + KEY_LOCATION_LONG + ","
@@ -175,9 +176,10 @@ public class Locations extends SQLiteOpenHelper {
 		        if (this.isFavourite(location.getId())) {
 		        	location.setFavourite();
 		        }
-		        location.setImages(images.getImagesForLocation(location));
-		        location.setTags(tags.getTagsForLocation(location));
+		        location.setImages(images.getImagesFor(location));
+		        location.setTags(tags.getTagsFor(location));
 		        location.setComments(comments.getCommentsFor(location));
+		        location.setFeatures(features.getFeaturesFor(location));
 		        db.close();
 		        return location;
 	        } 
@@ -228,13 +230,9 @@ public class Locations extends SQLiteOpenHelper {
         	this.deleteLocation(id);
         }
         Tags tags = new Tags(mContext);
-        tags.removeTagsForLocation(location);
-        List<Tag> tagList = location.getTags();
-        for(Iterator<Tag> i = tagList.iterator(); i.hasNext(); ) {
-        	  Tag tag = i.next();
-        	  tags.addLocationTag(location, tag);
-        }
-//TODO: add comments and images here too??        
+        tags.removeTagsFor(location);
+        tags.addTags(location, location.getTags());
+//TODO: add comments and images and features here too??        
         db.close();
         return result;
     }
@@ -242,6 +240,17 @@ public class Locations extends SQLiteOpenHelper {
     
     public void deleteLocation(int id) {
     	if (! isDeleted(id)) {
+    		//delete associated data
+//    		Location location = this.getLocation(id);
+//    		Tags tags = new Tags(mContext);
+//    		tags.removeTagsFor(location);
+//    		Comments comments = new Comments(mContext);
+//    		comments.removeCommentsFor(location);
+//    		Images images = new Images(mContext);
+//    		images.removeImagesFor(location);
+//    		Features features = new Features(mContext);
+//    		features.removeFeaturesFor(location);
+    		//mark location record as deleted
         	SQLiteDatabase db = this.getWritableDatabase();
         	ContentValues values = new ContentValues();
         	values.put(KEY_DELETED_LOCATIONID, id);

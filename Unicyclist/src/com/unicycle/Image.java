@@ -41,6 +41,19 @@ public class Image {
 		_description = "";
 	}
 	
+	public Image(Context context,Uri uri,double lat,double lon) {
+		mContext = context;
+		String dirname = Environment.getExternalStorageDirectory() + IMAGE_STORE;;
+		File sddir = new File(dirname);
+		sddir.mkdirs();
+		_id = -1;
+		_imageHash = 0;
+		_uri = getLocalImage(uri); //this will replace _imageHash, if a file is created
+		_latitude=lat;
+		_longitude=lon;
+		_description = "";		
+	}
+	
 	public Image (Context context,int id, int hash, Uri uri, double lat, double lon, String desc) {
 		mContext = context;
 		//ensure data directory exists

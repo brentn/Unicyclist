@@ -32,8 +32,6 @@ public class TrailsActivity extends MapActivity {
 	private TrailsListAdapter trailsListAdapter;
 	private Location location;
 	private List<Trail> trailsList;
-	private TextView trailName;
-	private ViewFlipper flipper;
 	private MapView mapView;
 	private ToggleButton satButton;
 	
@@ -52,12 +50,10 @@ public class TrailsActivity extends MapActivity {
         trailsList = db.getAllTrailsForLocation(location);
         
         //Find View Components
-        flipper = (ViewFlipper) findViewById(R.id.flipper);
         TextView locationName = (TextView) findViewById(R.id.locationName);
         mapView = (MapView) findViewById(R.id.mapView);
         ListView trailsView = (ListView) findViewById(R.id.trails_list);
         satButton = (ToggleButton) findViewById(R.id.satButton);
-        trailName = (TextView) findViewById(R.id.trailName);
         
         View footerView = ((LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.trails_list_add, null, false);
         trailsView.addFooterView(footerView);
@@ -71,17 +67,16 @@ public class TrailsActivity extends MapActivity {
         MapController mapController = mapView.getController();
         mapView.setBuiltInZoomControls(true);
         mapController.setCenter(point);
-        mapView.setSatellite(true);
-        satButton.setChecked(true);
+        mapView.setSatellite(false);
+        satButton.setChecked(false);
         mapController.setZoom(16);
         
         trailsView.setOnItemLongClickListener( new OnItemLongClickListener() {
 			@Override
-			public boolean onItemLongClick(AdapterView<?> arg0, View view, int position, long id) {
-//				((TextView) findViewById(R.id.trailName)).setText(trailsList.get(position).getName());
-//				((TextView) findViewById(R.id.description)).setText(trailsList.get(position).getDescription());				
-//				flipper.setDisplayedChild(1);
-				startActivity(new Intent(TrailsActivity.this, TrailActivity.class));
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//				startActivity(new Intent(TrailsActivity.this, TrailActivity.class));
+				Trail trail = (Trail) ((ListView) parent).getItemAtPosition(position);
+				launchTrail(trail);
 				return false;
 			}
         	
@@ -155,5 +150,10 @@ public class TrailsActivity extends MapActivity {
         super.onActivityResult(aRequestCode, aResultCode, aData);
     }
 
+    private void launchTrail(Trail trail) {
+		((UnicyclistApplication) getApplication()).setCurrentTrail(trail);
+		Intent intent = new Intent(TrailsActivity.this, TrailActivity.class);
+		TrailsActivity.this.startActivity(intent);
+    }
 
 }

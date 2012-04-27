@@ -64,6 +64,7 @@ public class Preferences extends PreferenceActivity {
 				copyDatabaseToSD(new Trails(getApplicationContext()).databaseName());
 				copyDatabaseToSD(new Images(getApplicationContext()).databaseName());
 				copyDatabaseToSD(new Comments(getApplicationContext()).databaseName());
+				copyDatabaseToSD(new Features(getApplicationContext()).databaseName());
 				Toast.makeText(getApplicationContext(), "Backup Complete", Toast.LENGTH_SHORT).show();
 				return true;
 			}
@@ -79,11 +80,13 @@ public class Preferences extends PreferenceActivity {
 				Trails trails = new Trails(getApplicationContext());
 				Images images = new Images(getApplicationContext());
 				Comments comments = new Comments(getApplicationContext());
+				Features features = new Features(getApplicationContext());
 				result = (restoreDatabaseFromSD(locations.databaseName()) && 
 						restoreDatabaseFromSD(tags.databaseName()) &&
 						restoreDatabaseFromSD(trails.databaseName()) &&
 						restoreDatabaseFromSD(images.databaseName())) &&
 						restoreDatabaseFromSD(comments.databaseName());
+						restoreDatabaseFromSD(features.databaseName());
     	        // Access the copied database so SQLiteHelper will cache it and mark
     	        // it as created.
  				locations.getWritableDatabase().close();
@@ -91,6 +94,7 @@ public class Preferences extends PreferenceActivity {
  				trails.getWritableDatabase().close();
  				images.getWritableDatabase().close();
  				comments.getWritableDatabase().close();
+ 				features.getWritableDatabase().close();
  				if (result) {
  					Toast.makeText(getApplicationContext(), "Restore Complete", Toast.LENGTH_SHORT).show();
  				} else {

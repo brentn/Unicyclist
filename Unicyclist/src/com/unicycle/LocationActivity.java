@@ -1,5 +1,7 @@
 package com.unicycle;
 
+import java.io.IOException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -7,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -25,7 +28,6 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Gallery;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -67,7 +69,7 @@ public class LocationActivity extends Activity {
         tags = (ViewGroup) findViewById(R.id.tagsGoHere);
 
         //add dynamic view objects
-        images.addView(new Images(this).getLocationImagesView(LocationActivity.this,location));
+        images.addView(new Images(this).getImagesView(LocationActivity.this,location));
         comments.addView(new Comments(this).getCommentsView(location));
         tags.addView(new Tags(this).getTagsView(LocationActivity.this,location));
 
@@ -199,15 +201,23 @@ public class LocationActivity extends Activity {
 		    if (requestCode == Images.SELECT_PICTURE) {
 		    	Uri selectedImageUri = data.getData();
 		    	if (selectedImageUri != null) {
-		            location.addImage(LocationActivity.this, new Image(LocationActivity.this,selectedImageUri));
+		    		ExifInterface exif = null;
+		    		float[] latlong = new float[2];
+		    		try {
+						exif = new ExifInterface(selectedImageUri.getPath());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+		    		if (exif.getLatLong(latlong)) {
+		    			location.addImage(LocationActivity.this, new Image(LocationActivity.this,selectedImageUri,(double) latlong[0],(double) latlong[1]));
+		    		} else {
+		    			location.addImage(LocationActivity.this, new Image(LocationActivity.this,selectedImageUri,location.getLatitude(),location.getLongitude()));
+		    		}
 		            images.removeAllViews();
-		            images.addView(new Images(this).getLocationImagesView(LocationActivity.this,location));
+		            images.addView(new Images(this).getImagesView(LocationActivity.this,location));
 		    	}
 		    }
 		    if (requestCode == UnicyclistActivity.SELECT_TAGS) {
-	        	Locations db = new Locations(LocationActivity.this);
-	        	db.updateLocation(location);
-	        	db.close();
 	        	tags.removeAllViews();
 	        	tags.addView(new Tags(this).getTagsView(LocationActivity.this,location));
 		    }

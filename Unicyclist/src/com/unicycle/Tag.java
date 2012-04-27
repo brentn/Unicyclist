@@ -7,7 +7,7 @@ public class Tag extends Object{
 	final public static int TRAIL_TAG=2;
 	final public static int FEATURE_TAG=3;
 	
-	private int _id;
+	private int _id = -1;
 	private String _name;
 	private int _usage;
 	

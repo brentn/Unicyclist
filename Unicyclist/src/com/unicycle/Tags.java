@@ -26,13 +26,14 @@ public class Tags extends SQLiteOpenHelper {
 	public static final int SORT_BY_NAME = 1;
 	public static final int SORT_BY_USAGE = 2;
 
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 	private static final String DATABASE_NAME = "tags";
 
 	//table names
 	private static final String TABLE_TAGS = "tags";
 	private static final String TABLE_LOCATION_TAGS = "locationTags";
 	private static final String TABLE_TRAIL_TAGS = "trailTags";
+	private static final String TABLE_FEATURE_TAGS = "featureTags";
 
 	//column names
 	private static final String KEY_TAG_ID = "id";
@@ -46,6 +47,10 @@ public class Tags extends SQLiteOpenHelper {
 	private static final String KEY_TRAIL_TAG_ID = "id";
 	private static final String KEY_TRAIL_TAG_TAGID = "tagId";
 	private static final String KEY_TRAIL_TAG_TRAILID = "trailId";
+	
+	private static final String KEY_FEATURE_TAG_ID = "id";
+	private static final String KEY_FEATURE_TAG_TAGID = "tagId";
+	private static final String KEY_FEATURE_TAG_FEATUREID = "featureId";
 	
 	private Context mContext;
 
@@ -62,9 +67,12 @@ public class Tags extends SQLiteOpenHelper {
 				+ KEY_LOCATION_TAG_ID + " INTEGER PRIMARY KEY, "+ KEY_LOCATION_TAG_LOCATIONID + " INTEGER, " + KEY_LOCATION_TAG_TAGID + " INTEGER)";
 		String CREATE_TRAIL_TAGS_TABLE = "CREATE TABLE " + TABLE_TRAIL_TAGS + "("
 				+ KEY_TRAIL_TAG_ID + " INTEGER PRIMARY KEY, "+ KEY_TRAIL_TAG_TRAILID + " INTEGER, " + KEY_TRAIL_TAG_TAGID + " INTEGER)";
+		String CREATE_FEATURE_TAGS_TABLE = "CREATE TABLE " + TABLE_FEATURE_TAGS + "("
+				+ KEY_FEATURE_TAG_ID + " INTEGER PRIMARY KEY, "+ KEY_FEATURE_TAG_FEATUREID + " INTEGER, " + KEY_FEATURE_TAG_TAGID + " INTEGER)";
 		db.execSQL(CREATE_TAGS_TABLE);
 		db.execSQL(CREATE_LOCATION_TAGS_TABLE);
 		db.execSQL(CREATE_TRAIL_TAGS_TABLE);
+		db.execSQL(CREATE_FEATURE_TAGS_TABLE);
 	}
 
 	@Override
@@ -72,6 +80,7 @@ public class Tags extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TAGS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOCATION_TAGS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRAIL_TAGS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FEATURE_TAGS);
         onCreate(db);
 	}
 	
@@ -79,7 +88,7 @@ public class Tags extends SQLiteOpenHelper {
 		return DATABASE_NAME;
 	}
 	
-	public int addTag(Tag tag) {
+	private int addTag(Tag tag) {
 		//Only if it doesn't exist.  Otherwise return ID of existing tag.
 		Tag target = findTagByName(tag.getName());
 		if ( target != null ) {
@@ -96,62 +105,46 @@ public class Tags extends SQLiteOpenHelper {
 		}
 	}
 	
-	public int addLocationTag(Location location, Tag tag) {
-		//ensure locationId has been set
-		if (location.getId() == -1) {
-			return -1;
+	public int addTagFor(Object o, Tag tag) {
+		int result = -1;
+		String table="";
+		String objectKey="";
+		String tagKey="";
+		int id = -1;
+		if (o instanceof Location) {
+			id = ((Location) o).getId();
+			table=TABLE_LOCATION_TAGS;
+			objectKey=KEY_LOCATION_TAG_LOCATIONID;
+			tagKey=KEY_LOCATION_TAG_TAGID;
+		} else if (o instanceof Trail) {
+			id = ((Trail) o).getId();
+			table=TABLE_TRAIL_TAGS;
+			objectKey=KEY_TRAIL_TAG_TRAILID;
+			tagKey=KEY_TRAIL_TAG_TAGID;
+		} else if (o instanceof Feature) {
+			id = ((Feature) o).getId();
+			table=TABLE_FEATURE_TAGS;
+			objectKey=KEY_FEATURE_TAG_FEATUREID;
+			tagKey=KEY_FEATURE_TAG_TAGID;
 		}
-		//If it is not a duplicate location tag
-		int id = findLocationTag(location,tag);
-		if (id == -1) {
-			//ensure the Tag exists
-			addTag(tag);
-			SQLiteDatabase db = this.getWritableDatabase();
-			ContentValues values = new ContentValues();
-			values.put(KEY_LOCATION_TAG_LOCATIONID,location.getId());
-			values.put(KEY_LOCATION_TAG_TAGID, tag.getId());
-			id = (int) db.insert(TABLE_LOCATION_TAGS, null, values);
-			db.close();
-			//record another use of this tag
-			tag.setUsage(tag.getUsage()+1);
-			this.updateTag(tag);
-		}
-		return id;
+		if (id == -1) {return -1;} //return if no ID has been set
+		addTag(tag); //this will not add duplicate
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		values.put(objectKey,id);
+		values.put(tagKey, tag.getId());
+		result = (int) db.insert(table, null, values);
+		db.close();
+		//record another use of this tag
+		tag.setUsage(tag.getUsage()+1);
+		this.updateTag(tag);
+		return result;
 	}
 	
-    public void addLocationTags(Location location, List<Tag> tags) {
+    public void addTags(Object o, List<Tag> tags) {
     	Iterator<Tag> i = tags.iterator();
     	while (i.hasNext()) {
-    		this.addLocationTag(location, (Tag) i.next());
-    		i.remove();
-    	}
-    }    
-	
-	public int addTrailTag(Trail trail, Tag tag) {
-		//ensure locationId has been set
-		if (trail.getId() == -1) {
-			return -1;
-		}
-		//If it is not a duplicate
-		int id = findTrailTag(trail,tag);
-		if (id == -1) {
-			SQLiteDatabase db = this.getWritableDatabase();
-			ContentValues values = new ContentValues();
-			values.put(KEY_TRAIL_TAG_TRAILID,trail.getId());
-			values.put(KEY_TRAIL_TAG_TAGID, tag.getId());
-			id = (int) db.insert(TABLE_TRAIL_TAGS, null, values);
-			db.close();
-			//record another use of this tag
-			tag.setUsage(tag.getUsage()+1);
-			this.updateTag(tag);
-		}
-		return id;
-	}
-	
-    public void addTrailTags(Trail trail, List<Tag> tags) {
-    	Iterator<Tag> i = tags.iterator();
-    	while (i.hasNext()) {
-    		this.addTrailTag(trail, (Tag) i.next());
+    		this.addTagFor(o, (Tag) i.next());
     		i.remove();
     	}
     }    
@@ -168,25 +161,22 @@ public class Tags extends SQLiteOpenHelper {
 		return tag;
 	}
 	
-	public int findLocationTag(Location location, Tag tag) {
+	public int findTag(Object o, Tag tag) {
 		int result = -1;
-		String query = "SELECT * FROM " + TABLE_LOCATION_TAGS 
-				+ " WHERE " + KEY_LOCATION_TAG_LOCATIONID + " = " + Integer.toString(location.getId())
-				+ " AND " + KEY_LOCATION_TAG_TAGID + " = " + Integer.toString(tag.getId());
-		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor cursor = db.rawQuery(query, null);
-		if (cursor.moveToFirst()) {
-			result = Integer.parseInt(cursor.getString(0));
+		String query = "";
+		if (o instanceof Location) {
+			query = "SELECT * FROM " + TABLE_LOCATION_TAGS 
+					+ " WHERE " + KEY_LOCATION_TAG_LOCATIONID + " = " + Integer.toString(((Location) o).getId())
+					+ " AND " + KEY_LOCATION_TAG_TAGID + " = " + Integer.toString(tag.getId());
+		} else if (o instanceof Trail) {
+			query = "SELECT * FROM " + TABLE_TRAIL_TAGS 
+					+ " WHERE " + KEY_TRAIL_TAG_TRAILID + " = " + Integer.toString(((Trail) o).getId())
+					+ " AND " + KEY_TRAIL_TAG_TAGID + " = " + Integer.toString(tag.getId());
+		} else if (o instanceof Feature) {
+			query = "SELECT * FROM " + TABLE_FEATURE_TAGS 
+					+ " WHERE " + KEY_FEATURE_TAG_FEATUREID + " = " + Integer.toString(((Feature) o).getId())
+					+ " AND " + KEY_LOCATION_TAG_TAGID + " = " + Integer.toString(tag.getId());
 		}
-		db.close();
-		return result;
-	}
-	
-	public int findTrailTag(Trail trail, Tag tag) {
-		int result = -1;
-		String query = "SELECT * FROM " + TABLE_TRAIL_TAGS 
-				+ " WHERE " + KEY_TRAIL_TAG_TRAILID + " = " + Integer.toString(trail.getId())
-				+ " AND " + KEY_TRAIL_TAG_TAGID + " = " + Integer.toString(tag.getId());
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(query, null);
 		if (cursor.moveToFirst()) {
@@ -245,13 +235,28 @@ public class Tags extends SQLiteOpenHelper {
 	    return tagList;
     }
     
-    public List<Tag> getTagsForLocation(Location location) {
+    public List<Tag> getTagsFor(Object o) {
     	List<Tag> tagList = new ArrayList<Tag>();
-    	String query = "SELECT t." + KEY_TAG_ID + ", t." + KEY_TAG_NAME + ", t." + KEY_TAG_USAGE
-    			+ " FROM " + TABLE_TAGS + " t"
-    			+ " INNER JOIN " + TABLE_LOCATION_TAGS + " lt ON t." + KEY_TAG_ID + " = lt." + KEY_LOCATION_TAG_TAGID 
-    			+ " WHERE lt." + KEY_LOCATION_TAG_LOCATIONID + " = " + Integer.toString(location.getId())
-    			+ " ORDER BY t." + KEY_TAG_USAGE + " DESC";
+    	String query = "";
+    	if (o instanceof Location) {
+	    	query = "SELECT t." + KEY_TAG_ID + ", t." + KEY_TAG_NAME + ", t." + KEY_TAG_USAGE
+	    			+ " FROM " + TABLE_TAGS + " t"
+	    			+ " INNER JOIN " + TABLE_LOCATION_TAGS + " lt ON t." + KEY_TAG_ID + " = lt." + KEY_LOCATION_TAG_TAGID 
+	    			+ " WHERE lt." + KEY_LOCATION_TAG_LOCATIONID + " = " + Integer.toString(((Location) o).getId())
+	    			+ " ORDER BY t." + KEY_TAG_USAGE + " DESC";
+    	} else if (o instanceof Trail) {
+        	query = "SELECT t." + KEY_TAG_ID + ", t." + KEY_TAG_NAME + ", t." + KEY_TAG_USAGE
+        			+ " FROM " + TABLE_TAGS + " t"
+        			+ " INNER JOIN " + TABLE_TRAIL_TAGS + " tt ON t." + KEY_TAG_ID + " = tt." + KEY_TRAIL_TAG_TAGID 
+        			+ " WHERE tt." + KEY_TRAIL_TAG_TRAILID + " = " + Integer.toString(((Trail) o).getId())
+        			+ " ORDER BY t." + KEY_TAG_USAGE + " DESC";    		
+    	} else if (o instanceof Feature) {
+        	query = "SELECT t." + KEY_TAG_ID + ", t." + KEY_TAG_NAME + ", t." + KEY_TAG_USAGE
+        			+ " FROM " + TABLE_TAGS + " t"
+        			+ " INNER JOIN " + TABLE_FEATURE_TAGS + " ft ON t." + KEY_TAG_ID + " = ft." + KEY_FEATURE_TAG_TAGID 
+        			+ " WHERE ft." + KEY_FEATURE_TAG_FEATUREID + " = " + Integer.toString(((Feature) o).getId())
+        			+ " ORDER BY t." + KEY_TAG_USAGE + " DESC";    		    		
+    	}
     	SQLiteDatabase db = this.getReadableDatabase();
     	Cursor cursor = db.rawQuery(query, null);
     	if (cursor.moveToFirst()) {
@@ -268,28 +273,6 @@ public class Tags extends SQLiteOpenHelper {
     	return tagList;
     }
     
-    public List<Tag> getTagsForTrail(Trail trail) {
-    	List<Tag> tagList = new ArrayList<Tag>();
-    	String query = "SELECT t." + KEY_TAG_ID + ", t." + KEY_TAG_NAME + ", t." + KEY_TAG_USAGE
-    			+ " FROM " + TABLE_TAGS + " t"
-    			+ " INNER JOIN " + TABLE_TRAIL_TAGS + " tt ON t." + KEY_TAG_ID + " = tt." + KEY_TRAIL_TAG_TAGID 
-    			+ " WHERE tt." + KEY_TRAIL_TAG_TRAILID + " = " + Integer.toString(trail.getId())
-    			+ " ORDER BY t." + KEY_TAG_USAGE + " DESC";
-    	SQLiteDatabase db = this.getReadableDatabase();
-    	Cursor cursor = db.rawQuery(query, null);
-    	if (cursor.moveToFirst()) {
-    		do {
-	        	int id = Integer.parseInt(cursor.getString(0));
-	        	Tag tag = new Tag();
-	        	tag.setId(id);
-	        	tag.setName(cursor.getString(1));
-	        	tag.setUsage(Integer.parseInt(cursor.getString(2)));
-	        	tagList.add(tag);    			
-    		} while (cursor.moveToNext());
-    	}
-    	db.close();
-    	return tagList;
-    }
     
     public List<Location> getLocationsForTag(Tag tag) {
     	List<Location> locationList = new ArrayList<Location>();
@@ -338,11 +321,17 @@ public class Tags extends SQLiteOpenHelper {
     	return result;
     }
     
-    public void removeLocationTag(Location location, Tag tag) {
-    	int id = findLocationTag(location, tag);
+    public void removeTagFor(Object o, Tag tag) {
+    	int id = findTag(o, tag);
     	if ( id >= 0 ) {
     		SQLiteDatabase db = this.getWritableDatabase();
-    		db.delete(TABLE_LOCATION_TAGS, KEY_LOCATION_TAG_ID + " = ?", new String[] {String.valueOf(id) });
+    		if (o instanceof Location) {
+    			db.delete(TABLE_LOCATION_TAGS, KEY_LOCATION_TAG_ID + " = ?", new String[] {String.valueOf(id) });
+    		} else if (o instanceof Trail) {
+    			db.delete(TABLE_TRAIL_TAGS, KEY_TRAIL_TAG_ID + " = ?", new String[] {String.valueOf(id) });
+    		} else if (o instanceof Feature) {
+    			db.delete(TABLE_FEATURE_TAGS, KEY_FEATURE_TAG_ID + " = ?", new String[] {String.valueOf(id) });
+    		}
     		db.close();
     		//reduce usage count for tag
     		tag.setUsage(tag.getUsage()-1);
@@ -350,11 +339,18 @@ public class Tags extends SQLiteOpenHelper {
     	}
     }
     
-    public void removeTagsForLocation(Location location) {
-    	List<Tag> tagList = location.getTags();
+    public void removeTagsFor(Object o) {
+    	List<Tag> tagList = new ArrayList<Tag>();
+    	if (o instanceof Location) {
+    		tagList = ((Location) o).getTags();
+    	} else if (o instanceof Trail) {
+    		tagList = ((Trail) o).getTags();
+    	} else if (o instanceof Feature) {
+    		tagList = ((Feature) o).getTags();
+    	}
         for(Iterator<Tag> i = tagList.iterator(); i.hasNext(); ) {
       	  Tag tag = i.next();
-      	  removeLocationTag(location,tag);
+      	  removeTagFor(o,tag);
         }
     }
     
@@ -373,6 +369,9 @@ public class Tags extends SQLiteOpenHelper {
     	} else if (o instanceof Trail) {
     		_tags = ((Trail) o ).getTags();
     		_tagType = Tag.TRAIL_TAG;
+    	} else if (o instanceof Feature) {
+    		_tags = ((Feature) o).getTags();
+    		_tagType = Tag.FEATURE_TAG;
     	}
     	final int _finalTagType = _tagType;
         OnClickListener editTags = new OnClickListener() {
@@ -381,8 +380,10 @@ public class Tags extends SQLiteOpenHelper {
         			((UnicyclistApplication) activity.getApplication()).copyTagsFromCurrentLocation();
         		} else if (o instanceof Trail) {
         			((UnicyclistApplication) activity.getApplication()).copyTagsFromCurrentTrail();
+        		} else if (o instanceof Feature) {
+        			((UnicyclistApplication) activity.getApplication()).copyTagsFromCurrentFeature();
         		}
-        		activity.startActivityForResult(new Intent(activity, TagsActivity.class),UnicyclistActivity.SELECT_TAGS);
+        		activity.startActivityForResult(new Intent(activity, TagPickerActivity.class),UnicyclistActivity.SELECT_TAGS);
         	}
         };
     	HorizontalScrollView view = new HorizontalScrollView(mContext);
@@ -434,7 +435,5 @@ public class Tags extends SQLiteOpenHelper {
     	}
     	return view;
     }
-    
-
-   
+       
 }

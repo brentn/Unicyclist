@@ -46,7 +46,7 @@
     <string name="tag_name">tag name</string>
     <string name="ride">Ride</string>
     <string name="trail_name">Trail Name</string>
-    <string name="features">Features</string>
+    <string name="feature">feature</string><string name="features">Features</string>
     <string name="new_trail">New Trail</string>
     <string name="create">Create</string>
     <string name="mark_trail_head">Mark Trail Head&#8230;</string>
@@ -55,8 +55,8 @@
     <string name="add_new_location">Add a New Location</string>
     <string name="submit">Submit</string>
     <string name="add_comment">Add a new comment</string>
-    <string name="num_features">0 features</string>
-    <string name="tracks">Tracks</string>
+    
+    <string name="tracks">GPS Tracks</string>
     <string name="username">User name</string>
     <string name="view">View</string>
     <string name="close">Close</string>

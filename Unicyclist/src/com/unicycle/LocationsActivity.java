@@ -150,7 +150,8 @@ public class LocationsActivity extends MapActivity {
         
         menu.setOnItemSelectedListener(new OnItemSelectedListener() {
 	        @Override
-	        public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {	        	page.setInAnimation(fadeIn);
+	        public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {	        	
+	        	page.setInAnimation(fadeIn);
 	        	page.setOutAnimation(fadeOut);
 	        	page.setDisplayedChild(position);
 	        }

@@ -3,7 +3,9 @@ package com.unicycle;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Trail extends ObjectThatRequiresVerification {
+import android.content.Context;
+
+public class Trail extends Object {
 	
 	static final int DIFFICULTY_EASIEST = 1;
 	static final int DIFFICULTY_MODERATE = 2;
@@ -213,12 +215,45 @@ public class Trail extends ObjectThatRequiresVerification {
 		this._images = images;
 	}
 	
+	public void addImage(Context context, Image image) {
+		Images images = new Images(context);
+		if (image != null) {
+			images.addImageFor(Trail.this,image);
+			_images.add(image);
+		}
+	}
+	
+	public void removeImage(Context context, int imageId) {
+		Images images = new Images(context);
+		Image image = images.getImage(imageId);
+		if (image != null) {
+			images.removeImageFor(Trail.this, image);
+			_images.remove(image);
+		}
+	}
+	
 	public List<Feature> getFeatures() {
 		return this._features;
 	}
 	
 	public void setFeatures(List<Feature> features) {
 		this._features = features;
+	}
+
+	public void addFeature(Context context, Feature feature) {
+		Features features = new Features(context);
+		features.addFeatureFor(Trail.this, feature);
+		_features.add(feature);
+		features.close();
+	}
+	
+	public void removeFeature(Context context, int featureId) {
+		Features features = new Features(context);
+		Feature feature = features.getFeature(featureId);
+		if (feature != null) {
+			features.removeFeatureFor(Trail.this, feature);
+			_features.remove(feature);
+		}
 	}
 	
 	public List<GPSTrack> getTracks() {
@@ -229,12 +264,46 @@ public class Trail extends ObjectThatRequiresVerification {
 		this._tracks = tracks;
 	}
 	
+//	public void addTrack(Context context, Track track) {
+//		Tracks tracks = new Tracks(context);
+//		tracks.addTrackFor(Trail.this, track);
+//		_tracks.add(track);
+//		tracks.close();
+//	}
+	
+//	public void removeTrack(Context context, int trackId) {
+//		Tracks tracks = new Tracks(context);
+//		Track track = tracks.getTrack(trackId);
+//		if (track != null) {
+//			tracks.removeTrackFor(Trail.this, track);
+//			_tracks.remove(track);
+//		}
+//	}
+	
 	public List<Tag> getTags() {
 		return this._tags;
 	}
 	
 	public void setTags(List<Tag> tags) {
 		this._tags = tags;
+	}
+
+	public void addTag(Context context,String name) {
+		Tags tags = new Tags(context);
+		Tag tag = new Tag(name);
+		tags.addTagFor(Trail.this, tag);
+		_tags.add(tag);
+		tags.close();
+	}
+	
+	public void removeTag(Context context, String name) {
+		Tags tags = new Tags(context);
+		Tag tag = tags.findTagByName(name);
+		if (tag != null) {
+			tags.removeTagFor(Trail.this, tag);
+			_tags.remove(tag);
+		}
+		tags.close();
 	}
 	
 	public void setComments(List<Comment> comments) {
@@ -245,5 +314,20 @@ public class Trail extends ObjectThatRequiresVerification {
 		return this._comments;
 	}
 	
-
+	public void addComment(Context context, Comment comment) {
+		Comments comments = new Comments(context);
+		comments.addCommentFor(Trail.this, comment);
+		_comments.add(0, comment);
+		comments.close();
+	}
+	
+	public void removeComment(Context context, int commentId) {
+		Comments comments = new Comments(context);
+		Comment comment = comments.getComment(commentId);
+		if (comment != null) {
+			comments.removeCommentFor(Trail.this, comment);
+			_comments.remove(comment);
+		}
+	}
+	
 }

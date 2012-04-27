@@ -63,10 +63,11 @@ public class FavouritesListAdapter extends android.widget.ArrayAdapter<Location>
             if (distance != null) {
             	_destLocation.setLatitude(location.getLatitude());
             	_destLocation.setLongitude(location.getLongitude());
-            	if (miles) {
-            		distance.setText(d.format(_myLocation.distanceTo(_destLocation)/1609.344)+"\nmi");
-            	} else {
-            		distance.setText(d.format(_myLocation.distanceTo(_destLocation)/1000)+"\nkm");
+            	if (_myLocation != null) {
+            		double meters = _myLocation.distanceTo(_destLocation);
+            		if (meters < 200000) {
+            			distance.setText(d.format((miles)?meters/(1609.344):(meters/1000)));
+            		}
             	}
             }
             if (tags != null) {

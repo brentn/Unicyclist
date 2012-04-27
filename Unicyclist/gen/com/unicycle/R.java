@@ -55,8 +55,8 @@ public final class R {
     }
     public static final class id {
         public static final int addButton=0x7f09001b;
-        public static final int addComment=0x7f09004c;
-        public static final int addImage=0x7f09004b;
+        public static final int addComment=0x7f09004a;
+        public static final int addImage=0x7f090049;
         public static final int addNewTrail=0x7f090024;
         public static final int allLocationsList=0x7f090021;
         public static final int bottomSection=0x7f090017;
@@ -65,7 +65,7 @@ public final class R {
         public static final int byUsage=0x7f09003b;
         public static final int cancelButton=0x7f09001a;
         public static final int comment=0x7f090002;
-        public static final int commentsArea=0x7f090043;
+        public static final int commentsArea=0x7f090044;
         public static final int commentsGoHere=0x7f090018;
         public static final int content=0x7f090005;
         public static final int content2=0x7f09000a;
@@ -79,9 +79,8 @@ public final class R {
         public static final int distance=0x7f090026;
         public static final int drag=0x7f09001d;
         public static final int feature=0x7f090003;
-        public static final int featureImage=0x7f09004a;
+        public static final int featureImage=0x7f090048;
         public static final int features=0x7f090039;
-        public static final int featuresButon=0x7f090048;
         public static final int featuresButton=0x7f090016;
         public static final int featuresList=0x7f09003a;
         public static final int flipper=0x7f09000f;
@@ -92,24 +91,23 @@ public final class R {
         public static final int linearLayout1=0x7f09002a;
         public static final int linearLayout2=0x7f09002c;
         public static final int locationButton=0x7f090006;
-        public static final int locationName=0x7f090044;
+        public static final int locationName=0x7f090045;
         public static final int locations=0x7f090035;
         public static final int locationsList=0x7f090036;
         public static final int locationsSlider=0x7f090004;
         public static final int longitude=0x7f090031;
         public static final int map=0x7f09001c;
-        public static final int mapView=0x7f090045;
+        public static final int mapView=0x7f090046;
         public static final int mapview=0x7f090023;
         public static final int menu=0x7f090020;
         public static final int myLocationsList=0x7f090022;
         public static final int name=0x7f09000c;
-        public static final int newLocation=0x7f09004d;
-        public static final int newTrail=0x7f09004f;
+        public static final int newLocation=0x7f09004b;
+        public static final int newTrail=0x7f09004d;
         public static final int newlocationflipper=0x7f090028;
-        public static final int numberOfFeatures=0x7f090047;
         public static final int okButton=0x7f09003e;
         public static final int photoButton=0x7f09002b;
-        public static final int preferences=0x7f09004e;
+        public static final int preferences=0x7f09004c;
         public static final int relativeLayout1=0x7f090029;
         public static final int relativeLayout2=0x7f090040;
         public static final int ridesButton=0x7f090008;
@@ -123,14 +121,14 @@ public final class R {
         public static final int tagName=0x7f090034;
         public static final int tags=0x7f090027;
         public static final int tagsGoHere=0x7f090012;
-        public static final int tracksButon=0x7f090049;
+        public static final int tracksButton=0x7f090042;
         public static final int trailCoordinates=0x7f09002d;
         public static final int trailName=0x7f09002f;
-        public static final int trailheadButton=0x7f090042;
+        public static final int trailheadButton=0x7f090043;
         public static final int trails=0x7f090037;
         public static final int trailsButton=0x7f090015;
         public static final int trailsList=0x7f090038;
-        public static final int trails_list=0x7f090046;
+        public static final int trails_list=0x7f090047;
         public static final int user=0x7f090000;
         public static final int x=0x7f090032;
         public static final int y=0x7f090033;
@@ -169,10 +167,10 @@ public final class R {
     public static final class string {
         public static final int New=0x7f07000b;
         public static final int add=0x7f070016;
-        public static final int add_comment=0x7f07002e;
+        public static final int add_comment=0x7f07002f;
         public static final int add_image=0x7f07000c;
-        public static final int add_new_location=0x7f07002c;
-        public static final int add_new_trail=0x7f07002b;
+        public static final int add_new_location=0x7f07002d;
+        public static final int add_new_trail=0x7f07002c;
         public static final int add_to_favourites=0x7f07000e;
         public static final int all_locations=0x7f070002;
         /**  Laptop   
@@ -184,7 +182,7 @@ public final class R {
         public static final int click_to_add_tags=0x7f070020;
         public static final int close=0x7f070033;
         public static final int comments=0x7f070008;
-        public static final int create=0x7f070028;
+        public static final int create=0x7f070029;
         public static final int delete_location=0x7f07000d;
         public static final int description=0x7f070004;
         public static final int directions=0x7f070005;
@@ -192,7 +190,8 @@ public final class R {
         public static final int distance_filter_summary=0x7f070014;
         public static final int distances_in_miles=0x7f070011;
         public static final int favourites=0x7f070017;
-        public static final int features=0x7f070026;
+        public static final int feature=0x7f070026;
+        public static final int features=0x7f070027;
         public static final int get_photo=0x7f070035;
         public static final int is_this_location_correct=0x7f07001a;
         public static final int location_name=0x7f070018;
@@ -205,20 +204,19 @@ public final class R {
          */
         public static final int maps_api_key=0x7f070000;
         public static final int mapview=0x7f070009;
-        public static final int mark_trail_head=0x7f070029;
+        public static final int mark_trail_head=0x7f07002a;
         public static final int my_locations=0x7f070003;
         public static final int name=0x7f070015;
         public static final int new_location=0x7f07000a;
-        public static final int new_trail=0x7f070027;
+        public static final int new_trail=0x7f070028;
         public static final int no=0x7f07001c;
-        public static final int num_features=0x7f07002f;
         public static final int preferences=0x7f070021;
         public static final int rating=0x7f07001d;
         public static final int remove_from_favourites=0x7f07000f;
         public static final int ride=0x7f070024;
         public static final int save_location=0x7f070034;
         public static final int settings=0x7f070010;
-        public static final int submit=0x7f07002d;
+        public static final int submit=0x7f07002e;
         public static final int tag_name=0x7f070023;
         public static final int tag_picker=0x7f070022;
         public static final int tags_by_name=0x7f07001e;
@@ -226,7 +224,7 @@ public final class R {
         public static final int tracks=0x7f070030;
         public static final int trail_name=0x7f070025;
         public static final int trails=0x7f070006;
-        public static final int update=0x7f07002a;
+        public static final int update=0x7f07002b;
         public static final int username=0x7f070031;
         public static final int using_camera=0x7f070036;
         public static final int using_gallery=0x7f070037;

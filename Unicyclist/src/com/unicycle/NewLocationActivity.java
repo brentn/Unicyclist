@@ -1,11 +1,5 @@
 package com.unicycle;
 
-import java.util.Collections;
-import java.util.Comparator;
-
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.OverlayItem;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
