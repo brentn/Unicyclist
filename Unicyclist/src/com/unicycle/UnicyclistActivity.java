@@ -22,12 +22,16 @@ public class UnicyclistActivity extends Activity {
 	public static final int CREATE_LOCATION = 1;
 	public static final int SELECT_TAGS = 2;
 	public static final int SELECT_LOCATION = 3;
+	public static final int LOCATION_TYPE=100;
+	public static final int TRAIL_TYPE=101;
+	public static final int FEATURE_TYPE=102;
 	public static final int CAMERA_REQUEST = 1888; 
 	public static final int SELECT_PICTURE = 1889;
+	public static final int GET_PHOTO = 1890;
 
 
 	private Context mContext = this;
-	ProgressDialog pd = null;
+	private ProgressDialog pd = null;
 	SlidingDrawer locationsButton;
 	SlidingDrawer ridesButton;
 	SlidingDrawer skillsButton;

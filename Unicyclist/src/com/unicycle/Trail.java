@@ -227,7 +227,7 @@ public class Trail extends Object {
 		Images images = new Images(context);
 		Image image = images.getImage(imageId);
 		if (image != null) {
-			images.removeImageFor(Trail.this, image);
+			images.removeImage(image);
 			_images.remove(image);
 		}
 	}
@@ -251,7 +251,7 @@ public class Trail extends Object {
 		Features features = new Features(context);
 		Feature feature = features.getFeature(featureId);
 		if (feature != null) {
-			features.removeFeatureFor(Trail.this, feature);
+			features.removeFeature(feature);
 			_features.remove(feature);
 		}
 	}

@@ -71,7 +71,8 @@ public class FavouritesListAdapter extends android.widget.ArrayAdapter<Location>
             	}
             }
             if (tags != null) {
-            	tags.setText(location.getTagString());
+            	Tags t = new Tags(getContext());
+            	tags.setText(t.getTagStringFor(location));
             }
         }
         return v;

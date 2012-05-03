@@ -18,6 +18,7 @@ public class Location extends Object {
 	private int _rating;
 	private boolean _favourite;
 	private boolean _deleted;
+	private String _md5sum = "";
 	private List<Image> _images;
 	private List<Tag> _tags;
 	private List<Comment> _comments;
@@ -45,7 +46,7 @@ public class Location extends Object {
 		this._comments = new ArrayList<Comment>();
 	}
 	
-	public Location(String name, double latitude, double longitude, String description, String directions, int rating) {
+	public Location(String name, double latitude, double longitude, String description, String directions, int rating, String md5sum) {
 		this._id=-1;
 		this._name = name;
 		this._latitude = latitude;
@@ -53,6 +54,7 @@ public class Location extends Object {
 		this._description = description;
 		this._directions = directions;
 		this._rating = rating;
+		this._md5sum = md5sum;
 		this._favourite = false;
 		this._deleted = false;
 		this._tags = new ArrayList<Tag>();
@@ -60,7 +62,7 @@ public class Location extends Object {
 		this._comments = new ArrayList<Comment>();
 	}
 	
-	public Location(int id, String name, double latitude, double longitude, String description, String directions, int rating) {
+	public Location(int id, String name, double latitude, double longitude, String description, String directions, int rating, String md5sum) {
 		this._id = id;
 		this._name = name;
 		this._latitude = latitude;
@@ -68,6 +70,7 @@ public class Location extends Object {
 		this._description = description;
 		this._directions = directions;
 		this._rating = rating;
+		this._md5sum = md5sum;
 		this._favourite = false;
 		this._deleted = false;
 		this._tags = new ArrayList<Tag>();
@@ -176,18 +179,26 @@ public class Location extends Object {
 		return this._deleted;
 	}
 	
+	public String getMd5sum() {
+		return this._md5sum;
+	}
+	
+	public void setMd5sum(String md5sum) {
+		this._md5sum = md5sum;
+	}
+	
 	public List<Tag> getTags() {
 		return _tags;
 	}
 	
-	public String getTagString() {
-		String result = "";
-		Iterator<Tag> i = _tags.iterator();
-		while (i.hasNext()) {
-			result = result + i.next().getName() + "      ";
-		}
-		return result.trim();
-	}
+//	public String getTagString() {
+//		String result = "";
+//		Iterator<Tag> i = _tags.iterator();
+//		while (i.hasNext()) {
+//			result = result + i.next().getName() + "      ";
+//		}
+//		return result.trim();
+//	}
 	
 	public void setTags(List<Tag> tags) {
 		this._tags = tags;
@@ -231,7 +242,7 @@ public class Location extends Object {
 		Images images = new Images(context);
 		Image image = images.getImage(imageId);
 		if (image != null) {
-			images.removeImageFor(Location.this, image);
+			images.removeImage(image);
 			_images.remove(image);
 		}
 	}
@@ -279,7 +290,7 @@ public class Location extends Object {
 		Features features = new Features(context);
 		Feature feature = features.getFeature(featureId);
 		if (feature != null) {
-			features.removeFeatureFor(Location.this, feature);
+			features.removeFeature(feature);
 			_features.remove(feature);
 		}
 	}

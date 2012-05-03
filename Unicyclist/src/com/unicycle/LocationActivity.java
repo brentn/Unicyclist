@@ -3,9 +3,7 @@ package com.unicycle;
 import java.io.IOException;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
@@ -13,34 +11,26 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.Gravity;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Gallery;
+import android.widget.HorizontalScrollView;
 import android.widget.TextView;
-import android.widget.ViewFlipper;
 
 public class LocationActivity extends Activity {
 	
 		
 	private Location location;
-	private ViewFlipper page; 
-	private Animation fadeIn;
-	private Animation fadeOut;
 	private ViewGroup images;
-	private TextView description;
-	private TextView directions;
+	private ViewGroup description;
 	private ViewGroup tags;
 	private ViewGroup comments;
 	private ProgressDialog pd = null;
@@ -53,16 +43,11 @@ public class LocationActivity extends Activity {
         location = ((UnicyclistApplication) getApplication()).getCurrentLocation();
         Typeface roboto = Typeface.createFromAsset(this.getAssets(),"fonts/Roboto-Thin.ttf");
         
-        page = (ViewFlipper) findViewById(R.id.flipper);
-        fadeIn = AnimationUtils.loadAnimation(this,android.R.anim.fade_in);
-        fadeOut = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
 
         //get view objects
         TextView name = (TextView) findViewById(R.id.name);
         images = (ViewGroup) findViewById(R.id.imagesGoHere);
-        Gallery descriptionMenu = (Gallery) findViewById(R.id.descriptionMenu);
-        description = (TextView) findViewById(R.id.description);
-        directions = (TextView) findViewById(R.id.directions);
+        description = (ViewGroup) findViewById(R.id.descriptionGoesHere);
         Button trailsButton = (Button) findViewById(R.id.trailsButton);
         Button featuresButton = (Button) findViewById(R.id.featuresButton);
         comments = (ViewGroup) findViewById(R.id.commentsGoHere);
@@ -74,87 +59,9 @@ public class LocationActivity extends Activity {
         tags.addView(new Tags(this).getTagsView(LocationActivity.this,location));
 
         //set up adapters
-        descriptionMenu.setAdapter(new DescriptionMenuAdapter(this, new String[] {"Description","Directions"}));
-         
-        descriptionMenu.setOnItemSelectedListener(new OnItemSelectedListener() {
-	        @Override
-	        public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
-	        	page.setInAnimation(fadeIn);
-	        	page.setOutAnimation(fadeOut);
-	        	page.setDisplayedChild(position);
-	        }
-	        @Override
-	        public void onNothingSelected(AdapterView<?> arg0) {
-	            // Do nothing
-	        }
-        });
-      
-        description.setOnLongClickListener(new OnLongClickListener() {
-			@Override
-			public boolean onLongClick(View arg0) {
-				AlertDialog.Builder alert = new AlertDialog.Builder(LocationActivity.this);
-
-				alert.setTitle("Description");
-				// Set an EditText view to get user input 
-				final EditText input = new EditText(LocationActivity.this);
-				input.setText(description.getText());
-				input.setLines(6);
-				input.setGravity(Gravity.TOP);
-				alert.setView(input);
-				alert.setPositiveButton("Update", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton) {
-					description.setText(input.getText().toString());
-					location.setDescription(input.getText().toString());
-		        	Locations db = new Locations(getBaseContext());
-		        	db.updateLocation(location);
-		        	db.close();
-				  }
-				});
-
-				alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-				  public void onClick(DialogInterface dialog, int whichButton) {
-				    // Canceled.
-				  }
-				});
-
-				alert.show();
-				return false;
-			}
-        });
-        directions.setOnLongClickListener(new OnLongClickListener() {
-			@Override
-			public boolean onLongClick(View arg0) {
-				AlertDialog.Builder alert = new AlertDialog.Builder(LocationActivity.this);
-
-				alert.setTitle("Directions");
-				// Set an EditText view to get user input 
-				final EditText input = new EditText(LocationActivity.this);
-				input.setText(directions.getText());
-				input.setLines(6);
-				input.setGravity(Gravity.TOP);
-				alert.setView(input);
-				alert.setPositiveButton("Update", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton) {
-					directions.setText(input.getText().toString());
-					location.setDirections(input.getText().toString());
-		        	Locations db = new Locations(getBaseContext());
-		        	db.updateLocation(location);
-		        	db.close();
-				  }
-				});
-
-				alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-				  public void onClick(DialogInterface dialog, int whichButton) {
-				    // Canceled.
-				  }
-				});
-
-				alert.show();
-				return false;
-			}
-        });
         trailsButton.setOnClickListener(new OnClickListener() {
         	public void onClick(View view) {
+            	pd = ProgressDialog.show(LocationActivity.this, "Opening Trail...", "Please wait...", true, false);
         		startActivity(new Intent(LocationActivity.this, TrailsActivity.class));
         	}
         });
@@ -163,11 +70,8 @@ public class LocationActivity extends Activity {
         	name.setText(location.getName());
         	name.setTypeface(roboto);
         }
-        if ( description != null) {
-        	description.setText(location.getDescription());
-        }
-        if ( directions != null) {
-        	directions.setText(location.getDirections());
+        if (description != null) {
+        	description.addView(new Description(this).getView(location));
         }
        
 	 }
@@ -184,8 +88,8 @@ public class LocationActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.addImage:	
-            	Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-				startActivityForResult(intent, Images.SELECT_PICTURE);
+            	Intent intent = new Intent(LocationActivity.this,GetPhoto.class);
+				startActivityForResult(intent, UnicyclistActivity.GET_PHOTO);
             	break; 
             case R.id.addComment:
             	Comments comments = new Comments(LocationActivity.this);
@@ -194,11 +98,45 @@ public class LocationActivity extends Activity {
         }
         return true;
     }
-	 @Override
-	 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.images, menu);
+}
+    
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+        Image image;
+        switch (item.getItemId()) {
+            case R.id.delete:
+            	image = location.getImages().get((int) info.id);
+            	location.removeImage(LocationActivity.this,image.getId());
+	            images.removeAllViews();
+	            images.addView(new Images(this).getImagesView(LocationActivity.this,location));
+                return true;
+            case R.id.set_cover:
+            	image = location.getImages().get((int) info.id);
+            	for (Image i: location.getImages()) {
+            		i.setCover(false);
+            	}
+            	image.setCover(true);
+            	((ImageAdapter)((Gallery) images.getChildAt(0)).getAdapter()).notifyDataSetChanged();
+            	Images i = new Images(LocationActivity.this);
+            	i.updateImage(image);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+    
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		 super.onActivityResult(requestCode, resultCode, data);
 		 if (resultCode == RESULT_OK) {
-		    if (requestCode == Images.SELECT_PICTURE) {
+		    if (requestCode == UnicyclistActivity.GET_PHOTO) {
 		    	Uri selectedImageUri = data.getData();
 		    	if (selectedImageUri != null) {
 		    		ExifInterface exif = null;
@@ -213,8 +151,9 @@ public class LocationActivity extends Activity {
 		    		} else {
 		    			location.addImage(LocationActivity.this, new Image(LocationActivity.this,selectedImageUri,location.getLatitude(),location.getLongitude()));
 		    		}
-		            images.removeAllViews();
-		            images.addView(new Images(this).getImagesView(LocationActivity.this,location));
+	            	((ImageAdapter)((Gallery) images.getChildAt(0)).getAdapter()).notifyDataSetChanged();
+//		            images.removeAllViews();
+//		            images.addView(new Images(this).getImagesView(LocationActivity.this,location));
 		    	}
 		    }
 		    if (requestCode == UnicyclistActivity.SELECT_TAGS) {
@@ -236,7 +175,7 @@ public class LocationActivity extends Activity {
     public void showTagProgress() {
         pd = ProgressDialog.show(LocationActivity.this, "Searching for tag", "Please wait...", true, false);
     }
-
+    
     @Override
     protected void onResume() {
     	super.onResume();
@@ -252,5 +191,4 @@ public class LocationActivity extends Activity {
     	}
     }
 	 
-	   
 }

@@ -51,6 +51,14 @@ public class LocationsListAdapter extends android.widget.ArrayAdapter<Location> 
             if (image != null) {
             	if (location.getImages().size() > 0 ) {
             		Uri uri = location.getImages().get(0).getUri();
+            		Iterator<Image> i = location.getImages().iterator();
+            		while (i.hasNext()) {
+            			Image img = i.next();
+            			if (img.isCover()) {
+            				uri = img.getUri();
+            				break;
+            			}
+            		}
             		image.setImageBitmap(Image.decodeFile(new File(uri.getPath())));
             	} else {
             		image.setImageResource(R.drawable.ic_photo);
@@ -80,7 +88,8 @@ public class LocationsListAdapter extends android.widget.ArrayAdapter<Location> 
             	}
             }
             if (tags != null) {
-        		tags.setText(location.getTagString());
+            	Tags t = new Tags(getContext());
+        		tags.setText(t.getTagStringFor(location));
             }
         }
         return v;

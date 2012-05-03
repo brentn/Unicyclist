@@ -14,7 +14,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class Locations extends SQLiteOpenHelper {
 	
-	private static final int DATABASE_VERSION = 3;
+	private static final int DATABASE_VERSION = 4;
 	private static final String DATABASE_NAME = "locations";
 	
 	//table names
@@ -30,6 +30,7 @@ public class Locations extends SQLiteOpenHelper {
 	private static final String KEY_LOCATION_DESCRIPTION = "description";
 	private static final String KEY_LOCATION_DIRECTIONS = "directions";
 	private static final String KEY_LOCATION_RATING = "rating";
+	private static final String KEY_LOCATION_MD5SUM = "md5sum";
 	private static final String KEY_FAVOURITES_ID = "id";
 	private static final String KEY_FAVOURITES_LOCATIONID = "locationId";
 	private static final String KEY_DELETED_ID = "id";
@@ -77,7 +78,7 @@ public class Locations extends SQLiteOpenHelper {
 				+ KEY_LOCATION_ID + " INTEGER PRIMARY KEY," + KEY_LOCATION_NAME + " TEXT,"
 				+ KEY_LOCATION_LAT + " INTEGER," + KEY_LOCATION_LONG + " INTEGER,"
 				+ KEY_LOCATION_DESCRIPTION + " TEXT," + KEY_LOCATION_DIRECTIONS + " TEXT," 
-				+ KEY_LOCATION_RATING + " INTEGER)";
+				+ KEY_LOCATION_RATING + " INTEGER," + KEY_LOCATION_MD5SUM + " TEXT)";
 		String CREATE_FAVOURITES_TABLE = "CREATE TABLE " + TABLE_FAVOURITES + "(" + KEY_FAVOURITES_ID + " INTEGER,"+KEY_FAVOURITES_LOCATIONID + " INTEGER)";
 		String CREATE_DELETED_TABLE = "CREATE TABLE " + TABLE_DELETED + "(" + KEY_DELETED_ID + " INTEGER,"+KEY_DELETED_LOCATIONID + " INTEGER)";
 		db.execSQL(CREATE_LOCATIONS_TABLE);
@@ -87,13 +88,11 @@ public class Locations extends SQLiteOpenHelper {
 	
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Drop older tables if they exist
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOCATIONS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FAVOURITES);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DELETED);
- 
-        // Create tables again
-        onCreate(db);
+    	switch (oldVersion) {
+    	case 3:
+    		db.execSQL("ALTER TABLE " + TABLE_LOCATIONS + " ADD COLUMN " + KEY_LOCATION_MD5SUM + " TEXT");
+    		//no break here
+    	}
     }
     
 	public String databaseName() {
@@ -112,6 +111,7 @@ public class Locations extends SQLiteOpenHelper {
 	    		values.put(KEY_FAVOURITES_LOCATIONID, id);
 	    		db.insert(TABLE_FAVOURITES, null, values);
 	    	}
+	    	cursor.close();
 	    	db.close();
     	}
     }
@@ -146,6 +146,7 @@ public class Locations extends SQLiteOpenHelper {
         values.put(KEY_LOCATION_DESCRIPTION, location.getDescription());
         values.put(KEY_LOCATION_DIRECTIONS, location.getDirections());
         values.put(KEY_LOCATION_RATING, location.getRating());
+        values.put(KEY_LOCATION_MD5SUM, location.getMd5sum());
         int id = (int) db.insert(TABLE_LOCATIONS, null, values);
         if (location.isFavourite()) {
         	this.addFavourite(id);
@@ -156,6 +157,7 @@ public class Locations extends SQLiteOpenHelper {
     }
     
     public Location getLocation(int id) {
+    	Location result = null;
         Tags tags = new Tags(mContext);
         Comments comments = new Comments(mContext);
         Images images = new Images(mContext);
@@ -163,16 +165,17 @@ public class Locations extends SQLiteOpenHelper {
     	if ( ! this.isDeleted(id)) {
 	    	String query = "SELECT " + KEY_LOCATION_ID + "," + KEY_LOCATION_NAME + ","
 			    			+ KEY_LOCATION_LAT + "," + KEY_LOCATION_LONG + ","
-			    			+ KEY_LOCATION_DESCRIPTION + "," + KEY_LOCATION_DIRECTIONS + "," + KEY_LOCATION_RATING
+			    			+ KEY_LOCATION_DESCRIPTION + "," + KEY_LOCATION_DIRECTIONS + "," + KEY_LOCATION_RATING + ","
+			    			+ KEY_LOCATION_MD5SUM
 	    			+ " FROM " + TABLE_LOCATIONS
-	    			+ " WHERE " + KEY_LOCATION_ID + " = " + Integer.toString(id);
+	    			+ " WHERE " + KEY_LOCATION_ID + " = " + Integer.toString(id) + " LIMIT 1";
 	    	SQLiteDatabase db = this.getReadableDatabase();
 	        Cursor cursor = db.rawQuery(query, null);
 	        if (cursor.moveToFirst()) {
 		        Location location = new Location(Integer.parseInt(cursor.getString(0)),
 		                cursor.getString(1), Integer.parseInt(cursor.getString(2))/1e6, Integer.parseInt(cursor.getString(3))/1e6,
 		                cursor.getString(4), cursor.getString(5), 
-		                Integer.parseInt(cursor.getString(6)));
+		                cursor.getInt(6), cursor.getString(7));
 		        if (this.isFavourite(location.getId())) {
 		        	location.setFavourite();
 		        }
@@ -180,12 +183,11 @@ public class Locations extends SQLiteOpenHelper {
 		        location.setTags(tags.getTagsFor(location));
 		        location.setComments(comments.getCommentsFor(location));
 		        location.setFeatures(features.getFeaturesFor(location));
-		        db.close();
-		        return location;
+		        result = location;
 	        } 
 	        db.close();
     	}
-    	return null;    
+    	return result;    
     }
     
     public List<Location> getAllLocations() {
@@ -219,6 +221,7 @@ public class Locations extends SQLiteOpenHelper {
         values.put(KEY_LOCATION_DESCRIPTION, location.getDescription());
         values.put(KEY_LOCATION_DIRECTIONS, location.getDirections());
         values.put(KEY_LOCATION_RATING, location.getRating());
+        values.put(KEY_LOCATION_MD5SUM, location.getMd5sum());
         int result = db.update(TABLE_LOCATIONS, values, KEY_LOCATION_ID + " = ?", new String[] { String.valueOf(id) });
         
         if (location.isFavourite()) {

@@ -8,6 +8,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -50,6 +51,7 @@ public class LocationsActivity extends MapActivity {
 	private Animation fadeIn;
 	private Animation fadeOut;
 
+	private ProgressDialog pd = null;
 	private List<Location> locationList;
 	private List<Location> favouritesList;
 	private LocationsListAdapter locationsListAdapter;
@@ -186,6 +188,7 @@ public class LocationsActivity extends MapActivity {
         //add stuff to the map
         List<Overlay> mapOverlays = mapView.getOverlays();
         Drawable drawable = this.getResources().getDrawable(R.drawable.ic_blue_pin);
+        drawable.setBounds(0,-drawable.getIntrinsicHeight(),drawable.getIntrinsicWidth(),0);
         locationsOverlay = new LocationsOverlay(drawable, this);
         for(Iterator<Location> i = locationList.iterator(); i.hasNext(); ) {
         	  Location location = i.next();
@@ -197,12 +200,16 @@ public class LocationsActivity extends MapActivity {
     }
     
     public void onClick(View footerView) {
+    	pd = ProgressDialog.show(LocationsActivity.this, "Opening..", "Please wait...", true, false);
     	startActivityForResult(new Intent(LocationsActivity.this, NewLocationActivity.class), UnicyclistActivity.CREATE_LOCATION);
     }
     
     @Override
     protected void onResume() {
     	super.onResume();
+		if (pd!=null) {
+			pd.dismiss();
+		}
     	Location location = ((UnicyclistApplication) getApplication()).getCurrentLocation();
     	if (location != null) {
     		int position = locationList.indexOf(location);
@@ -252,6 +259,7 @@ public class LocationsActivity extends MapActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.newLocation:	
+            	pd = ProgressDialog.show(LocationsActivity.this, "Opening...", "Please wait...", true, false);
             	startActivityForResult(new Intent(LocationsActivity.this, NewLocationActivity.class), UnicyclistActivity.CREATE_LOCATION);
             	break;   
         }
@@ -271,7 +279,8 @@ public class LocationsActivity extends MapActivity {
             		String description = aData.getStringExtra("description");
             		String directions = aData.getStringExtra("directions");
             		int rating = aData.getIntExtra("rating",5);
-            		Location location = new Location(name,latitude,longitude,description,directions,rating);
+            		String md5sum = "";
+            		Location location = new Location(name,latitude,longitude,description,directions,rating,md5sum);
             		//Add to database
             		Locations db = new Locations(this);
             		location.setId(db.addLocation(location));
@@ -403,7 +412,7 @@ public class LocationsActivity extends MapActivity {
     	Context mContext;
     	
     	public LocationsOverlay(Drawable defaultMarker, Context context) {
-    	  super(boundCenterBottom(defaultMarker));
+    	  super(defaultMarker);
     	  mContext = context;
     	}
     	
@@ -454,6 +463,7 @@ public class LocationsActivity extends MapActivity {
     
     private void launchLocation(Location location) {
 		((UnicyclistApplication) getApplication()).setCurrentLocation(location);
+    	pd = ProgressDialog.show(LocationsActivity.this, "Opening Location..", "Please wait...", true, false);
 		Intent locationIntent = new Intent(LocationsActivity.this, LocationActivity.class);
 		LocationsActivity.this.startActivity(locationIntent);
     }

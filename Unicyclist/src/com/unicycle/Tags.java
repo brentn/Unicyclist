@@ -157,6 +157,7 @@ public class Tags extends SQLiteOpenHelper {
 		if (cursor.moveToFirst()) {
 			tag = getTag(Integer.parseInt(cursor.getString(0)));
 		}
+		cursor.close();
 		db.close();
 		return tag;
 	}
@@ -189,7 +190,7 @@ public class Tags extends SQLiteOpenHelper {
 	public Tag getTag(int id) {
 		Tag tag = null;
 		String query = "SELECT " + KEY_TAG_ID + ", " + KEY_TAG_NAME + ", " + KEY_TAG_USAGE 
-				+ " FROM " + TABLE_TAGS + " WHERE " + KEY_TAG_ID + " = " + Integer.toString(id);
+				+ " FROM " + TABLE_TAGS + " WHERE " + KEY_TAG_ID + " = " + Integer.toString(id) + " LIMIT 1";
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(query, null);
 		if (cursor.moveToFirst()) {
@@ -271,6 +272,25 @@ public class Tags extends SQLiteOpenHelper {
     	}
     	db.close();
     	return tagList;
+    }
+    
+    public String getTagStringFor(Object o) {
+    	String result = "";
+    	List<Tag> tagList = null;
+    	if (o instanceof Location) {
+    		tagList = ((Location) o).getTags();
+    	} else if (o instanceof Trail) {
+    		tagList = ((Trail) o).getTags();
+    	} else if (o instanceof Feature) {
+    		tagList = ((Feature) o).getTags();
+    	}
+    	if (tagList != null) {
+    		Iterator<Tag> i = tagList.iterator();
+    		while (i.hasNext()) {
+    			result = result + i.next().getName() + "      ";
+    		}
+    	}
+		return result.trim();
     }
     
     
@@ -376,14 +396,15 @@ public class Tags extends SQLiteOpenHelper {
     	final int _finalTagType = _tagType;
         OnClickListener editTags = new OnClickListener() {
         	public void onClick(View view) {
+        		Intent intent = new Intent(activity, TagPickerActivity.class);
         		if (o instanceof Location) {
-        			((UnicyclistApplication) activity.getApplication()).copyTagsFromCurrentLocation();
+        			intent.putExtra("objectType", UnicyclistActivity.LOCATION_TYPE);
         		} else if (o instanceof Trail) {
-        			((UnicyclistApplication) activity.getApplication()).copyTagsFromCurrentTrail();
+        			intent.putExtra("objectType", UnicyclistActivity.TRAIL_TYPE);
         		} else if (o instanceof Feature) {
-        			((UnicyclistApplication) activity.getApplication()).copyTagsFromCurrentFeature();
+        			intent.putExtra("objectType", UnicyclistActivity.FEATURE_TYPE);
         		}
-        		activity.startActivityForResult(new Intent(activity, TagPickerActivity.class),UnicyclistActivity.SELECT_TAGS);
+        		activity.startActivityForResult(intent,UnicyclistActivity.SELECT_TAGS);
         	}
         };
     	HorizontalScrollView view = new HorizontalScrollView(mContext);

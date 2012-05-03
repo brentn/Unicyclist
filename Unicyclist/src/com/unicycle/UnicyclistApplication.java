@@ -57,24 +57,12 @@ public class UnicyclistApplication extends Application {
 		UnicyclistApplication._currentTrail = trail;
 	}
 	
-	public List<Tag> getCurrentTagSet() {
-		return UnicyclistApplication._currentTagSet;
+	public Feature getCurrentFeature() {
+		return UnicyclistApplication._currentFeature;
 	}
 	
-	public void setCurrentTagSet(List<Tag> tagSet) {
-		UnicyclistApplication._currentTagSet = tagSet;
-	}
-	
-	public void copyTagsFromCurrentLocation() {
-		UnicyclistApplication._currentTagSet = UnicyclistApplication._currentLocation.getTags();
-	}
-	
-	public void copyTagsFromCurrentTrail() {
-		UnicyclistApplication._currentTagSet = UnicyclistApplication._currentTrail.getTags();
-	}
-	
-	public void copyTagsFromCurrentFeature() {
-		UnicyclistApplication._currentTagSet = UnicyclistApplication._currentFeature.getTags();
+	public void setCurrentFeature(Feature feature) {
+		UnicyclistApplication._currentFeature = feature;
 	}
 	
 	public LocationResult locationResult = new LocationResult(){

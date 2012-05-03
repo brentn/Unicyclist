@@ -16,7 +16,7 @@ import android.util.Log;
 
 public class Image {
 	
-	private static final String IMAGE_STORE = "/com.unicycle/images/";
+	public static final String IMAGE_STORE = "/com.unicycle/images/";
 	
 	private int _id;
 	private Uri _uri;
@@ -24,6 +24,7 @@ public class Image {
 	private Double _latitude;
 	private Double _longitude;
 	private String _description;
+	private boolean _cover = false;
 	
 	Context mContext;
 	
@@ -54,7 +55,7 @@ public class Image {
 		_description = "";		
 	}
 	
-	public Image (Context context,int id, int hash, Uri uri, double lat, double lon, String desc) {
+	public Image (Context context,int id, int hash, Uri uri, double lat, double lon, String desc, boolean cover) {
 		mContext = context;
 		//ensure data directory exists
 		String dirname = Environment.getExternalStorageDirectory() + IMAGE_STORE;;
@@ -66,6 +67,7 @@ public class Image {
 		_latitude = lat;
 		_longitude = lon;
 		_description = desc;
+		_cover = cover;
 	}
 	
 	@Override
@@ -115,6 +117,11 @@ public class Image {
 			Log.e("com.unicycle","The input file was missing: "+uri.getPath());
 		}
 		return result;
+	}
+	
+	public void deleteFile() {
+		File file = new File(this._uri.getPath());
+		file.delete();
 	}
 	
 	  //decodes image and scales it to reduce memory consumption
@@ -180,6 +187,14 @@ public class Image {
 	
 	public void setDescription(String desc) {
 		_description = desc;
+	}
+	
+	public boolean isCover() {
+		return this._cover;
+	}
+	
+	public void setCover(boolean cover) {
+		this._cover = cover;
 	}
 	
 }

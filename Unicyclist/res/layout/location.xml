@@ -18,51 +18,10 @@
     	android:layout_height="80dip" />
         
     <RelativeLayout
+        android:id="@+id/descriptionGoesHere"
         android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:layout_gravity="top" >
-        
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:adjustViewBounds="true"
-        android:cropToPadding="true"
-        android:longClickable="true"
-        android:scaleType="fitStart"
-        android:src="@drawable/background" />
-    
-    <Gallery
-        android:id="@+id/descriptionMenu"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top" />
-        
-    <ViewFlipper
-	        android:id="@+id/flipper"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_below="@id/descriptionMenu" >
-	
-	        <TextView
-	            android:id="@+id/description"
-	            android:layout_width="fill_parent"
-	            android:layout_height="100dip"
-	            android:padding="5dp"
-		        android:longClickable="true"
-	            android:textColor="#33b5e5" />
-		
-		    <TextView
-		        android:id="@+id/directions"
-		        android:layout_width="fill_parent"
-		        android:layout_height="100dip"
-		        android:padding="5dp"
-		        android:longClickable="true"
-		        android:textColor="#ffbb33"
-		        android:visibility="gone" />
-	
-	    </ViewFlipper>
-    </RelativeLayout>
+        android:layout_width="fill_parent" />
+
    	<LinearLayout 
    	    android:id="@+id/tagsGoHere"
    	    android:layout_width="fill_parent"

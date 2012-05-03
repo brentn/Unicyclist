@@ -1,11 +1,18 @@
 package com.unicycle;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,26 +21,30 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-import android.widget.ViewFlipper;
 
 import com.google.android.maps.GeoPoint;
+import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
+import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
 
 public class TrailsActivity extends MapActivity {
 	
 	final int GET_NEW_TRAIL = 1;
 	
+	private ProgressDialog pd=null;
 	private TrailsListAdapter trailsListAdapter;
 	private Location location;
 	private List<Trail> trailsList;
 	private MapView mapView;
 	private ToggleButton satButton;
+	private TrailsOverlay trailsOverlay;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,13 +82,25 @@ public class TrailsActivity extends MapActivity {
         satButton.setChecked(false);
         mapController.setZoom(16);
         
-        trailsView.setOnItemLongClickListener( new OnItemLongClickListener() {
+        //add stuff to the map
+        List<Overlay> mapOverlays = mapView.getOverlays();
+        Drawable marker = this.getResources().getDrawable(R.drawable.ic_trail_pin);
+        marker.setBounds(0, -marker.getIntrinsicHeight(), marker.getIntrinsicWidth(), 0);
+        trailsOverlay = new TrailsOverlay(marker, this);
+        for(Iterator<Trail> i = trailsList.iterator(); i.hasNext(); ) {
+        	  Trail trail = i.next();
+        	  point = new GeoPoint((int) (trail.getLatitude()*1e6),(int) (trail.getLongitude()*1e6));
+        	  OverlayItem overlayitem = new OverlayItem(point, trail.getName(), trail.getDescription());
+              trailsOverlay.addOverlay(overlayitem,trail.getId());
+        	}
+        mapOverlays.add(trailsOverlay);
+
+        
+        trailsView.setOnItemClickListener( new OnItemClickListener() {
 			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//				startActivity(new Intent(TrailsActivity.this, TrailActivity.class));
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Trail trail = (Trail) ((ListView) parent).getItemAtPosition(position);
 				launchTrail(trail);
-				return false;
 			}
         	
         });
@@ -93,6 +116,7 @@ public class TrailsActivity extends MapActivity {
     }
 
     public void onClick(View footerView) {
+    	pd = ProgressDialog.show(TrailsActivity.this, "Opening...", "Please wait...", true, false);
     	startActivityForResult(new Intent(TrailsActivity.this, NewTrailActivity.class), GET_NEW_TRAIL);
     }
     
@@ -114,6 +138,7 @@ public class TrailsActivity extends MapActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.newTrail:	
+            	pd = ProgressDialog.show(TrailsActivity.this, "Opening...", "Please wait...", true, false);
             	startActivityForResult(new Intent(TrailsActivity.this, NewTrailActivity.class), GET_NEW_TRAIL);
             	break;   
         }
@@ -134,6 +159,7 @@ public class TrailsActivity extends MapActivity {
             		String description = aData.getStringExtra("description");
             		String directions = aData.getStringExtra("directions");
             		int rating = aData.getIntExtra("rating",5);
+            		String imagePath = aData.getStringExtra("imagePath");
             		Trail trail = new Trail(location.getId(),name,latitude,longitude,description,directions,0,rating,difficulty);
             		//Add to database
             		Trails db = new Trails(this);
@@ -149,9 +175,73 @@ public class TrailsActivity extends MapActivity {
         }
         super.onActivityResult(aRequestCode, aResultCode, aData);
     }
+    
+    public class TrailsOverlay extends ItemizedOverlay {
+
+    	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
+    	private List<Integer> trailIds = new ArrayList<Integer>();
+    	Context mContext;
+    	
+    	public TrailsOverlay(Drawable defaultMarker, Context context) {
+    	  super(defaultMarker);
+    	  mContext = context;
+    	}
+    	
+    	public void addOverlay(OverlayItem overlay,int id) {
+    	    mOverlays.add(overlay);
+    	    trailIds.add(id);
+    	    populate();
+    	}
+    	
+    	@Override
+    	protected OverlayItem createItem(int i) {
+    	  return mOverlays.get(i);
+    	}
+    	
+    	@Override
+    	public int size() {
+    	  return mOverlays.size();
+    	}
+    	
+    	@Override
+    	protected boolean onTap(int index) {
+    		final int id = index;
+    	  OverlayItem item = mOverlays.get(index);
+    	  AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+    	  dialog.setTitle(item.getTitle());
+    	  dialog.setMessage(item.getSnippet());
+    	  dialog.setPositiveButton(R.string.view, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Trails trails = new Trails(TrailsActivity.this);
+        		Trail trail = trails.getTrail(trailIds.get(id));
+        		launchTrail(trail);				
+			}
+
+    	  });
+    	  dialog.setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+        		dialog.dismiss();
+			}
+
+    	  });
+    	  dialog.show();
+    	  return true;
+    	}
+
+    }
+    
+    protected void onResume() {
+    	super.onResume();
+		if (pd!=null) {
+			pd.dismiss();
+		}
+    }
 
     private void launchTrail(Trail trail) {
 		((UnicyclistApplication) getApplication()).setCurrentTrail(trail);
+    	pd = ProgressDialog.show(TrailsActivity.this, "Opening Trail...", "Please wait...", true, false);
 		Intent intent = new Intent(TrailsActivity.this, TrailActivity.class);
 		TrailsActivity.this.startActivity(intent);
     }

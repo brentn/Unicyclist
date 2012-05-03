@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!-- Work 
+<!-- Work--> 
     <string name="maps_api_key">0Wp1747MVgsklImDthpkPZQmQXF-igwvxB_kePg</string>
--->
-<!-- Home  -->
-	<string name="maps_api_key">0Wp1747MVgskQz6SzgO1mpYZQNHRrP40R4v8aTA</string>
 
+<!-- Home   
+	<string name="maps_api_key">0Wp1747MVgsmw4PIyxzmIVN_8fL3Y1Fu3AgESjg</string>
+-->
 <!-- Laptop   
 	<string name="maps_api_key">0uU3CgeK14j7-Y1uuKGDdFZ7MveW4BEX72coW1Q</string>
 -->   	
@@ -61,8 +61,10 @@
     <string name="view">View</string>
     <string name="close">Close</string>
     <string name="save_location">Save location</string>
-    <string name="get_photo">Get Photo</string>
-    <string name="using_camera">Using Camera</string>
-    <string name="using_gallery">Using Gallery</string>
+    <string name="get_photo">Get Photo from...</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="delete_image">Delete Image</string>
+    <string name="set_as_cover_image">Select as Cover Image</string>
     
 </resources>

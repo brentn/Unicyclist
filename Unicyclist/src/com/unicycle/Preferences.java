@@ -11,6 +11,7 @@ import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.widget.Toast;
 
@@ -39,6 +40,13 @@ public class Preferences extends PreferenceActivity {
  
         distFilter.setSummary(distFilter.getEntry());
         username.setSummary(username.getText());
+        username.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+        	@Override
+        	public boolean onPreferenceChange(Preference preference, Object o) {
+        		preference.setSummary(((String)o));
+        		return true;
+        	};
+        });
  
         distFilter.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
