@@ -1,10 +1,10 @@
 package com.unicycle;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 
 public class Location extends Object {	
 	
@@ -243,7 +243,12 @@ public class Location extends Object {
 		Image image = images.getImage(imageId);
 		if (image != null) {
 			images.removeImage(image);
-			_images.remove(image);
+			for (int x=0; x<this._images.size();x++) {
+				if (this._images.get(x).getId() == imageId) {
+					this._images.remove(x);
+					break;
+				}
+			}
 		}
 	}
 	

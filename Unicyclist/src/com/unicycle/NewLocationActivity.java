@@ -2,12 +2,15 @@ package com.unicycle;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -25,6 +28,8 @@ public class NewLocationActivity extends Activity {
 	private Button cancelButton;
 	private double latitude;
 	private double longitude;
+	private Uri selectedImageUri = Uri.EMPTY;
+
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,6 +69,7 @@ public class NewLocationActivity extends Activity {
 	        		_result.putExtra("description",description.getText().toString());
 	        		_result.putExtra("directions",directions.getText().toString());
 	        		_result.putExtra("rating",5);
+	        		_result.putExtra("uri",selectedImageUri.toString());
 	        		setResult(Activity.RESULT_OK,_result);
 	        		NewLocationActivity.this.finish();
         		}
@@ -77,8 +83,8 @@ public class NewLocationActivity extends Activity {
         });
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(NewLocationActivity.this);
         Intent intent = new Intent(NewLocationActivity.this, LocationPickerActivity.class);
-        intent.putExtra("latitude", (settings.getInt("latitude", 90)/1e6));
-        intent.putExtra("longitude", (settings.getInt("longitude",0)/1e6));
+        intent.putExtra("latitude", (settings.getInt("latitude", 40000000)/1e6));
+        intent.putExtra("longitude", (settings.getInt("longitude",-122000000)/1e6));
         startActivityForResult(intent,UnicyclistActivity.SELECT_LOCATION);
     }
     
@@ -87,8 +93,15 @@ public class NewLocationActivity extends Activity {
         int aRequestCode, int aResultCode, Intent aData) {
         switch (aRequestCode) {
     	case UnicyclistActivity.GET_PHOTO:
-    		Bitmap image = (Bitmap) aData.getExtras().get("data"); 
-    		photo.setImageBitmap(image);
+	    	selectedImageUri = aData.getData();
+            getContentResolver().notifyChange(selectedImageUri, null);
+            ContentResolver cr = getContentResolver();
+            try {
+                Bitmap bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImageUri);
+               photo.setImageBitmap(bitmap);
+            } catch (Exception e) {
+               Log.e("Camera", e.toString());
+            }
     		break;
         case UnicyclistActivity.SELECT_LOCATION:
         	if ((aData != null) && (aResultCode == Activity.RESULT_OK)) {

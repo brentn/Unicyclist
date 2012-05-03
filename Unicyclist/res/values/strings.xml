@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!-- Work--> 
+<!-- Work 
     <string name="maps_api_key">0Wp1747MVgsklImDthpkPZQmQXF-igwvxB_kePg</string>
-
-<!-- Home   
-	<string name="maps_api_key">0Wp1747MVgsmw4PIyxzmIVN_8fL3Y1Fu3AgESjg</string>
 -->
+<!-- Home -->   
+	<string name="maps_api_key">0Wp1747MVgsmw4PIyxzmIVN_8fL3Y1Fu3AgESjg</string>
+
 <!-- Laptop   
 	<string name="maps_api_key">0uU3CgeK14j7-Y1uuKGDdFZ7MveW4BEX72coW1Q</string>
 -->   	

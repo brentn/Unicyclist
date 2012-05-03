@@ -228,7 +228,12 @@ public class Trail extends Object {
 		Image image = images.getImage(imageId);
 		if (image != null) {
 			images.removeImage(image);
-			_images.remove(image);
+			for (int x=0; x<this._images.size();x++) {
+				if (this._images.get(x).getId() == imageId) {
+					this._images.remove(x);
+					break;
+				}
+			}
 		}
 	}
 	

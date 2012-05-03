@@ -11,6 +11,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -19,10 +20,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.Button;
 import android.widget.Gallery;
-import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
 public class LocationActivity extends Activity {
@@ -101,35 +102,44 @@ public class LocationActivity extends Activity {
     
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, v, menuInfo);
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.images, menu);
+    	AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+    	//don't show menu if long-click on the add image icon
+    	if (info.position < (((Gallery)v).getCount()-1)) {
+			super.onCreateContextMenu(menu, v, menuInfo);
+			MenuInflater inflater = getMenuInflater();
+			inflater.inflate(R.menu.images, menu);
+    	}
 }
     
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
         Image image;
-        switch (item.getItemId()) {
-            case R.id.delete:
-            	image = location.getImages().get((int) info.id);
-            	location.removeImage(LocationActivity.this,image.getId());
-	            images.removeAllViews();
-	            images.addView(new Images(this).getImagesView(LocationActivity.this,location));
-                return true;
-            case R.id.set_cover:
-            	image = location.getImages().get((int) info.id);
-            	for (Image i: location.getImages()) {
-            		i.setCover(false);
-            	}
-            	image.setCover(true);
-            	((ImageAdapter)((Gallery) images.getChildAt(0)).getAdapter()).notifyDataSetChanged();
-            	Images i = new Images(LocationActivity.this);
-            	i.updateImage(image);
-                return true;
-            default:
-                return super.onContextItemSelected(item);
+        if (info.id >= location.getImages().size()) {
+        	Log.e("LocationActivity","selection beyond size of array.");
+        } else {
+	        switch (item.getItemId()) {
+	            case R.id.delete:
+	            	image = location.getImages().get((int) info.id);
+	            	location.removeImage(LocationActivity.this,image.getId());
+	            	((ImageAdapter)((Gallery) images.getChildAt(0)).getAdapter()).notifyDataSetChanged();
+	                return true;
+	            case R.id.set_cover:
+	            	Images imageDb = new Images(LocationActivity.this);
+	            	image = location.getImages().get((int) info.id);
+	            	for (Image i: location.getImages()) {
+	            		i.setCover(false);
+	            		imageDb.updateImage(i);
+	            	}
+	            	image.setCover(true);
+	            	((ImageAdapter)((Gallery) images.getChildAt(0)).getAdapter()).notifyDataSetChanged();
+	            	imageDb.updateImage(image);
+	                return true;
+	            default:
+	                return super.onContextItemSelected(item);
+	        }
         }
+        return false;
     }
     
 	@Override
@@ -152,8 +162,7 @@ public class LocationActivity extends Activity {
 		    			location.addImage(LocationActivity.this, new Image(LocationActivity.this,selectedImageUri,location.getLatitude(),location.getLongitude()));
 		    		}
 	            	((ImageAdapter)((Gallery) images.getChildAt(0)).getAdapter()).notifyDataSetChanged();
-//		            images.removeAllViews();
-//		            images.addView(new Images(this).getImagesView(LocationActivity.this,location));
+		            images.addView(new Images(this).getImagesView(LocationActivity.this,location));
 		    	}
 		    }
 		    if (requestCode == UnicyclistActivity.SELECT_TAGS) {

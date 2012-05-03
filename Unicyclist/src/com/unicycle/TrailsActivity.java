@@ -1,5 +1,6 @@
 package com.unicycle;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -12,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -159,13 +161,29 @@ public class TrailsActivity extends MapActivity {
             		String description = aData.getStringExtra("description");
             		String directions = aData.getStringExtra("directions");
             		int rating = aData.getIntExtra("rating",5);
-            		String imagePath = aData.getStringExtra("imagePath");
+            		String imagePath = aData.getStringExtra("uri");
             		Trail trail = new Trail(location.getId(),name,latitude,longitude,description,directions,0,rating,difficulty);
             		//Add to database
             		Trails db = new Trails(this);
             		trail.setId(db.addTrail(trail));
             		db.close();    		
-            		//Add to location list in memory
+            		//add image, if selected
+            		if (imagePath != null && imagePath.length() > 0) {
+            			Uri selectedImageUri = Uri.parse(imagePath);
+            			ExifInterface exif = null;
+    		    		float[] latlong = new float[2];
+    		    		try {
+    						exif = new ExifInterface(selectedImageUri.getPath());
+    					} catch (IOException e) {
+    						e.printStackTrace();
+    					}
+    		    		if (exif.getLatLong(latlong)) {
+    		    			trail.addImage(TrailsActivity.this, new Image(TrailsActivity.this,selectedImageUri,(double) latlong[0],(double) latlong[1]));
+    		    		} else {
+    		    			trail.addImage(TrailsActivity.this, new Image(TrailsActivity.this,selectedImageUri,trail.getLatitude(),trail.getLongitude()));
+    		    		}
+            		}
+             		//Add to location list in memory
             		trailsList.add(trail);
             		trailsListAdapter.notifyDataSetChanged();
 

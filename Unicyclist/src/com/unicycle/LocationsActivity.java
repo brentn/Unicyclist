@@ -1,5 +1,6 @@
 package com.unicycle;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -16,6 +17,8 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.ContextMenu;
@@ -280,11 +283,28 @@ public class LocationsActivity extends MapActivity {
             		String directions = aData.getStringExtra("directions");
             		int rating = aData.getIntExtra("rating",5);
             		String md5sum = "";
+            		String imagePath = aData.getStringExtra("uri");
             		Location location = new Location(name,latitude,longitude,description,directions,rating,md5sum);
             		//Add to database
             		Locations db = new Locations(this);
             		location.setId(db.addLocation(location));
             		db.close();
+            		//add image, if selected
+            		if (imagePath != null && imagePath.length() > 0) {
+            			Uri selectedImageUri = Uri.parse(imagePath);
+            			ExifInterface exif = null;
+    		    		float[] latlong = new float[2];
+    		    		try {
+    						exif = new ExifInterface(selectedImageUri.getPath());
+    					} catch (IOException e) {
+    						e.printStackTrace();
+    					}
+    		    		if (exif.getLatLong(latlong)) {
+    		    			location.addImage(LocationsActivity.this, new Image(LocationsActivity.this,selectedImageUri,(double) latlong[0],(double) latlong[1]));
+    		    		} else {
+    		    			location.addImage(LocationsActivity.this, new Image(LocationsActivity.this,selectedImageUri,location.getLatitude(),location.getLongitude()));
+    		    		}
+            		}
             		//Add to location list in memory
             		locationList.add(location);
             		Collections.sort(locationList, new Comparator<Location>() {
