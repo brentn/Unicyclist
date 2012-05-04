@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+    
+    <LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:orientation="vertical" >
+	
+	    <LinearLayout
+	        android:id="@+id/linearLayout1"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content" >
+	
+	        <ImageView
+	            android:id="@+id/photoButton"
+	            android:layout_width="80dip"
+	            android:layout_height="80dip"
+	            android:clickable="true"
+	            android:padding="8dip"
+	            android:src="@drawable/ic_photo" />
+	
+	        <LinearLayout
+	            android:id="@+id/linearLayout2"
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent"
+	            android:gravity="center_vertical|right"
+	            android:orientation="vertical" >
+	
+	            <Button
+	                android:id="@+id/trailCoordinates"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="@string/mark_trail_head" />
+	
+	            <Gallery
+	                android:id="@+id/difficultyGallery"
+	                android:layout_width="100dip"
+	                android:layout_height="32dip"
+	                android:spacing="30dip" />
+	
+	        </LinearLayout>
+	
+	    </LinearLayout>
+
+   	    <EditText
+   	        android:id="@+id/trailName"
+   	        android:layout_width="fill_parent"
+   	        android:layout_height="wrap_content"
+   	        android:capitalize="words"
+   	        android:hint="@string/trail_name"
+   	        android:singleLine="true" >
+	
+	        <requestFocus />
+	    </EditText>
+		
+	    <EditText
+	        android:id="@+id/description"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:capitalize="sentences"
+	        android:hint="@string/description"
+		    android:gravity="top"
+		    android:inputType="textMultiLine|textCapSentences"
+		    android:lines="5"
+	        android:singleLine="false" />
+	
+	    <EditText
+	        android:id="@+id/directions"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:capitalize="sentences"
+	        android:hint="@string/directions"
+		    android:gravity="top"
+		    android:inputType="textMultiLine|textCapSentences"
+		    android:lines="5"
+	        android:singleLine="false" />
+	    
+	   	   	<RelativeLayout
+	   	   	    android:id="@+id/relativeLayout1"
+	   	   	    android:layout_width="wrap_content"
+	   	   	    android:layout_height="wrap_content" >
+		
+		   		<Button
+		   		    android:id="@+id/addButton"
+		   		    android:layout_width="100dp"
+		   		    android:layout_height="50dp"
+		   		    android:layout_alignParentRight="true"
+		   		    android:layout_alignParentBottom="true"
+		   		    android:background="@drawable/black_button"
+		   		    android:textColor="#FFFFFF"
+		   		    android:text="@string/add" />
+		
+		   		<Button
+		   		    android:id="@+id/cancelButton"
+		   		    android:layout_width="100dp"
+		   		    android:layout_height="50dp"
+		   		    android:layout_alignParentLeft="true"
+		   		    android:layout_alignParentBottom="true"
+		   		    android:background="@drawable/black_button"
+		   		    android:text="@android:string/cancel"
+		   		    android:textColor="#FFFFFF" />
+	
+		   	</RelativeLayout>
+	
+	</LinearLayout>
+</ScrollView>
+	

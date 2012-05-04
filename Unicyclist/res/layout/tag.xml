@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tagName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#99cc00"
+        android:textSize="30dip" />
+
+    <LinearLayout
+        android:id="@+id/locations"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/background"
+        android:orientation="vertical" 
+        android:visibility="gone" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/locations"
+            android:paddingLeft="8dip"
+            android:background="#33b5e5"
+            android:textColor="#222222"
+            android:textSize="15dip" />
+
+        <ListView
+            android:id="@+id/locationsList"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+        </ListView>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/trails"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/background"
+        android:orientation="vertical" 
+        android:visibility="gone" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/trails" 
+            android:paddingLeft="8dip"
+            android:background="#AA66CC"
+            android:textColor="#222222"
+            android:textSize="15dip" />
+
+        <ListView
+            android:id="@+id/trailsList"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+        </ListView>
+
+    </LinearLayout>
+        <LinearLayout
+        android:id="@+id/features"            
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/background"
+        android:orientation="vertical" 
+        android:visibility="gone" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/features" 
+            android:paddingLeft="8dip"
+            android:background="#FFBB33"
+            android:textColor="#222222"
+            android:textSize="15dip" />
+
+        <ListView
+            android:id="@+id/featuresList"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+        </ListView>
+
+    </LinearLayout>
+    
+</LinearLayout>

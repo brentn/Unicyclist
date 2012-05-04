@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/delete" android:title="@string/delete_image" android:titleCondensed="@string/delete_image"></item>
+    <item android:id="@+id/set_cover" android:title="@string/set_as_cover_image" android:titleCondensed="@string/set_as_cover_image"></item>
+    
+
+</menu>

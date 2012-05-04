@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:baselineAligned="false" >
+
+   	<LinearLayout
+   	    android:id="@+id/buttons"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true" >
+	    
+	    <Button
+	        android:id="@+id/cancelButton"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:background="@drawable/black_button"
+	        android:text="@android:string/cancel"
+	        android:textColor="#FFFFFF" />
+	        
+	    <Button
+	        android:id="@+id/addButton"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:background="@drawable/black_button"
+	        android:text="@string/save_location"
+	        android:textColor="#FFFFFF" />
+	        
+    </LinearLayout>
+	    
+    <RelativeLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_above="@+id/buttons" >
+    
+	    <com.google.android.maps.MapView
+	        android:id="@+id/map"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:apiKey="@string/maps_api_key"
+	        android:clickable="true"
+	        android:visibility="visible" />
+
+		 <ImageView android:id="@+id/drag"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:src="@drawable/ic_red_pin"
+		    android:visibility="gone"
+		  />   
+	
+		   	<ToggleButton
+		   	    android:id="@+id/gpsButton"
+		   	    android:layout_width="36dip"
+		   	    android:layout_height="36dip"
+		   	    android:textOn=""
+		   	    android:textOff=""
+		   	    android:layout_alignParentTop="true"
+		   	    android:layout_alignParentRight="true"
+		   	    android:layout_marginRight="10dip"
+		   	    android:layout_marginTop="10dip"
+		 	    android:background="@drawable/gps_button" />
+	
+		   	<ToggleButton
+		   	    android:id="@+id/satButton"
+		   	    android:layout_width="36dip"
+		   	    android:layout_height="36dip"
+		   	    android:textOn=""
+		   	    android:textOff=""
+		   	    android:layout_alignParentRight="true"
+		   	    android:layout_below="@+id/gpsButton"
+		   	    android:layout_marginRight="10dip"
+		   	    android:layout_marginTop="6dip"
+		   	    android:background="@drawable/sat_button" />
+	</RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/difficulty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="28dp" />
+
+        <TextView
+            android:id="@+id/trailName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/trail_name"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#AA66CC"
+            android:textSize="30dip" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/imagesGoHere"
+        android:layout_width="fill_parent"
+        android:layout_height="80dip"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/descriptionGoesHere"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent" />
+
+   	<LinearLayout 
+   	    android:id="@+id/tagsGoHere"
+   	    android:layout_width="fill_parent"
+   	    android:layout_height="wrap_content" 
+        android:layout_gravity="bottom" />
+        
+    <LinearLayout
+        android:id="@+id/buttons"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" >
+        
+        <Button
+            android:id="@+id/featuresButton"
+            android:layout_width="100dip"
+            android:layout_height="wrap_content"
+            android:background="@drawable/black_button"
+            android:textColor="#FFFFFF"
+            android:text="@string/features" />
+        <Button
+            android:id="@+id/tracksButton"
+            android:layout_width="100dip"
+            android:layout_height="wrap_content"
+            android:background="@drawable/black_button"
+            android:textColor="#FFFFFF"
+            android:text="@string/tracks" />
+        <Button
+            android:id="@+id/trailheadButton"
+            android:layout_width="100dip"
+            android:layout_height="wrap_content"
+            android:background="@drawable/black_button"
+            android:textColor="#FFFFFF"
+            android:text="@string/mark_trail_head" />
+        
+    </LinearLayout>
+    
+     <RelativeLayout
+        android:id="@+id/bottomSection"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:layout_gravity="top" >
+        
+	    <LinearLayout
+	        android:id="@+id/commentsGoHere"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:layout_alignParentTop="true" />
+         
+    </RelativeLayout>
+
+</LinearLayout>
