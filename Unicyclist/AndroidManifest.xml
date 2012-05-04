@@ -20,17 +20,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="LocationsActivity"></activity>
-        <activity android:name="LocationActivity"></activity>
-        <activity android:name="NewLocationActivity" android:label="@string/new_location"></activity><activity android:name="Preferences"></activity>
-        <activity android:name="TrailsActivity"></activity>
-        <activity android:name=".TagPickerActivity" android:theme="@android:style/Theme.Dialog" android:label="@string/tag_picker"></activity>
-        <activity android:name="NewTrailActivity" android:theme="@android:style/Theme.Dialog" android:label="@string/new_trail"></activity>
-        <activity android:name="TagActivity"></activity>
-        <activity android:name="TrailActivity"></activity>
-        <activity android:name="LocationPickerActivity" android:theme="@android:style/Theme.Dialog"></activity>
-        <activity android:name="GetPhoto">
+        <activity android:name=".locations.LocationsActivity"></activity>
+        <activity android:name=".locations.LocationActivity"></activity>
+        <activity android:name=".locations.NewLocationActivity" android:label="@string/new_location"></activity><activity android:name="Preferences"></activity>
+        <activity android:name=".locations.trails.TrailsActivity"></activity>
+        <activity android:name=".tags.TagPickerActivity" android:theme="@android:style/Theme.Dialog" android:label="@string/tag_picker"></activity>
+        <activity android:name=".locations.trails.NewTrailActivity" android:theme="@android:style/Theme.Dialog" android:label="@string/new_trail"></activity>
+        <activity android:name=".tags.TagActivity"></activity>
+        <activity android:name=".locations.trails.TrailActivity"></activity>
+        <activity android:name=".locations.LocationPickerActivity" android:theme="@android:style/Theme.Dialog"></activity>
+        <activity android:name=".images.GetPhoto">
         </activity>
+        <activity android:name=".skills.SkillsActivity"></activity>
+        <activity android:name=".rides.RidesActivity"></activity>
         
         
     </application>

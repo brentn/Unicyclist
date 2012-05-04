@@ -5,6 +5,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 
+import com.unicycle.comments.Comments;
+import com.unicycle.images.Images;
+import com.unicycle.locations.Locations;
+import com.unicycle.locations.features.Features;
+import com.unicycle.locations.trails.Trails;
+import com.unicycle.tags.Tags;
+
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.CheckBoxPreference;

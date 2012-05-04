@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,6 +14,10 @@ import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.SlidingDrawer;
 import android.widget.SlidingDrawer.OnDrawerOpenListener;
+
+import com.unicycle.locations.LocationsActivity;
+import com.unicycle.rides.RidesActivity;
+import com.unicycle.skills.SkillsActivity;
 
 public class UnicyclistActivity extends Activity {
 	
@@ -45,7 +47,22 @@ public class UnicyclistActivity extends Activity {
         ridesButton = (SlidingDrawer) findViewById(R.id.ridesSlider);
         skillsButton = (SlidingDrawer) findViewById(R.id.skillsSlider);
         ImageView feature = (ImageView) findViewById(R.id.feature);
-
+        
+//        int screenWidth = getWindowManager().getDefaultDisplay().getWidth();
+//        int buttonOffset = (screenWidth-320);
+//        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,84);
+//        lp.rightMargin=buttonOffset;
+//        lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+//        skillsButton.setLayoutParams(lp);
+//        lp = new LayoutParams(LayoutParams.WRAP_CONTENT,84);
+//        lp.rightMargin=buttonOffset;
+//        lp.addRule(RelativeLayout.ABOVE,R.id.skillsSlider);
+//        ridesButton.setLayoutParams(lp);
+//        lp = new LayoutParams(LayoutParams.WRAP_CONTENT,84);
+//        lp.rightMargin=buttonOffset;
+//        lp.addRule(RelativeLayout.ABOVE,R.id.ridesSlider);
+//        locationsButton.setLayoutParams(lp);
+        
         locationsButton.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View arg0, MotionEvent arg1) {
@@ -71,8 +88,8 @@ public class UnicyclistActivity extends Activity {
         ridesButton.setOnDrawerOpenListener(new OnDrawerOpenListener() {
 			@Override
 			public void onDrawerOpened() {
-//				Intent intent = new Intent(UnicyclistActivity.this, LocationsActivity.class);
-//				UnicyclistActivity.this.startActivity(intent);
+				Intent intent = new Intent(UnicyclistActivity.this, RidesActivity.class);
+				UnicyclistActivity.this.startActivity(intent);
 			}
         	
         });
@@ -85,8 +102,8 @@ public class UnicyclistActivity extends Activity {
         skillsButton.setOnDrawerOpenListener(new OnDrawerOpenListener() {
 			@Override
 			public void onDrawerOpened() {
-//				Intent intent = new Intent(UnicyclistActivity.this, LocationsActivity.class);
-//				UnicyclistActivity.this.startActivity(intent);
+				Intent intent = new Intent(UnicyclistActivity.this, SkillsActivity.class);
+				UnicyclistActivity.this.startActivity(intent);
 		}
         	
         });

@@ -13,11 +13,14 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.unicycle.MyLocation.LocationResult;
+import com.unicycle.locations.features.Feature;
+import com.unicycle.locations.trails.Trail;
+import com.unicycle.tags.Tag;
 
 public class UnicyclistApplication extends Application {
 
 	private static android.location.Location _myLocation = new android.location.Location("");
-	private static com.unicycle.Location _currentLocation;
+	private static com.unicycle.locations.Location _currentLocation;
 	private static Trail _currentTrail;
 	private static Feature _currentFeature;
 	private static List<Tag> _currentTagSet;
@@ -41,11 +44,11 @@ public class UnicyclistApplication extends Application {
 		UnicyclistApplication._myLocation = myLocation;
 	}
 	
-	public com.unicycle.Location getCurrentLocation() {
+	public com.unicycle.locations.Location getCurrentLocation() {
 		return UnicyclistApplication._currentLocation;
 	}
 	
-	public void setCurrentLocation(com.unicycle.Location location) {
+	public void setCurrentLocation(com.unicycle.locations.Location location) {
 		UnicyclistApplication._currentLocation = location;
 	}
 	

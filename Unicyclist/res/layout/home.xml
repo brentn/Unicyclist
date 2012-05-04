@@ -1,31 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:gravity="bottom"
-    android:orientation="vertical" >
-    
-    <ImageView
-	    android:id="@+id/feature"        	
-       	android:layout_width="fill_parent"
-       	android:layout_height="250dip"
-       	android:src="@drawable/muni"
-       	android:layout_gravity="center"
-       	android:scaleType="centerCrop" />
+    android:layout_height="fill_parent" >
 
-    <SlidingDrawer
-        android:id="@+id/locationsSlider"
+   <SlidingDrawer
+        android:id="@+id/skillsSlider"
         android:layout_width="fill_parent"
         android:layout_height="84dip"
+        android:layout_alignParentBottom="true"
+        android:topOffset="-235dip"
+        android:orientation="horizontal"
+        android:content="@+id/content2"
+        android:handle="@+id/skillsButton" >
+
+        <ImageView
+            android:id="@+id/skillsButton"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/skills_btn" />
+
+        <LinearLayout
+            android:id="@+id/content2"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+        </LinearLayout>
+    </SlidingDrawer>
+
+    <SlidingDrawer
+        android:id="@+id/ridesSlider"
+        android:layout_width="fill_parent"
+        android:layout_height="84dip"
+        android:layout_above="@+id/skillsSlider"
         android:topOffset="-235dip"
         android:orientation="horizontal"
         android:content="@+id/content"
-        android:handle="@+id/locationButton" >
+        android:handle="@+id/ridesButton" >
 
 	    <ImageView
-	        android:id="@+id/locationButton"
+	        android:id="@+id/ridesButton"
 	        android:layout_width="fill_parent"
-	        android:layout_height="84dip"
+	        android:layout_height="match_parent"
+	        android:src="@drawable/rides_btn" />
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+        </LinearLayout>
+    </SlidingDrawer>
+    
+    <SlidingDrawer
+        android:id="@+id/locationsSlider"
+        android:layout_width="wrap_content"
+        android:layout_height="84dip"
+        android:layout_alignParentRight="true"
+        android:layout_above="@+id/ridesSlider"
+        android:topOffset="-235dip"
+        android:orientation="horizontal"
+        android:gravity="right"
+        android:content="@+id/content"
+        android:handle="@+id/locationsButton" >
+
+	    <ImageView
+	        android:id="@+id/locationsButton"
+	        android:layout_width="fill_parent"
+	        android:layout_height="match_parent"
 	        android:src="@drawable/locations_btn" />
 
         <LinearLayout
@@ -38,47 +78,13 @@
         </LinearLayout>
     </SlidingDrawer>
 
-    <SlidingDrawer
-        android:id="@+id/ridesSlider"
-        android:layout_width="fill_parent"
-        android:layout_height="84dip"
-        android:topOffset="-235dip"
-        android:orientation="horizontal"
-        android:content="@+id/content"
-        android:handle="@+id/ridesButton" >
+    <ImageView
+	    android:id="@+id/feature"        	
+       	android:layout_width="fill_parent"
+       	android:layout_height="fill_parent"
+       	android:layout_above="@+id/locationsSlider"
+       	android:src="@drawable/muni"
+       	android:layout_gravity="center"
+       	android:scaleType="centerCrop" />
 
-	    <ImageView
-	        android:id="@+id/ridesButton"
-	        android:layout_width="fill_parent"
-	        android:layout_height="84dip"
-	        android:src="@drawable/rides_btn" />
-
-        <LinearLayout
-            android:id="@+id/content"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
-        </LinearLayout>
-    </SlidingDrawer>
-    
-    <SlidingDrawer
-        android:id="@+id/skillsSlider"
-        android:layout_width="fill_parent"
-        android:layout_height="84dip"
-        android:topOffset="-235dip"
-        android:orientation="horizontal"
-        android:content="@+id/content2"
-        android:handle="@+id/skillsButton" >
-
-        <ImageView
-	        android:id="@+id/skillsButton"
-	        android:layout_width="wrap_content"
-	        android:layout_height="84dip"
-	        android:src="@drawable/skills_btn" />
-
-        <LinearLayout
-            android:id="@+id/content2"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
-        </LinearLayout>
-    </SlidingDrawer>
-</LinearLayout>
+</RelativeLayout>
