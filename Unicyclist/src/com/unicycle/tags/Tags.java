@@ -4,18 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.unicycle.R;
-import com.unicycle.UnicyclistActivity;
-import com.unicycle.R.drawable;
-import com.unicycle.R.string;
-import com.unicycle.locations.Location;
-import com.unicycle.locations.LocationActivity;
-import com.unicycle.locations.Locations;
-import com.unicycle.locations.features.Feature;
-import com.unicycle.locations.trails.Trail;
-import com.unicycle.locations.trails.TrailActivity;
-import com.unicycle.locations.trails.Trails;
-
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
@@ -33,12 +21,24 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.unicycle.R;
+import com.unicycle.UnicyclistActivity;
+import com.unicycle.locations.Location;
+import com.unicycle.locations.LocationActivity;
+import com.unicycle.locations.Locations;
+import com.unicycle.locations.features.Feature;
+import com.unicycle.locations.trails.Trail;
+import com.unicycle.locations.trails.TrailActivity;
+import com.unicycle.locations.trails.Trails;
+import com.unicycle.rides.Ride;
+import com.unicycle.skills.Skill;
+
 public class Tags extends SQLiteOpenHelper {
 
 	public static final int SORT_BY_NAME = 1;
 	public static final int SORT_BY_USAGE = 2;
 
-	private static final int DATABASE_VERSION = 3;
+	private static final int DATABASE_VERSION = 4;
 	private static final String DATABASE_NAME = "tags";
 
 	//table names
@@ -46,6 +46,8 @@ public class Tags extends SQLiteOpenHelper {
 	private static final String TABLE_LOCATION_TAGS = "locationTags";
 	private static final String TABLE_TRAIL_TAGS = "trailTags";
 	private static final String TABLE_FEATURE_TAGS = "featureTags";
+	private static final String TABLE_SKILL_TAGS = "skillTags";
+	private static final String TABLE_RIDE_TAGS = "rideTags";
 
 	//column names
 	private static final String KEY_TAG_ID = "id";
@@ -64,6 +66,14 @@ public class Tags extends SQLiteOpenHelper {
 	private static final String KEY_FEATURE_TAG_TAGID = "tagId";
 	private static final String KEY_FEATURE_TAG_FEATUREID = "featureId";
 	
+	private static final String KEY_SKILL_TAG_ID = "id";
+	private static final String KEY_SKILL_TAG_TAGID = "tagId";
+	private static final String KEY_SKILL_TAG_SKILLID = "skillId";
+	
+	private static final String KEY_RIDE_TAG_ID = "id";
+	private static final String KEY_RIDE_TAG_TAGID = "tagId";
+	private static final String KEY_RIDE_TAG_RIDEID = "rideId";
+	
 	private Context mContext;
 
 	public Tags(Context context) {
@@ -81,19 +91,27 @@ public class Tags extends SQLiteOpenHelper {
 				+ KEY_TRAIL_TAG_ID + " INTEGER PRIMARY KEY, "+ KEY_TRAIL_TAG_TRAILID + " INTEGER, " + KEY_TRAIL_TAG_TAGID + " INTEGER)";
 		String CREATE_FEATURE_TAGS_TABLE = "CREATE TABLE " + TABLE_FEATURE_TAGS + "("
 				+ KEY_FEATURE_TAG_ID + " INTEGER PRIMARY KEY, "+ KEY_FEATURE_TAG_FEATUREID + " INTEGER, " + KEY_FEATURE_TAG_TAGID + " INTEGER)";
+		String CREATE_SKILL_TAGS_TABLE = "CREATE TABLE " + TABLE_SKILL_TAGS + "("
+				+ KEY_SKILL_TAG_ID + " INTEGER PRIMARY KEY, "+ KEY_SKILL_TAG_SKILLID + " INTEGER, " + KEY_SKILL_TAG_TAGID + " INTEGER)";
+		String CREATE_RIDE_TAGS_TABLE = "CREATE TABLE " + TABLE_RIDE_TAGS + "("
+				+ KEY_RIDE_TAG_ID + " INTEGER PRIMARY KEY, "+ KEY_RIDE_TAG_RIDEID + " INTEGER, " + KEY_RIDE_TAG_TAGID + " INTEGER)";
 		db.execSQL(CREATE_TAGS_TABLE);
 		db.execSQL(CREATE_LOCATION_TAGS_TABLE);
 		db.execSQL(CREATE_TRAIL_TAGS_TABLE);
 		db.execSQL(CREATE_FEATURE_TAGS_TABLE);
+		db.execSQL(CREATE_SKILL_TAGS_TABLE);
+		db.execSQL(CREATE_RIDE_TAGS_TABLE);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TAGS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOCATION_TAGS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRAIL_TAGS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FEATURE_TAGS);
-        onCreate(db);
+    	switch (oldVersion) {
+    	case 3:
+    		String CREATE_RIDE_TAGS_TABLE = "CREATE TABLE " + TABLE_RIDE_TAGS + "("
+    				+ KEY_RIDE_TAG_ID + " INTEGER PRIMARY KEY, "+ KEY_RIDE_TAG_RIDEID + " INTEGER, " + KEY_RIDE_TAG_TAGID + " INTEGER)";
+    		db.execSQL(CREATE_RIDE_TAGS_TABLE);
+    		//no break here
+    	}
 	}
 	
 	public String databaseName() {
@@ -269,6 +287,18 @@ public class Tags extends SQLiteOpenHelper {
         			+ " INNER JOIN " + TABLE_FEATURE_TAGS + " ft ON t." + KEY_TAG_ID + " = ft." + KEY_FEATURE_TAG_TAGID 
         			+ " WHERE ft." + KEY_FEATURE_TAG_FEATUREID + " = " + Integer.toString(((Feature) o).getId())
         			+ " ORDER BY t." + KEY_TAG_USAGE + " DESC";    		    		
+    	} else if (o instanceof Skill) {
+        	query = "SELECT t." + KEY_TAG_ID + ", t." + KEY_TAG_NAME + ", t." + KEY_TAG_USAGE
+        			+ " FROM " + TABLE_TAGS + " t"
+        			+ " INNER JOIN " + TABLE_SKILL_TAGS + " st ON t." + KEY_TAG_ID + " = st." + KEY_SKILL_TAG_TAGID 
+        			+ " WHERE st." + KEY_SKILL_TAG_SKILLID + " = " + Integer.toString(((Skill) o).getId())
+        			+ " ORDER BY t." + KEY_TAG_USAGE + " DESC";    		    		
+    	} else if (o instanceof Ride) {
+        	query = "SELECT t." + KEY_TAG_ID + ", t." + KEY_TAG_NAME + ", t." + KEY_TAG_USAGE
+        			+ " FROM " + TABLE_TAGS + " t"
+        			+ " INNER JOIN " + TABLE_RIDE_TAGS + " rt ON t." + KEY_TAG_ID + " = rt." + KEY_RIDE_TAG_TAGID 
+        			+ " WHERE tt." + KEY_RIDE_TAG_RIDEID + " = " + Integer.toString(((Ride) o).getId())
+        			+ " ORDER BY t." + KEY_TAG_USAGE + " DESC";    		
     	}
     	SQLiteDatabase db = this.getReadableDatabase();
     	Cursor cursor = db.rawQuery(query, null);

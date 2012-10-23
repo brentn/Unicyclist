@@ -36,18 +36,12 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 import com.unicycle.R;
+import com.unicycle.UnicyclistActivity;
 import com.unicycle.UnicyclistApplication;
-import com.unicycle.R.drawable;
-import com.unicycle.R.id;
-import com.unicycle.R.layout;
-import com.unicycle.R.menu;
-import com.unicycle.R.string;
 import com.unicycle.images.Image;
 import com.unicycle.locations.Location;
 
 public class TrailsActivity extends MapActivity {
-	
-	final int GET_NEW_TRAIL = 1;
 	
 	private ProgressDialog pd=null;
 	private TrailsListAdapter trailsListAdapter;
@@ -128,7 +122,7 @@ public class TrailsActivity extends MapActivity {
 
     public void onClick(View footerView) {
     	pd = ProgressDialog.show(TrailsActivity.this, "Opening...", "Please wait...", true, false);
-    	startActivityForResult(new Intent(TrailsActivity.this, NewTrailActivity.class), GET_NEW_TRAIL);
+    	startActivityForResult(new Intent(TrailsActivity.this, NewTrailActivity.class), UnicyclistActivity.CREATE_TRAIL);
     }
     
 	@Override
@@ -150,7 +144,7 @@ public class TrailsActivity extends MapActivity {
         switch (item.getItemId()) {
             case R.id.newTrail:	
             	pd = ProgressDialog.show(TrailsActivity.this, "Opening...", "Please wait...", true, false);
-            	startActivityForResult(new Intent(TrailsActivity.this, NewTrailActivity.class), GET_NEW_TRAIL);
+            	startActivityForResult(new Intent(TrailsActivity.this, NewTrailActivity.class), UnicyclistActivity.CREATE_TRAIL);
             	break;   
         }
         return true;
@@ -160,7 +154,7 @@ public class TrailsActivity extends MapActivity {
     protected void onActivityResult(
         int aRequestCode, int aResultCode, Intent aData) {
         switch (aRequestCode) {
-            case GET_NEW_TRAIL:
+            case UnicyclistActivity.CREATE_TRAIL:
             	if ((aData != null) && (aResultCode == Activity.RESULT_OK)) {
             		//Retrieve Data
             		String name = aData.getStringExtra("name");

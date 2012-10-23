@@ -3,12 +3,12 @@
 <!-- Work  
     <string name="maps_api_key">0Wp1747MVgsklImDthpkPZQmQXF-igwvxB_kePg</string>
 -->
-<!-- Home -->    
+<!-- Home     
 	<string name="maps_api_key">0Wp1747MVgsmw4PIyxzmIVN_8fL3Y1Fu3AgESjg</string>
-
-<!-- Laptop   
+-->
+<!-- Laptop -->   
 	<string name="maps_api_key">0uU3CgeK14j7-Y1uuKGDdFZ7MveW4BEX72coW1Q</string>
--->   	
+   	
     <string name="app_name">Mountain Unicyclist</string>
     <string name="all_locations">All Locations</string>
     <string name="my_locations">My Locations</string>
@@ -57,7 +57,7 @@
     <string name="add_comment">Add a new comment</string>
     <string name="skills">Skills</string>
     <string name="goals">Goals</string>
-    <string name="accomplishments">Achievements</string>
+    <string name="accomplishments">Conquests</string>
     <string name="tracks">GPS Tracks</string>
     <string name="username">User name</string>
     <string name="view">View</string>
@@ -70,5 +70,11 @@
     <string name="set_as_cover_image">Select as Cover Image</string>
     <string name="schedule_a_ride">Schedule a Ride</string>
     <string name="my_rides">My Rides</string>
+    <string name="add_new_skill">Add a new Skill</string>
+    <string name="define_new_skill">Define a new skill</string>
+    <string name="skill_name">Skill name</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="save">Save</string>
+    <string name="new_skill">New Skill</string>
     
 </resources>

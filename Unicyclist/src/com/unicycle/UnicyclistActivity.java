@@ -22,8 +22,11 @@ import com.unicycle.skills.SkillsActivity;
 public class UnicyclistActivity extends Activity {
 	
 	public static final int CREATE_LOCATION = 1;
-	public static final int SELECT_TAGS = 2;
-	public static final int SELECT_LOCATION = 3;
+	public static final int CREATE_TRAIL = 2;
+	public static final int CREATE_SKILL = 3;
+	public static final int CREATE_RIDE = 4;
+	public static final int SELECT_TAGS = 10;
+	public static final int SELECT_LOCATION = 11;
 	public static final int LOCATION_TYPE=100;
 	public static final int TRAIL_TYPE=101;
 	public static final int FEATURE_TYPE=102;

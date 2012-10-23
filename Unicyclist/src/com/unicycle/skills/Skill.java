@@ -16,8 +16,9 @@ public class Skill {
 	private int _difficulty;
 	private List<Tag> _tags = new ArrayList<Tag>();
 	
-	public Skill(String name, int difficulty) {
+	public Skill(String name, String description, int difficulty) {
 		this._name = name;
+		this._description = description;
 		this._difficulty = difficulty;
 	}
 	

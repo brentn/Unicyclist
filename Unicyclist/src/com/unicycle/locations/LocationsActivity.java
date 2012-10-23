@@ -58,6 +58,8 @@ import com.unicycle.images.Image;
 
 public class LocationsActivity extends MapActivity {
 	
+	private final String titleColor = "#33b5e5";
+	
 	ListView.OnItemClickListener clickListener;
     
 	private ViewFlipper page; 
@@ -132,7 +134,7 @@ public class LocationsActivity extends MapActivity {
         locationsView.setAdapter(locationsListAdapter);
         favouritesListAdapter = new LocationsListAdapter(((UnicyclistApplication) getApplication()).getMyLocation(),LocationsActivity.this, R.layout.locations_list_item, favouritesList);
         favouritesView.setAdapter(favouritesListAdapter);
-        menu.setAdapter(new GalleryMenuAdapter(this, new String[] {getString(R.string.locations),getString(R.string.favourites),getString(R.string.mapview)}));
+        menu.setAdapter(new GalleryMenuAdapter(this, new String[] {getString(R.string.locations),getString(R.string.favourites),getString(R.string.mapview)},titleColor));
         
         //Set Up Menus
         if (favouritesList.size() > 0 ) {

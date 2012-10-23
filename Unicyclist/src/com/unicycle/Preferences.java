@@ -5,13 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 
-import com.unicycle.comments.Comments;
-import com.unicycle.images.Images;
-import com.unicycle.locations.Locations;
-import com.unicycle.locations.features.Features;
-import com.unicycle.locations.trails.Trails;
-import com.unicycle.tags.Tags;
-
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.CheckBoxPreference;
@@ -21,6 +14,14 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.widget.Toast;
+
+import com.unicycle.comments.Comments;
+import com.unicycle.images.Images;
+import com.unicycle.locations.Locations;
+import com.unicycle.locations.features.Features;
+import com.unicycle.locations.trails.Trails;
+import com.unicycle.rides.Rides;
+import com.unicycle.tags.Tags;
 
 public class Preferences extends PreferenceActivity {
 	
@@ -80,6 +81,7 @@ public class Preferences extends PreferenceActivity {
 				copyDatabaseToSD(new Images(getApplicationContext()).databaseName());
 				copyDatabaseToSD(new Comments(getApplicationContext()).databaseName());
 				copyDatabaseToSD(new Features(getApplicationContext()).databaseName());
+				copyDatabaseToSD(new Rides(getApplicationContext()).databaseName());
 				Toast.makeText(getApplicationContext(), "Backup Complete", Toast.LENGTH_SHORT).show();
 				return true;
 			}
@@ -96,12 +98,14 @@ public class Preferences extends PreferenceActivity {
 				Images images = new Images(getApplicationContext());
 				Comments comments = new Comments(getApplicationContext());
 				Features features = new Features(getApplicationContext());
+				Rides rides = new Rides(getApplicationContext());
 				result = (restoreDatabaseFromSD(locations.databaseName()) && 
 						restoreDatabaseFromSD(tags.databaseName()) &&
 						restoreDatabaseFromSD(trails.databaseName()) &&
 						restoreDatabaseFromSD(images.databaseName())) &&
-						restoreDatabaseFromSD(comments.databaseName());
-						restoreDatabaseFromSD(features.databaseName());
+						restoreDatabaseFromSD(comments.databaseName()) &&
+						restoreDatabaseFromSD(features.databaseName()) &&
+						restoreDatabaseFromSD(rides.databaseName());
     	        // Access the copied database so SQLiteHelper will cache it and mark
     	        // it as created.
  				locations.getWritableDatabase().close();
@@ -110,6 +114,7 @@ public class Preferences extends PreferenceActivity {
  				images.getWritableDatabase().close();
  				comments.getWritableDatabase().close();
  				features.getWritableDatabase().close();
+ 				rides.getWritableDatabase().close();
  				if (result) {
  					Toast.makeText(getApplicationContext(), "Restore Complete", Toast.LENGTH_SHORT).show();
  				} else {
