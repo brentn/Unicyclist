@@ -1,0 +1,29 @@
+<resources>
+
+    <string name="app_name">Prayer Requests</string>
+    <string name="title_request_detail">Details</string>
+    <string name="title_request_list">Prayer Requests</string>
+    <string name="new_prayer_request">New Prayer Request</string>
+    <string name="pray_for">Pray for...</string>
+    <string name="answered">Mark as Answered</string>
+    <string name="add_to_journal">Add to Journal</string>
+    <string name="save">Save</string>
+    <string name="areyousure">Are you sure?</string>
+    <string name="yes">Yes</string>
+    <string name="clickyestodelete">Click Yes to DELETE this prayer request</string>
+    <string name="edit_journal">Edit Journal Entry</string>
+    <string name="edit_request">Edit Prayer Request</string>
+    <string name="delete_request">Delete Request</string>
+    <string name="no">No</string>
+    <string name="cancel">Cancel</string>
+    <string name="clickyestodelete_journalentry">Click Yes to DELETE this journal entry</string>
+    <string name="delete">Delete</string>
+    <string name="organize">Organize</string>
+    <string name="edit">Edit</string>
+    <string name="tag_name">List Name</string>
+    <string name="create">Create</string>
+    <string name="list_chooser">List Chooser</string>
+    <string name="all_prayer_requests">All Prayer Requests</string>
+    <string name="select_list">Select List to View</string>
+
+</resources>
